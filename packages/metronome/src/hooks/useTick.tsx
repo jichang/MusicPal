@@ -1,25 +1,25 @@
-import { useEffect, useRef } from "react";
-import { useTimingWorker } from "./useTimingWorker";
-import * as Comlink from "comlink";
+import { useEffect, useRef } from 'react';
+import { useTimingWorker } from './useTimingWorker';
+import * as Comlink from 'comlink';
 
 export interface TickOption {
   isRunning: boolean;
-  beatsPerMinute: number;
+  tempo: number;
   ticksPerBeat: number;
 }
 
 export type TickCallback = () => void;
 
 export function useTick(option: TickOption, callback: TickCallback) {
-  const { isRunning, beatsPerMinute, ticksPerBeat } = option;
+  const { isRunning, tempo, ticksPerBeat } = option;
   const callbackRef = useRef(callback);
   callbackRef.current = callback;
 
   const worker = useTimingWorker();
 
   useEffect(() => {
-    if (isRunning && beatsPerMinute && ticksPerBeat) {
-      const tpm = beatsPerMinute * ticksPerBeat;
+    if (isRunning && tempo && ticksPerBeat) {
+      const tpm = tempo * ticksPerBeat;
 
       const identity = `Tick.${Date.now()}.${Math.random}`;
       const handleInteval = Comlink.proxy(() => {
@@ -33,5 +33,5 @@ export function useTick(option: TickOption, callback: TickCallback) {
         worker.clearInterval(identity);
       };
     }
-  }, [worker, isRunning, beatsPerMinute, ticksPerBeat]);
+  }, [worker, isRunning, tempo, ticksPerBeat]);
 }

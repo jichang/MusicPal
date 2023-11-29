@@ -1,5 +1,5 @@
-import { useState } from "react";
-import * as Comlink from "comlink";
+import { useState } from 'react';
+import * as Comlink from 'comlink';
 
 export interface TimlingWorker {
   setInterval(identity: string, callback: () => void, interval: number): number;
@@ -8,8 +8,8 @@ export interface TimlingWorker {
 
 export function useTimingWorker() {
   const [worker] = useState(() => {
-    const worker = new Worker(new URL("../utils/timing", import.meta.url), {
-      type: "module",
+    const worker = new Worker(new URL('../utils/timing', import.meta.url), {
+      type: 'module',
     });
 
     return Comlink.wrap<TimlingWorker>(worker);

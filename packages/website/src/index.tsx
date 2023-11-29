@@ -1,10 +1,10 @@
-import React from "react";
-import { createRoot } from "react-dom/client";
-import { App } from "./App";
-import { MusicPalDexie } from "./components/storage.context";
-import "intl-polyfill";
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import { App } from './App';
+import { MusicPalDexie } from './components/storage.context';
+import 'intl-polyfill';
 
-const container = document.getElementById("app") as HTMLDivElement;
+const container = document.getElementById('app') as HTMLDivElement;
 const root = createRoot(container);
 const dexie = new MusicPalDexie();
 

@@ -1,8 +1,8 @@
-import React, { useCallback } from "react";
-import { Button, ButtonProps } from "antd";
-import { BellOutlined } from "@ant-design/icons";
-import { Dynamics, Note } from "../utils/music";
-import "./NoteButton.css";
+import React, { useCallback } from 'react';
+import { Button, ButtonProps } from 'antd';
+import { BellOutlined } from '@ant-design/icons';
+import './NoteButton.css';
+import { Dynamics, Note } from '@musicpal/music';
 
 export interface NoteButtonProps {
   index: number;
@@ -11,11 +11,11 @@ export interface NoteButtonProps {
   onClick: (index: number) => void;
 }
 
-const types: Record<Dynamics, ButtonProps["type"] | ""> = {
-  [Dynamics.None]: "text",
-  [Dynamics.Light]: "dashed",
-  [Dynamics.Accent]: "primary",
-  [Dynamics.Invalid]: "",
+const types: Record<Dynamics, ButtonProps['type'] | ''> = {
+  [Dynamics.None]: 'text',
+  [Dynamics.Light]: 'dashed',
+  [Dynamics.Accent]: 'primary',
+  [Dynamics.Invalid]: '',
 };
 
 export function NoteButton(props: NoteButtonProps) {
@@ -30,7 +30,7 @@ export function NoteButton(props: NoteButtonProps) {
       title="note"
       icon={<BellOutlined />}
       className={`button--note note--${note.dynamics} ${
-        isCurrent ? "note--active" : ""
+        isCurrent ? 'note--active' : ''
       }`}
       type={types[note.dynamics] || undefined}
       onClick={handleOnClick}

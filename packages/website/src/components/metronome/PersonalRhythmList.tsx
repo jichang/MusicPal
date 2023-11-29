@@ -1,11 +1,11 @@
-import React, { useCallback } from "react";
-import { Rhythm } from "@musicpal/metronome";
-import { useLiveQuery } from "dexie-react-hooks";
-import { useStorage } from "../storage.context";
-import { Button, ConfigProvider, Empty, List, Card } from "antd";
-import { Link } from "react-router-dom";
-import { Localized } from "@fluent/react";
-import { ArrowRightOutlined, PlusOutlined } from "@ant-design/icons";
+import React, { useCallback } from 'react';
+import { Rhythm } from '@musicpal/metronome';
+import { useLiveQuery } from 'dexie-react-hooks';
+import { useStorage } from '../storage.context';
+import { Button, ConfigProvider, Empty, List, Card } from 'antd';
+import { Link } from 'react-router-dom';
+import { Localized } from '@fluent/react';
+import { ArrowRightOutlined, PlusOutlined } from '@ant-design/icons';
 
 export interface PersonalRhythmListProps {
   onCreateRhythm: () => void;
@@ -16,7 +16,7 @@ export function PersonalRhythmList(props: PersonalRhythmListProps) {
   const { dexie } = useStorage();
 
   const rhythms = useLiveQuery(() => {
-    return dexie.rhythms.where("category").equals("personal").toArray();
+    return dexie.rhythms.where('category').equals('personal').toArray();
   }, [dexie]);
 
   const renderEmpty = useCallback(() => {

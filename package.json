@@ -22,9 +22,7 @@
     "packages/website"
   ],
   "devDependencies": {
+    "prettier": "^3.0.3",
     "process": "^0.11.10"
-  },
-  "dependencies": {
-    "prettier": "^3.0.3"
   }
 }

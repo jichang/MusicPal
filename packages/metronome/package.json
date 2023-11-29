@@ -22,6 +22,7 @@
   "peerDependencies": {
     "@ant-design/icons": "^5.2.6",
     "@fluent/react": "^0.15.2",
+    "@musicpal/music": "^1.0.0",
     "antd": "^5.10.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

@@ -1,12 +1,12 @@
-import React, { useCallback, useState } from "react";
-import { Measure, BeatsPerMinute } from "../utils/music";
-import { Localized } from "@fluent/react";
-import { Card, Button, TabsProps, Tabs } from "antd";
-import "./MeasureViewer.css";
-import { MeasureBeats } from "./MeasureBeats";
-import { MeasureSettings } from "./MeasureSettings";
+import React, { useCallback, useState } from 'react';
+import { Localized } from '@fluent/react';
+import { Card, Button, TabsProps, Tabs } from 'antd';
+import './MeasureViewer.css';
+import { MeasureBeats } from './MeasureBeats';
+import { MeasureSettings } from './MeasureSettings';
+import { Measure } from '@musicpal/music';
 
-export type TabsItems = TabsProps["items"];
+export type TabsItems = TabsProps['items'];
 
 export interface MeasureViewerProps {
   index: number;
@@ -17,10 +17,6 @@ export interface MeasureViewerProps {
   measure: Measure;
   onRemove: (measureIndex: number) => void;
   onChangeRepeat: (measureIndex: number, repeat: number) => void;
-  onChangeBeatsPerMinute: (
-    measureIndex: number,
-    beatsPerMinute: BeatsPerMinute,
-  ) => void;
   onAddBeat: (measureIndex: number) => void;
   onRemoveBeat: (measureIndex: number) => void;
   onAddNote: (measureIndex: number, beatIndex: number) => void;
@@ -42,7 +38,6 @@ export function MeasureViewer(props: MeasureViewerProps) {
     measure,
     onRemove,
     onChangeRepeat,
-    onChangeBeatsPerMinute,
     onAddBeat,
     onRemoveBeat,
     onAddNote,
@@ -59,20 +54,13 @@ export function MeasureViewer(props: MeasureViewerProps) {
     [index, onChangeRepeat],
   );
 
-  const handleChangeBeatsPerMinute = useCallback(
-    (beatsPerMinute: BeatsPerMinute) => {
-      onChangeBeatsPerMinute(index, beatsPerMinute);
-    },
-    [index, onChangeBeatsPerMinute],
-  );
-
   const handleRemoveMeasure = useCallback(() => {
     onRemove(index);
   }, [index, onRemove]);
 
   const items: TabsItems = [
     {
-      key: "beats",
+      key: 'beats',
       label: <Localized id="beats">Beats</Localized>,
       children: (
         <MeasureBeats
@@ -91,19 +79,18 @@ export function MeasureViewer(props: MeasureViewerProps) {
       ),
     },
     {
-      key: "tempo",
-      label: <Localized id="tempo">Tempo</Localized>,
+      key: 'settings',
+      label: <Localized id="settings">Settings</Localized>,
       children: (
         <MeasureSettings
           measure={measure}
           onChangeRepeat={handleChangeRepeat}
-          onChangeBeatsPerMinute={handleChangeBeatsPerMinute}
         />
       ),
     },
   ];
 
-  const [activeViewKey, setActiveViewKey] = useState("beats");
+  const [activeViewKey, setActiveViewKey] = useState('beats');
 
   return (
     <Card

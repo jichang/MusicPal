@@ -1,92 +1,33 @@
-import { lcm } from "./math";
+import { DEFAULT_MEASURES } from './constants';
+import { lcm } from './math';
+import { Tempo, Note, Beat, Measure, Rhythm, Dynamics } from './theory';
+import * as R from 'ramda';
 
-export interface UniformBeatsPerMinute {
-  type: "uniform";
-  speed: number;
-}
-
-export interface VaryingBeatsPerMinute {
-  type: "varying";
-  begin: number;
-  step: number;
-  end: number;
-}
-
-export type BeatsPerMinute = UniformBeatsPerMinute | VaryingBeatsPerMinute;
-
-export const UNIFORM_BPM_60: UniformBeatsPerMinute = {
-  type: "uniform",
-  speed: 60,
-};
-
-export const VARYING_BPM_60: VaryingBeatsPerMinute = {
-  type: "varying",
-  begin: 60,
-  end: 60,
-  step: 10,
-};
-
-export enum Dynamics {
-  None = 0,
-  Light,
-  Accent,
-  Invalid,
-}
-
-export interface Note {
-  dynamics: Dynamics;
+export function cloneTempo<T extends Tempo>(tempo: T): T {
+  return R.clone(tempo);
 }
 
 export function cloneNote(note: Note): Note {
-  return {
-    ...note,
-  };
-}
-
-export interface Beat {
-  notes: Note[];
+  return R.clone(note);
 }
 
 export function cloneBeat(beat: Beat): Beat {
-  return {
-    notes: beat.notes.map((note) => {
-      return {
-        ...note,
-      };
-    }),
-  };
-}
-
-export interface Measure {
-  repeat: number;
-  beatsPerMinute: BeatsPerMinute;
-  beats: Beat[];
+  return R.clone(beat);
 }
 
 export function cloneMeasure(measure: Measure): Measure {
-  return {
-    repeat: measure.repeat,
-    beatsPerMinute: measure.beatsPerMinute,
-    beats: measure.beats.map(cloneBeat),
-  };
-}
-
-export interface Rhythm {
-  id: string;
-  category: "default" | "personal";
-  name: string;
-  order: number;
-  measures: Measure[];
+  return R.clone(measure);
 }
 
 export function cloneRhythm(rhythm: Rhythm): Rhythm {
-  return {
-    id: rhythm.id,
-    category: rhythm.category,
-    name: rhythm.name,
-    order: rhythm.order,
-    measures: rhythm.measures.map(cloneMeasure),
-  };
+  return R.clone(rhythm);
+}
+
+export function changeTempo(rhythm: Rhythm, tempo: Tempo) {
+  const newRhythm = cloneRhythm(rhythm);
+  newRhythm.tempo = cloneTempo(tempo);
+
+  return newRhythm;
 }
 
 export function addMeasure(rhythm: Rhythm) {
@@ -117,20 +58,6 @@ export function changeRepeat(
   const measure = newRhythm.measures[measureIndex];
   if (measure) {
     measure.repeat = repeat;
-  }
-
-  return newRhythm;
-}
-
-export function changeBeatsPerMinute(
-  rhythm: Rhythm,
-  measureIndex: number,
-  beatsPerMinute: BeatsPerMinute,
-) {
-  const newRhythm = cloneRhythm(rhythm);
-  const measure = newRhythm.measures[measureIndex];
-  if (measure) {
-    measure.beatsPerMinute = beatsPerMinute;
   }
 
   return newRhythm;
@@ -225,27 +152,35 @@ export function removeNote(
   return newRhythm;
 }
 
-export function parseRhythm(rhythm: Rhythm) {
+export function analyseRhythm(rhythm: Rhythm) {
   let measureCount = 0;
   let beatCount = 0;
   let noteCount = 0;
-  let ticksPerBeat = 1;
+  let ticksPerBeat = 0;
+  let beatsPerMinute = 0;
+
+  switch (rhythm.tempo.type) {
+    case 'uniform':
+      beatsPerMinute = rhythm.tempo.speed;
+      break;
+    case 'varying':
+      {
+        for (let speed = rhythm.tempo.begin; speed <= rhythm.tempo.end; speed += rhythm.tempo.step) {
+          beatsPerMinute = lcm(beatsPerMinute, speed);
+        }
+      }
+      break;
+  }
 
   for (const measure of rhythm.measures) {
-    for (
-      let measureOffset = 0;
-      measureOffset < measure.repeat;
-      measureOffset++
-    ) {
-      measureCount = measureCount + 1;
+    measureCount = measureCount + measure.repeat;
 
-      for (const beat of measure.beats) {
-        beatCount = beatCount + 1;
+    for (const beat of measure.beats) {
+      beatCount = beatCount + measure.repeat;
 
-        noteCount = noteCount + beat.notes.length;
+      noteCount = noteCount + beat.notes.length * measure.repeat;
 
-        ticksPerBeat = lcm(ticksPerBeat, beat.notes.length);
-      }
+      ticksPerBeat = lcm(ticksPerBeat, beat.notes.length);
     }
   }
 
@@ -254,10 +189,11 @@ export function parseRhythm(rhythm: Rhythm) {
     beatCount,
     noteCount,
     ticksPerBeat,
+    beatsPerMinute
   };
 }
 
-export function locate(rhythm: Rhythm, ticksPerBeat: number, currTick: number) {
+export function locate(rhythm: Rhythm, ticksPerBeat: number, beatsPerMinute: number, currTick: number) {
   let currMeasureIndex = 0;
   let currMeasureOffset = 0;
   let currBeatIndex = 0;
@@ -313,209 +249,3 @@ export function locate(rhythm: Rhythm, ticksPerBeat: number, currTick: number) {
     currNoteIndex,
   };
 }
-
-export const DEFAULT_MEASURES: Measure[] = [
-  {
-    repeat: 1,
-    beatsPerMinute: UNIFORM_BPM_60,
-    beats: [
-      {
-        notes: [
-          {
-            dynamics: Dynamics.Accent,
-          },
-        ],
-      },
-      {
-        notes: [
-          {
-            dynamics: Dynamics.Light,
-          },
-        ],
-      },
-      {
-        notes: [
-          {
-            dynamics: Dynamics.Light,
-          },
-        ],
-      },
-      {
-        notes: [
-          {
-            dynamics: Dynamics.Light,
-          },
-        ],
-      },
-      {
-        notes: [
-          {
-            dynamics: Dynamics.Accent,
-          },
-        ],
-      },
-      {
-        notes: [
-          {
-            dynamics: Dynamics.Light,
-          },
-        ],
-      },
-      {
-        notes: [
-          {
-            dynamics: Dynamics.Light,
-          },
-        ],
-      },
-      {
-        notes: [
-          {
-            dynamics: Dynamics.Light,
-          },
-        ],
-      },
-    ],
-  },
-];
-
-export const SINGLE_RHYTHM: Rhythm = {
-  id: "0",
-  name: "single",
-  category: "default",
-  order: 0,
-  measures: [
-    {
-      repeat: 1,
-      beatsPerMinute: UNIFORM_BPM_60,
-      beats: [
-        {
-          notes: [
-            {
-              dynamics: Dynamics.Accent,
-            },
-          ],
-        },
-        {
-          notes: [
-            {
-              dynamics: Dynamics.Light,
-            },
-          ],
-        },
-        {
-          notes: [
-            {
-              dynamics: Dynamics.Light,
-            },
-          ],
-        },
-        {
-          notes: [
-            {
-              dynamics: Dynamics.Light,
-            },
-          ],
-        },
-      ],
-    },
-  ],
-};
-
-export const DUPLETS_RHYTHM: Rhythm = {
-  id: "1",
-  name: "duplets",
-  category: "default",
-  order: 1,
-  measures: [
-    {
-      repeat: 1,
-      beatsPerMinute: UNIFORM_BPM_60,
-      beats: [
-        {
-          notes: [
-            {
-              dynamics: Dynamics.Accent,
-            },
-            { dynamics: Dynamics.Light },
-          ],
-        },
-        {
-          notes: [
-            {
-              dynamics: Dynamics.Accent,
-            },
-            { dynamics: Dynamics.Light },
-          ],
-        },
-        {
-          notes: [
-            {
-              dynamics: Dynamics.Accent,
-            },
-            { dynamics: Dynamics.Light },
-          ],
-        },
-        {
-          notes: [
-            {
-              dynamics: Dynamics.Accent,
-            },
-            { dynamics: Dynamics.Light },
-          ],
-        },
-      ],
-    },
-  ],
-};
-
-export const TRIPLETS_RHYTHM: Rhythm = {
-  id: "2",
-  name: "triplets",
-  category: "default",
-  order: 1,
-  measures: [
-    {
-      repeat: 1,
-      beatsPerMinute: UNIFORM_BPM_60,
-      beats: [
-        {
-          notes: [
-            {
-              dynamics: Dynamics.Accent,
-            },
-            { dynamics: Dynamics.Light },
-            { dynamics: Dynamics.Light },
-          ],
-        },
-        {
-          notes: [
-            {
-              dynamics: Dynamics.Accent,
-            },
-            { dynamics: Dynamics.Light },
-            { dynamics: Dynamics.Light },
-          ],
-        },
-        {
-          notes: [
-            {
-              dynamics: Dynamics.Accent,
-            },
-            { dynamics: Dynamics.Light },
-            { dynamics: Dynamics.Light },
-          ],
-        },
-        {
-          notes: [
-            {
-              dynamics: Dynamics.Accent,
-            },
-            { dynamics: Dynamics.Light },
-            { dynamics: Dynamics.Light },
-          ],
-        },
-      ],
-    },
-  ],
-};

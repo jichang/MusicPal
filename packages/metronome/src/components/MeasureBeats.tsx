@@ -1,10 +1,10 @@
-import React, { useCallback } from "react";
-import "./MeasureBeats.css";
-import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
-import { Localized } from "@fluent/react";
-import { Button } from "antd";
-import { BeatViewer } from "./BeatViewer";
-import { Measure } from "../utils/music";
+import React, { useCallback } from 'react';
+import './MeasureBeats.css';
+import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
+import { Localized } from '@fluent/react';
+import { Button } from 'antd';
+import { BeatViewer } from './BeatViewer';
+import { Measure } from '@musicpal/music';
 
 export interface MeasureBeatsProps {
   measure: Measure;

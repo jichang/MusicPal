@@ -1,15 +1,15 @@
-import { Localized } from "@fluent/react";
-import React from "react";
-import { ComponentProps } from "react";
-import "./Form.css";
+import { Localized } from '@fluent/react';
+import React from 'react';
+import { ComponentProps } from 'react';
+import './Form.css';
 
-export interface FormFieldGroupProps extends ComponentProps<"div"> {}
+export interface FormFieldGroupProps extends ComponentProps<'div'> {}
 
 export function FormFieldGroup(props: FormFieldGroupProps) {
   return <div className="form__field__group">{props.children}</div>;
 }
 
-export interface FormFieldProps extends ComponentProps<"div"> {
+export interface FormFieldProps extends ComponentProps<'div'> {
   name?: string;
   label?: string;
 }
@@ -29,8 +29,13 @@ export function FormField(props: FormFieldProps) {
   );
 }
 
-export interface FormProps extends ComponentProps<"form"> {}
+export interface FormProps extends ComponentProps<'form'> {}
 
 export function Form(props: FormProps) {
-  return <form className="form">{props.children}</form>;
+  const { children, ...rest } = props;
+  return (
+    <form className="form" {...rest}>
+      {props.children}
+    </form>
+  );
 }

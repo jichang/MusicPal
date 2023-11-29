@@ -1,11 +1,11 @@
-import React, { useCallback, useMemo, useState } from "react";
-import { BeatsPerMinute, Rhythm, locate, parseRhythm } from "../utils/music";
-import "./RhythmViewer.css";
-import { PlusOutlined } from "@ant-design/icons";
-import { Localized } from "@fluent/react";
-import { Button, Flex, List } from "antd";
-import { MeasureViewer } from "./MeasureViewer";
-import { useTick } from "../hooks/useTick";
+import React, { useCallback, useMemo, useState } from 'react';
+import './RhythmViewer.css';
+import { PlusOutlined } from '@ant-design/icons';
+import { Localized } from '@fluent/react';
+import { Button, Flex, List } from 'antd';
+import { MeasureViewer } from './MeasureViewer';
+import { useTick } from '../hooks/useTick';
+import { Measure, Rhythm, analyseRhythm, locate } from '@musicpal/music';
 
 export interface RhythmViewerProps {
   isRunning: boolean;
@@ -17,10 +17,6 @@ export interface RhythmViewerProps {
   onAddMeasure: () => void;
   onRemoveMeasure: (measureIndex: number) => void;
   onChangeRepeat: (measureIndex: number, repeat: number) => void;
-  onChangeBeatsPerMinute: (
-    measureIndex: number,
-    beatPerMinute: BeatsPerMinute,
-  ) => void;
   onAddBeat: (measureIndex: number) => void;
   onRemoveBeat: (measureIndex: number) => void;
   onAddNote: (measureIndex: number, beatIndex: number) => void;
@@ -39,7 +35,6 @@ export function RhythmViewer(props: RhythmViewerProps) {
     onAddMeasure,
     onRemoveMeasure,
     onChangeRepeat,
-    onChangeBeatsPerMinute,
     onAddBeat,
     onRemoveBeat,
     onAddNote,
@@ -47,8 +42,8 @@ export function RhythmViewer(props: RhythmViewerProps) {
     onRemoveNote,
   } = props;
 
-  const { ticksPerBeat, beatCount } = useMemo(() => {
-    return parseRhythm(rhythm);
+  const { ticksPerBeat, beatsPerMinute, beatCount } = useMemo(() => {
+    return analyseRhythm(rhythm);
   }, [rhythm]);
 
   const [currTick, setCurrTick] = useState(0);
@@ -58,18 +53,18 @@ export function RhythmViewer(props: RhythmViewerProps) {
     });
   }, [setCurrTick, ticksPerBeat, beatCount]);
 
-  useTick({ isRunning, beatsPerMinute: 60, ticksPerBeat }, incrementTick);
+  useTick({ isRunning, tempo: 60, ticksPerBeat }, incrementTick);
 
   const location = useMemo(() => {
-    return locate(rhythm, ticksPerBeat, currTick);
-  }, [rhythm, currTick, ticksPerBeat]);
+    return locate(rhythm, ticksPerBeat, beatsPerMinute, currTick);
+  }, [rhythm, currTick, beatsPerMinute, ticksPerBeat]);
 
   const { currMeasureIndex, currMeasureOffset, currBeatIndex, currNoteIndex } =
     location;
 
   return (
     <div className="rhythm__viewer">
-      <List
+      <List<Measure>
         className="measure__list"
         dataSource={rhythm.measures}
         renderItem={(measure, index) => {
@@ -84,7 +79,6 @@ export function RhythmViewer(props: RhythmViewerProps) {
                 currNoteIndex={currNoteIndex}
                 onRemove={onRemoveMeasure}
                 onChangeRepeat={onChangeRepeat}
-                onChangeBeatsPerMinute={onChangeBeatsPerMinute}
                 onAddBeat={onAddBeat}
                 onRemoveBeat={onRemoveBeat}
                 onAddNote={onAddNote}

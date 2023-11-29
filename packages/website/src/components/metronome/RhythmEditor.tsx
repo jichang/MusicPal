@@ -1,28 +1,29 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from 'react';
+import { FormField, RhythmViewer, TempoSettings } from '@musicpal/metronome';
 import {
-  BeatsPerMinute,
+  Tempo,
   Rhythm,
-  RhythmViewer,
   addBeat,
   addMeasure,
   addNote,
-  changeBeatsPerMinute,
+  changeTempo,
   changeNote,
   changeRepeat,
   cloneRhythm,
   removeBeat,
   removeMeasure,
   removeNote,
-} from "@musicpal/metronome";
-import "./RhythmEditor.css";
-import { Button } from "antd";
+} from '@musicpal/music';
+import './RhythmEditor.css';
+import { Button, Form, Modal } from 'antd';
 import {
+  ClockCircleOutlined,
   PauseCircleFilled,
   PlayCircleFilled,
   SaveOutlined,
-} from "@ant-design/icons";
-import { Localized } from "@fluent/react";
-import { useFlag } from "../../hooks/useFlag";
+} from '@ant-design/icons';
+import { Localized } from '@fluent/react';
+import { useFlag } from '../../hooks/useFlag';
 
 export interface RhythmEditorProps {
   rhythm: Rhythm;
@@ -33,6 +34,8 @@ export interface RhythmEditorProps {
 export function RhythmEditor(props: RhythmEditorProps) {
   const { children, onSave } = props;
 
+  const [hasPendingChanges, setHasPendingChanges] = useState(false);
+
   const [rhythm, setRhythm] = useState(() => {
     return cloneRhythm(props.rhythm);
   });
@@ -41,89 +44,105 @@ export function RhythmEditor(props: RhythmEditorProps) {
     setRhythm(cloneRhythm(props.rhythm));
   }, [props.rhythm, setRhythm]);
 
+  const updateRhythm = useCallback(
+    (updater: Rhythm | ((rhythm: Rhythm) => Rhythm)) => {
+      setRhythm(updater);
+      setHasPendingChanges(true);
+    },
+    [setRhythm, setHasPendingChanges],
+  );
+
   const handleAddMeasure = useCallback(() => {
-    setRhythm((rhythm) => {
+    updateRhythm((rhythm) => {
       return addMeasure(rhythm);
     });
-  }, [setRhythm]);
+  }, [updateRhythm]);
 
   const handleRemoveMeasure = useCallback(
     (measureIndex: number) => {
-      setRhythm((rhythm) => {
+      updateRhythm((rhythm) => {
         return removeMeasure(rhythm, measureIndex);
       });
     },
-    [setRhythm],
+    [updateRhythm],
   );
 
   const handleAddBeat = useCallback(
     (measureIndex: number) => {
-      setRhythm((rhythm) => {
+      updateRhythm((rhythm) => {
         return addBeat(rhythm, measureIndex);
       });
     },
-    [setRhythm],
+    [updateRhythm],
   );
 
   const handleRemoveBeat = useCallback(
     (measureIndex: number) => {
-      setRhythm((rhythm) => {
+      updateRhythm((rhythm) => {
         return removeBeat(rhythm, measureIndex);
       });
     },
-    [setRhythm],
+    [updateRhythm],
   );
 
   const handleAddNote = useCallback(
     (measureIndex: number, beatIndex: number) => {
-      setRhythm((rhythm) => {
+      updateRhythm((rhythm) => {
         return addNote(rhythm, measureIndex, beatIndex);
       });
     },
-    [setRhythm],
+    [updateRhythm],
   );
 
   const handleChangeNote = useCallback(
     (measureIndex: number, beatIndex: number, noteIndex: number) => {
-      setRhythm((rhythm) => {
+      updateRhythm((rhythm) => {
         return changeNote(rhythm, measureIndex, beatIndex, noteIndex);
       });
     },
-    [setRhythm],
+    [updateRhythm],
   );
 
   const handleRemoveNote = useCallback(
     (measureIndex: number, beatIndex: number) => {
-      setRhythm((rhythm) => {
+      updateRhythm((rhythm) => {
         return removeNote(rhythm, measureIndex, beatIndex);
       });
     },
-    [setRhythm],
+    [updateRhythm],
   );
 
   const { flag: isRunning, toggle } = useFlag(false);
 
   const handleChangeRepeat = useCallback(
     (measuerIndex: number, repeat: number) => {
-      setRhythm((rhythm) => {
+      updateRhythm((rhythm) => {
         return changeRepeat(rhythm, measuerIndex, repeat);
       });
     },
-    [setRhythm],
+    [updateRhythm],
   );
 
-  const handleChangeBeatsPerMinute = useCallback(
-    (measuerIndex: number, beatsPerMinute: BeatsPerMinute) => {
-      setRhythm((rhythm) => {
-        return changeBeatsPerMinute(rhythm, measuerIndex, beatsPerMinute);
+  const {
+    flag: isTempoModalOpened,
+    toggle: toggleTempoModal,
+    turnOn: openTempoModal,
+    turnOff: closeTempoModal,
+  } = useFlag(false);
+
+  const handleChangeTempo = useCallback(
+    (tempo: Tempo) => {
+      updateRhythm((rhythm) => {
+        return changeTempo(rhythm, tempo);
       });
     },
-    [setRhythm],
+    [updateRhythm],
   );
 
   const handleSave = useCallback(() => {
     onSave(rhythm);
-  }, [rhythm, onSave]);
+    setHasPendingChanges(false);
+  }, [rhythm, onSave, setHasPendingChanges]);
 
   return (
     <div className="rhythm__editor">
@@ -131,7 +150,6 @@ export function RhythmEditor(props: RhythmEditorProps) {
         rhythm={rhythm}
         isRunning={isRunning}
         onChangeRepeat={handleChangeRepeat}
-        onChangeBeatsPerMinute={handleChangeBeatsPerMinute}
         onAddMeasure={handleAddMeasure}
         onRemoveMeasure={handleRemoveMeasure}
         onAddBeat={handleAddBeat}
@@ -143,6 +161,9 @@ export function RhythmEditor(props: RhythmEditorProps) {
       <div className="rhythm__editor__footer">
         <div className="toolbar">
           <div className="toolbar__main">
+            <Button icon={<ClockCircleOutlined />} onClick={toggleTempoModal}>
+              <Localized id="tempo">Tempo</Localized>
+            </Button>
             <Button
               icon={isRunning ? <PauseCircleFilled /> : <PlayCircleFilled />}
               onClick={toggle}
@@ -155,13 +176,31 @@ export function RhythmEditor(props: RhythmEditorProps) {
             </Button>
           </div>
           <div className="toolbar__side">
-            <Button type="primary" icon={<SaveOutlined />} onClick={handleSave}>
+            <Button
+              disabled={!hasPendingChanges}
+              type="primary"
+              icon={<SaveOutlined />}
+              onClick={handleSave}
+            >
               <Localized id="save">Save</Localized>
             </Button>
           </div>
         </div>
       </div>
       {children}
+
+      <Modal
+        title={
+          <Localized id="update-tempo-of-rhythm">
+            Update tempo of rhythm
+          </Localized>
+        }
+        open={isTempoModalOpened}
+        footer={null}
+        onCancel={closeTempoModal}
+      >
+        <TempoSettings tempo={rhythm.tempo} onChangeTempo={handleChangeTempo} />
+      </Modal>
     </div>
   );
 }

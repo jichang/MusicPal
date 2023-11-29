@@ -1,4 +1,4 @@
-import * as Comlink from "comlink";
+import * as Comlink from 'comlink';
 
 const intervalIds: Map<string, number> = new Map<string, number>();
 

@@ -1,10 +1,10 @@
-import { negotiateLanguages } from "@fluent/langneg";
-import { createContext, useCallback, useContext, useState } from "react";
-import { RESOURCES, generateBundles, getDefaultLocale } from "../i18n";
-import { LocalizationProvider, ReactLocalization } from "@fluent/react";
-import React from "react";
+import { negotiateLanguages } from '@fluent/langneg';
+import { createContext, useCallback, useContext, useState } from 'react';
+import { RESOURCES, generateBundles, getDefaultLocale } from '../i18n';
+import { LocalizationProvider, ReactLocalization } from '@fluent/react';
+import React from 'react';
 
-export const LOCALE_STORAGE_KEY = "musicalpal.locale";
+export const LOCALE_STORAGE_KEY = 'musicalpal.locale';
 
 export interface IAppContextValue {
   locale: string;
@@ -12,7 +12,7 @@ export interface IAppContextValue {
 }
 
 export const AppContext = createContext<IAppContextValue>({
-  locale: "en-US",
+  locale: 'en-US',
   changeLocale: () => {},
 });
 

@@ -1,11 +1,11 @@
-import React from "react";
-import { List, Card } from "antd";
-import { useLiveQuery } from "dexie-react-hooks";
-import { useStorage } from "../storage.context";
-import { Rhythm } from "@musicpal/metronome";
-import { Localized } from "@fluent/react";
-import { Link } from "react-router-dom";
-import { ArrowRightOutlined } from "@ant-design/icons";
+import React from 'react';
+import { List, Card } from 'antd';
+import { useLiveQuery } from 'dexie-react-hooks';
+import { useStorage } from '../storage.context';
+import { Rhythm } from '@musicpal/metronome';
+import { Localized } from '@fluent/react';
+import { Link } from 'react-router-dom';
+import { ArrowRightOutlined } from '@ant-design/icons';
 
 export interface DefaultRhythmListProps {}
 
@@ -13,7 +13,7 @@ export function DefaultRhythmList(props: DefaultRhythmListProps) {
   const { dexie } = useStorage();
 
   const rhythms = useLiveQuery(() => {
-    return dexie.rhythms.where("category").equals("default").toArray();
+    return dexie.rhythms.where('category').equals('default').toArray();
   }, [dexie]);
 
   return (

@@ -1,8 +1,8 @@
-import { ArrowLeftOutlined } from "@ant-design/icons";
-import { Localized } from "@fluent/react";
-import { Button } from "antd";
-import React, { useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { ArrowLeftOutlined } from '@ant-design/icons';
+import { Localized } from '@fluent/react';
+import { Button } from 'antd';
+import React, { useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export function GoBack() {
   const navigate = useNavigate();

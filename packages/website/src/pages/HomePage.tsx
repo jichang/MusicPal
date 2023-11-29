@@ -1,21 +1,21 @@
-import React, { useCallback } from "react";
-import { Button, Dropdown, List, MenuProps } from "antd";
-import { ArrowRightOutlined, TranslationOutlined } from "@ant-design/icons";
-import { Localized } from "@fluent/react";
-import "./HomePage.css";
-import { useAppContext } from "../components/app.context";
-import { RESOURCES_LABELS } from "../i18n";
-import { Link } from "react-router-dom";
+import React, { useCallback } from 'react';
+import { Button, Dropdown, List, MenuProps } from 'antd';
+import { ArrowRightOutlined, TranslationOutlined } from '@ant-design/icons';
+import { Localized } from '@fluent/react';
+import './HomePage.css';
+import { useAppContext } from '../components/app.context';
+import { RESOURCES_LABELS } from '../i18n';
+import { Link } from 'react-router-dom';
 
 export function HomePage() {
-  const items: MenuProps["items"] = [
+  const items: MenuProps['items'] = [
     {
-      label: RESOURCES_LABELS["en-US"],
-      key: "en-US",
+      label: RESOURCES_LABELS['en-US'],
+      key: 'en-US',
     },
     {
-      label: RESOURCES_LABELS["zh-CN"],
-      key: "zh-CN",
+      label: RESOURCES_LABELS['zh-CN'],
+      key: 'zh-CN',
     },
   ];
 

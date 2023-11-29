@@ -1,21 +1,22 @@
-import React, { ChangeEvent, useCallback, useState } from "react";
-import "./MetronomeListPage.css";
-import { Button, Input, Modal, Tabs } from "antd";
-import type { TabsProps } from "antd";
-import { PersonalRhythmList } from "../components/metronome/PersonalRhythmList";
-import { DefaultRhythmList } from "../components/metronome/DefaultRhythmList";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { Localized } from "@fluent/react";
-import { GoBack } from "../components/GoBack";
-import { useFlag } from "../hooks/useFlag";
-import { useStorage } from "../components/storage.context";
-import { DEFAULT_MEASURES, Form, FormField, Rhythm } from "@musicpal/metronome";
+import React, { ChangeEvent, FormEvent, useCallback, useState } from 'react';
+import './MetronomeListPage.css';
+import { Button, Input, Modal, Tabs } from 'antd';
+import type { TabsProps } from 'antd';
+import { PersonalRhythmList } from '../components/metronome/PersonalRhythmList';
+import { DefaultRhythmList } from '../components/metronome/DefaultRhythmList';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Localized } from '@fluent/react';
+import { GoBack } from '../components/GoBack';
+import { useFlag } from '../hooks/useFlag';
+import { useStorage } from '../components/storage.context';
+import { Form, FormField } from '@musicpal/metronome';
+import { DEFAULT_MEASURES, Rhythm, UNIFORM_BPM_60 } from '@musicpal/music';
 
 type FieldType = {
   name?: string;
 };
 
-export type TabsItems = TabsProps["items"];
+export type TabsItems = TabsProps['items'];
 
 export function MetronomeListPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -28,12 +29,12 @@ export function MetronomeListPage() {
 
   const items: TabsItems = [
     {
-      key: "personal",
+      key: 'personal',
       label: <Localized id="personal">Personal</Localized>,
       children: <PersonalRhythmList onCreateRhythm={openRhythmNameModal} />,
     },
     {
-      key: "default",
+      key: 'default',
       label: <Localized id="default">Default</Localized>,
       children: <DefaultRhythmList />,
     },
@@ -46,7 +47,7 @@ export function MetronomeListPage() {
     [setSearchParams],
   );
 
-  const [rhythmName, setRhythmName] = useState("");
+  const [rhythmName, setRhythmName] = useState('');
 
   const changeRhythmName = useCallback(
     (evt: ChangeEvent<HTMLInputElement>) => {
@@ -60,28 +61,34 @@ export function MetronomeListPage() {
 
   const [isCreating, setIsCreating] = useState(false);
 
-  const createRhythm = useCallback(() => {
-    const id = `${Date.now()}.${Math.random()}`;
-    const rhythm: Rhythm = {
-      id,
-      category: "personal",
-      name: rhythmName,
-      order: Date.now(),
-      measures: DEFAULT_MEASURES,
-    };
+  const createRhythm = useCallback(
+    (evt: FormEvent) => {
+      evt.preventDefault();
 
-    setIsCreating(true);
+      const id = `${Date.now()}.${Math.random()}`;
+      const rhythm: Rhythm = {
+        id,
+        category: 'personal',
+        name: rhythmName,
+        order: Date.now(),
+        tempo: UNIFORM_BPM_60,
+        measures: DEFAULT_MEASURES,
+      };
 
-    dexie.rhythms.add(rhythm).then(
-      () => {
-        setIsCreating(false);
-        navigate(`/metronome/${id}`);
-      },
-      () => {
-        setIsCreating(false);
-      },
-    );
-  }, [rhythmName, dexie, navigate, setIsCreating]);
+      setIsCreating(true);
+
+      dexie.rhythms.add(rhythm).then(
+        () => {
+          setIsCreating(false);
+          navigate(`/metronome/${id}`);
+        },
+        () => {
+          setIsCreating(false);
+        },
+      );
+    },
+    [rhythmName, dexie, navigate, setIsCreating],
+  );
 
   return (
     <div className="page page--metronome">
@@ -90,7 +97,7 @@ export function MetronomeListPage() {
       </div>
       <div className="page__content">
         <Tabs
-          activeKey={searchParams.get("tabkey") || "personal"}
+          activeKey={searchParams.get('tabkey') || 'personal'}
           items={items}
           onChange={handleTabChanged}
         />

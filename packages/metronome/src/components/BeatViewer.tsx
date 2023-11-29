@@ -1,10 +1,10 @@
-import React, { useCallback } from "react";
-import { Beat } from "../utils/music";
-import { NoteButton } from "./NoteButton";
-import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
-import { Localized } from "@fluent/react";
-import { Button } from "antd";
-import "./BeatViewer.css";
+import React, { useCallback } from 'react';
+import { NoteButton } from './NoteButton';
+import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
+import { Localized } from '@fluent/react';
+import { Button } from 'antd';
+import './BeatViewer.css';
+import { Beat } from '@musicpal/music';
 
 export interface BeatViewerProps {
   beat: Beat;
