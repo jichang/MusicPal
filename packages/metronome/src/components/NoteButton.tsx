@@ -15,7 +15,6 @@ export function NoteButton(props: NoteButtonProps) {
   return (
     <Button
       title="note"
-      htmlType="button"
       icon={<AudioFilled />}
       className={`note note--${note.dynamics} ${
         isCurrent ? "note--active" : ""

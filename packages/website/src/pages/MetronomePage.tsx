@@ -4,7 +4,7 @@ import { Button, Layout, Tabs } from "antd";
 import type { TabsProps } from "antd";
 import { PersonalRhythmList } from "../components/metronome/PersonalRhythmList";
 import { DefaultRhythmList } from "../components/metronome/DefaultRhythmList";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Localized } from "@fluent/react";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 
@@ -49,9 +49,10 @@ export function MetronomePage() {
   return (
     <div className="page page--home">
       <div className="page__header">
-        <Button icon={<ArrowLeftOutlined />} type="link" href="/">
+        <Link to="/">
+          <ArrowLeftOutlined />
           <Localized id="back">Back</Localized>
-        </Button>
+        </Link>
       </div>
       <div className="page__content">
         <Tabs activeKey={activeKey} items={items} onChange={handleTabChanged} />

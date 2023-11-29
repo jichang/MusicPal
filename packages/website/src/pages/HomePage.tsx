@@ -5,6 +5,7 @@ import { Localized } from "@fluent/react";
 import "./HomePage.css";
 import { useAppContext } from "../components/app.context";
 import { RESOURCES_LABELS } from "../i18n";
+import { Link } from "react-router-dom";
 
 export function HomePage() {
   const items: MenuProps["items"] = [
@@ -44,13 +45,10 @@ export function HomePage() {
         <List bordered>
           <List.Item
             actions={[
-              <Button
-                type="link"
-                icon={<PlaySquareOutlined />}
-                href="/metronome"
-              >
+              <Link to="/metronome">
+                <PlaySquareOutlined />
                 <Localized id="open">Open</Localized>
-              </Button>,
+              </Link>,
             ]}
           >
             <List.Item.Meta

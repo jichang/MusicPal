@@ -18,7 +18,7 @@ export class MusicPalDexie extends Dexie {
     this.rhythms.bulkAdd([
       {
         id: "0",
-        name: "Rhythm4x4",
+        name: "single-beat",
         category: "default",
         order: 0,
         measures: [
@@ -42,7 +42,56 @@ export class MusicPalDexie extends Dexie {
       },
       {
         id: "1",
-        name: "Rhythm8x4",
+        name: "duplets",
+        category: "default",
+        order: 1,
+        measures: [
+          {
+            repeat: 1,
+            beats: [
+              {
+                repeat: 1,
+                notes: [
+                  {
+                    dynamics: Dynamics.Strong,
+                  },
+                  { dynamics: Dynamics.Light },
+                ],
+              },
+              {
+                repeat: 1,
+                notes: [
+                  {
+                    dynamics: Dynamics.Strong,
+                  },
+                  { dynamics: Dynamics.Light },
+                ],
+              },
+              {
+                repeat: 1,
+                notes: [
+                  {
+                    dynamics: Dynamics.Strong,
+                  },
+                  { dynamics: Dynamics.Light },
+                ],
+              },
+              {
+                repeat: 1,
+                notes: [
+                  {
+                    dynamics: Dynamics.Strong,
+                  },
+                  { dynamics: Dynamics.Light },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+      {
+        id: "2",
+        name: "triplets",
         category: "default",
         order: 1,
         measures: [
@@ -57,11 +106,34 @@ export class MusicPalDexie extends Dexie {
                   },
                   { dynamics: Dynamics.Light },
                   { dynamics: Dynamics.Light },
-                  { dynamics: Dynamics.Light },
+                ],
+              },
+              {
+                repeat: 1,
+                notes: [
                   {
                     dynamics: Dynamics.Strong,
                   },
                   { dynamics: Dynamics.Light },
+                  { dynamics: Dynamics.Light },
+                ],
+              },
+              {
+                repeat: 1,
+                notes: [
+                  {
+                    dynamics: Dynamics.Strong,
+                  },
+                  { dynamics: Dynamics.Light },
+                  { dynamics: Dynamics.Light },
+                ],
+              },
+              {
+                repeat: 1,
+                notes: [
+                  {
+                    dynamics: Dynamics.Strong,
+                  },
                   { dynamics: Dynamics.Light },
                   { dynamics: Dynamics.Light },
                 ],

@@ -18,6 +18,10 @@ const router = createBrowserRouter([
     element: <MetronomePage />,
   },
   {
+    path: "/metronome/create",
+    element: <></>,
+  },
+  {
     path: "/metronome/:id",
     element: <></>,
   },
