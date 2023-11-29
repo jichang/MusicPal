@@ -29,3 +29,5 @@ add-note-btn =
 remove-note-btn =
   .title = 删除音符
 no-measures = 尚无小节
+uniform = 匀速
+varying = 变速

@@ -1,10 +1,11 @@
 import React, { useCallback } from "react";
-import { Measure } from "../utils/music";
+import { BeatsPerMinute, Measure } from "../utils/music";
 import { PlusOutlined, MinusOutlined } from "@ant-design/icons";
 import { Localized } from "@fluent/react";
 import { Card, Button } from "antd";
 import "./MeasureViewer.css";
 import { BeatViewer } from "./BeatViewer";
+import { BeatsPerMinuteAdjuster } from "./BeatsPerMinuteAdjuster";
 
 export interface MeasureViewerProps {
   index: number;
@@ -15,6 +16,10 @@ export interface MeasureViewerProps {
   editable: boolean;
   measure: Measure;
   onRemove: (measureIndex: number) => void;
+  onChangeBeatPerMinute: (
+    measureIndex: number,
+    beatPerMinute: BeatsPerMinute
+  ) => void;
   onAddBeat: (measureIndex: number) => void;
   onRemoveBeat: (measureIndex: number) => void;
   onAddNote: (measureIndex: number, beatIndex: number) => void;
@@ -31,22 +36,30 @@ export function MeasureViewer(props: MeasureViewerProps) {
     editable,
     measure,
     onRemove,
+    onChangeBeatPerMinute,
     onAddBeat,
     onRemoveBeat,
     onAddNote,
     onRemoveNote,
   } = props;
 
+  const handleChangeBeatPerMinute = useCallback(
+    (beatPerMinute: BeatsPerMinute) => {
+      onChangeBeatPerMinute(index, beatPerMinute);
+    },
+    [index, onChangeBeatPerMinute]
+  );
+
   const handleAddBeat = useCallback(() => {
-    onAddBeat?.(index);
+    onAddBeat(index);
   }, [onAddBeat, index]);
 
   const handleRemoveBeat = useCallback(() => {
-    onRemoveBeat?.(index);
+    onRemoveBeat(index);
   }, [onRemoveBeat, index]);
 
   const handleRemoveMeasure = useCallback(() => {
-    onRemove?.(index);
+    onRemove(index);
   }, [index, onRemove]);
 
   return (
@@ -110,6 +123,12 @@ export function MeasureViewer(props: MeasureViewerProps) {
             />
           </Localized>
         ) : null}
+      </div>
+      <div>
+        <BeatsPerMinuteAdjuster
+          beatsPerMinute={measure.beatsPerMinute}
+          onChange={handleChangeBeatPerMinute}
+        />
       </div>
     </Card>
   );

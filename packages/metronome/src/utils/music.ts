@@ -1,5 +1,20 @@
 import { lcm } from "./math";
 
+export type BeatsPerMinute = {
+  type: 'uniform',
+  speed: number;
+} | {
+  type: 'varying',
+  from: number,
+  step: number;
+  to: number,
+}
+
+export const BPM_60: BeatsPerMinute = {
+  type: 'uniform',
+  speed: 60
+}
+
 export enum Dynamics {
   None = 0,
   Light,
@@ -32,12 +47,14 @@ export function cloneBeat(beat: Beat): Beat {
 
 export interface Measure {
   repeat: number;
+  beatsPerMinute: BeatsPerMinute;
   beats: Beat[];
 }
 
 export function cloneMeasure(measure: Measure): Measure {
   return {
     repeat: measure.repeat,
+    beatsPerMinute: measure.beatsPerMinute,
     beats: measure.beats.map(cloneBeat),
   };
 }
@@ -75,6 +92,16 @@ export function addMeasure(rhythm: Rhythm) {
 export function removeMeasure(rhythm: Rhythm, measureIndex: number) {
   const newRhythm = cloneRhythm(rhythm);
   newRhythm.measures.splice(measureIndex, 1);
+
+  return newRhythm;
+}
+
+export function changeBeatsPerMinute(rhythm: Rhythm, measureIndex: number, beatsPerMinute: BeatsPerMinute) {
+  const newRhythm = cloneRhythm(rhythm);
+  const measure = newRhythm.measures[measureIndex];
+  if (measure) {
+    measure.beatsPerMinute = beatsPerMinute;
+  }
 
   return newRhythm;
 }
@@ -238,6 +265,7 @@ export function locate(rhythm: Rhythm, ticksPerBeat: number, currTick: number) {
 export const DEFAULT_MEASURES: Measure[] = [
   {
     repeat: 1,
+    beatsPerMinute: BPM_60,
     beats: [
       {
         notes: [
@@ -307,6 +335,7 @@ export const SINGLE_RHYTHM: Rhythm = {
   measures: [
     {
       repeat: 1,
+      beatsPerMinute: BPM_60,
       beats: [
         {
           notes: [
@@ -349,6 +378,7 @@ export const DUPLETS_RHYTHM: Rhythm = {
   measures: [
     {
       repeat: 1,
+      beatsPerMinute: BPM_60,
       beats: [
         {
           notes: [
@@ -395,6 +425,7 @@ export const TRIPLETS_RHYTHM: Rhythm = {
   measures: [
     {
       repeat: 1,
+      beatsPerMinute: BPM_60,
       beats: [
         {
           notes: [

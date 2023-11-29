@@ -29,3 +29,5 @@ add-note-btn =
 remove-note-btn =
   .title = Remove Note
 no-measures = No Measures
+uniform = Uniform
+varying = Varying

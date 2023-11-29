@@ -1,10 +1,12 @@
 import React, { useCallback, useEffect, useState } from "react";
 import {
+  BeatsPerMinute,
   Rhythm,
   RhythmViewer,
   addBeat,
   addMeasure,
   addNote,
+  changeBeatsPerMinute,
   cloneRhythm,
   removeBeat,
   removeMeasure,
@@ -90,13 +92,13 @@ export function RhythmEditor(props: RhythmEditorProps) {
 
   const { flag: isRunning, toggle } = useFlag(false);
 
-  const [beatsPerMinute, setBeatsPerMinute] = useState(120);
-
-  const handleBeatsPerMinuteChanged = useCallback(
-    (beatsPerMinute: number | null) => {
-      setBeatsPerMinute(beatsPerMinute || 60);
+  const handleChangeBeatsPerMinute = useCallback(
+    (measuerIndex: number, beatsPerMinute: BeatsPerMinute) => {
+      setRhythm((rhythm) => {
+        return changeBeatsPerMinute(rhythm, measuerIndex, beatsPerMinute);
+      });
     },
-    [setBeatsPerMinute]
+    [setRhythm]
   );
 
   const handleSave = useCallback(() => {
@@ -109,7 +111,7 @@ export function RhythmEditor(props: RhythmEditorProps) {
         editable={rhythm.category !== "default"}
         rhythm={rhythm}
         isRunning={isRunning}
-        beatsPerMinute={beatsPerMinute}
+        onChangeBeatPerMinute={handleChangeBeatsPerMinute}
         onAddMeasure={handleAddMeasure}
         onRemoveMeasure={handleRemoveMeasure}
         onAddBeat={handleAddBeat}
@@ -119,18 +121,12 @@ export function RhythmEditor(props: RhythmEditorProps) {
       />
       <div className="rhythm__editor__footer">
         <div className="toolbar">
-          <Form className="form--player">
-            <InputNumber
-              value={beatsPerMinute}
-              onChange={handleBeatsPerMinuteChanged}
-            />
-            <Button
-              icon={isRunning ? <PauseCircleFilled /> : <PlayCircleFilled />}
-              onClick={toggle}
-            >
-              <Localized id="play">Play</Localized>
-            </Button>
-          </Form>
+          <Button
+            icon={isRunning ? <PauseCircleFilled /> : <PlayCircleFilled />}
+            onClick={toggle}
+          >
+            <Localized id="play">Play</Localized>
+          </Button>
           <Button type="primary" icon={<SaveOutlined />} onClick={handleSave}>
             <Localized id="save">Save</Localized>
           </Button>

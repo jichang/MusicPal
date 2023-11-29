@@ -90,7 +90,7 @@ export function MetronomeListPage() {
       </div>
       <div className="page__content">
         <Tabs
-          activeKey={searchParams.get("tabkey") || "default"}
+          activeKey={searchParams.get("tabkey") || "personal"}
           items={items}
           onChange={handleTabChanged}
         />

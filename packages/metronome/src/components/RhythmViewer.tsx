@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from "react";
-import { Rhythm, locate, parseRhythm } from "../utils/music";
+import { BeatsPerMinute, Rhythm, locate, parseRhythm } from "../utils/music";
 import "./RhythmViewer.css";
 import { PlusOutlined } from "@ant-design/icons";
 import { Localized } from "@fluent/react";
@@ -9,7 +9,6 @@ import { useTick } from "../hooks/useTick";
 
 export interface RhythmViewerProps {
   isRunning: boolean;
-  beatsPerMinute: number;
   rhythm: Rhythm;
   currMeasureIndex?: number;
   currMeasureOffset?: number;
@@ -18,6 +17,10 @@ export interface RhythmViewerProps {
   editable: boolean;
   onAddMeasure: () => void;
   onRemoveMeasure: (measureIndex: number) => void;
+  onChangeBeatPerMinute: (
+    measureIndex: number,
+    beatPerMinute: BeatsPerMinute
+  ) => void;
   onAddBeat: (measureIndex: number) => void;
   onRemoveBeat: (measureIndex: number) => void;
   onAddNote: (measureIndex: number, beatIndex: number) => void;
@@ -28,10 +31,10 @@ export function RhythmViewer(props: RhythmViewerProps) {
   const {
     isRunning,
     rhythm,
-    beatsPerMinute,
     editable,
     onAddMeasure,
     onRemoveMeasure,
+    onChangeBeatPerMinute,
     onAddBeat,
     onRemoveBeat,
     onAddNote,
@@ -49,7 +52,7 @@ export function RhythmViewer(props: RhythmViewerProps) {
     });
   }, [setCurrTick, ticksPerBeat, beatCount]);
 
-  useTick({ isRunning, beatsPerMinute, ticksPerBeat }, incrementTick);
+  useTick({ isRunning, beatsPerMinute: 60, ticksPerBeat }, incrementTick);
 
   const location = useMemo(() => {
     return locate(rhythm, ticksPerBeat, currTick);
@@ -75,6 +78,7 @@ export function RhythmViewer(props: RhythmViewerProps) {
                 currBeatIndex={currBeatIndex}
                 currNoteIndex={currNoteIndex}
                 onRemove={onRemoveMeasure}
+                onChangeBeatPerMinute={onChangeBeatPerMinute}
                 onAddBeat={onAddBeat}
                 onRemoveBeat={onRemoveBeat}
                 onAddNote={onAddNote}
