@@ -1,12 +1,14 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { MetronomePage } from "./pages/MetronomePage";
+import { MetronomeListPage } from "./pages/MetronomeListPage";
 import { HomePage } from "./pages/HomePage";
 import {
   MusicPalDexie,
   StorageContextProvider,
 } from "./components/storage.context";
 import { AppContextProvider } from "./components/app.context";
+import { MetronomeCreatePage } from "./pages/MetronomeCreatePage";
+import { MetronomePlayerPage } from "./pages/MetronomePlayerPage";
 
 const router = createBrowserRouter([
   {
@@ -15,15 +17,15 @@ const router = createBrowserRouter([
   },
   {
     path: "/metronome",
-    element: <MetronomePage />,
+    element: <MetronomeListPage />,
   },
   {
     path: "/metronome/create",
-    element: <></>,
+    element: <MetronomeCreatePage />,
   },
   {
     path: "/metronome/:id",
-    element: <></>,
+    element: <MetronomePlayerPage />,
   },
 ]);
 

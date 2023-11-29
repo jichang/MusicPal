@@ -1,5 +1,4 @@
 export * from "./components/NoteButton";
-export * from "./components/RhythmList";
 export * from "./components/RhythmPlayer";
 export * from "./components/RhythmViewer";
 export * from "./hooks/useTick";

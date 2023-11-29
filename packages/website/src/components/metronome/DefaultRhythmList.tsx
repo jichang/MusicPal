@@ -1,10 +1,11 @@
 import React, { useCallback } from "react";
-import { ConfigProvider, Empty, List } from "antd";
+import { Button, ConfigProvider, Empty, Space, List } from "antd";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useStorage } from "../storage.context";
-import { RhythmList } from "@musicpal/metronome";
+import { Rhythm } from "@musicpal/metronome";
 import { Localized } from "@fluent/react";
 import { Link } from "react-router-dom";
+import { PlayCircleOutlined, EditOutlined } from "@ant-design/icons";
 
 export interface DefaultRhythmListProps {}
 
@@ -15,11 +16,31 @@ export function DefaultRhythmList(props: DefaultRhythmListProps) {
     return dexie.rhythms.where("category").equals("default").toArray();
   }, [dexie]);
 
-  const renderEmpty = useCallback(() => {
-    return (
-      <Empty description={<Localized id="no-rhythms">No Rhythms</Localized>} />
-    )
-  }, []);
+  return (
+    <List
+      bordered
+      header={
+        <Space>
+          <Localized id="rhythms">Rhythms</Localized>
+        </Space>
+      }
+      dataSource={rhythms}
+      renderItem={(rhythm: Rhythm) => {
+        const actions = [
+          <Link to={`/metronome/${rhythm.id}`}>
+            <PlayCircleOutlined />
+            <Localized id="play">Play</Localized>
+          </Link>,
+        ];
 
-  return <ConfigProvider renderEmpty={renderEmpty}><RhythmList rhythms={rhythms ?? []} /></ConfigProvider>;
+        return (
+          <List.Item actions={actions}>
+            <List.Item.Meta
+              title={<Localized id={rhythm.name}>{rhythm.name}</Localized>}
+            />
+          </List.Item>
+        );
+      }}
+    />
+  );
 }

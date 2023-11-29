@@ -1,10 +1,11 @@
 import React, { useCallback } from "react";
-import { RhythmList } from "@musicpal/metronome";
+import { Rhythm } from "@musicpal/metronome";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useStorage } from "../storage.context";
-import { ConfigProvider, Empty } from "antd";
+import { Button, ConfigProvider, Empty, Space, List } from "antd";
 import { Link } from "react-router-dom";
 import { Localized } from "@fluent/react";
+import { PlayCircleOutlined, EditOutlined } from "@ant-design/icons";
 
 export interface PersonalRhythmListProps {}
 
@@ -22,8 +23,39 @@ export function PersonalRhythmList(props: PersonalRhythmListProps) {
           <Localized id="create">Create</Localized>
         </Link>
       </Empty>
-    )
+    );
   }, []);
 
-  return <ConfigProvider renderEmpty={renderEmpty}><RhythmList rhythms={rhythms ?? []} /></ConfigProvider>;
+  return (
+    <ConfigProvider renderEmpty={renderEmpty}>
+      <List
+        bordered
+        header={
+          <Space>
+            <Localized id="rhythms">Rhythms</Localized>
+            <Space />
+            <Link to="/metronome/create">
+              <Localized id="create">Create</Localized>
+            </Link>
+          </Space>
+        }
+        dataSource={rhythms}
+        renderItem={(rhythm: Rhythm) => {
+          const actions = [
+            <Link to={`/metronome/${rhythm.id}`}>
+              <PlayCircleOutlined />
+              <Localized id="play">Play</Localized>
+            </Link>,
+            <Button icon={<EditOutlined />}>Edit</Button>,
+          ];
+
+          return (
+            <List.Item actions={actions}>
+              <List.Item.Meta title={rhythm.name} />
+            </List.Item>
+          );
+        }}
+      />
+    </ConfigProvider>
+  );
 }

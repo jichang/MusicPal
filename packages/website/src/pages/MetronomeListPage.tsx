@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
-import "./MetronomePage.css";
-import { Button, Layout, Tabs } from "antd";
+import "./MetronomeListPage.css";
+import { Tabs } from "antd";
 import type { TabsProps } from "antd";
 import { PersonalRhythmList } from "../components/metronome/PersonalRhythmList";
 import { DefaultRhythmList } from "../components/metronome/DefaultRhythmList";
@@ -10,7 +10,7 @@ import { ArrowLeftOutlined } from "@ant-design/icons";
 
 export type TabsItems = TabsProps["items"];
 
-export function MetronomePage() {
+export function MetronomeListPage() {
   const navigate = useNavigate();
   const [activeKey, setActiveKey] = useState(() => {
     const url = new URL(window.location.href);
@@ -47,7 +47,7 @@ export function MetronomePage() {
   );
 
   return (
-    <div className="page page--home">
+    <div className="page page--metronome">
       <div className="page__header">
         <Link to="/">
           <ArrowLeftOutlined />
