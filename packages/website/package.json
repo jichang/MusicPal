@@ -1,0 +1,25 @@
+{
+  "name": "@musicpal/website",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "parcel ./src/index.html",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@musicpal/metronome": "^1.0.0",
+    "comlink": "^4.4.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.16.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.28",
+    "@types/react-dom": "^18.2.13",
+    "parcel": "^2.10.0",
+    "typescript": "^5.2.2"
+  }
+}
