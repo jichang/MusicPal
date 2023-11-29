@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { RhythmViewer, TempoSettings } from '@musicpal/metronome';
+import { RhythmPlayer, RhythmViewer, TempoSettings } from '@musicpal/metronome';
 import {
   Tempo,
   Rhythm,
@@ -146,10 +146,9 @@ export function RhythmEditor(props: RhythmEditorProps) {
 
   return (
     <div className="rhythm__editor">
-      <RhythmContextProvider editable={!isRunning}>
+      <RhythmPlayer rhythm={rhythm} isRunning={isRunning}>
         <RhythmViewer
           rhythm={rhythm}
-          isRunning={isRunning}
           onChangeRepeat={handleChangeRepeat}
           onAddMeasure={handleAddMeasure}
           onRemoveMeasure={handleRemoveMeasure}
@@ -159,7 +158,7 @@ export function RhythmEditor(props: RhythmEditorProps) {
           onChangeNote={handleChangeNote}
           onRemoveNote={handleRemoveNote}
         />
-      </RhythmContextProvider>
+      </RhythmPlayer>
       <div className="rhythm__editor__footer">
         <div className="toolbar">
           <div className="toolbar__main">

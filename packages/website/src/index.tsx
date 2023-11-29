@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { App } from './App';
 import { MusicPalDexie } from './components/storage.context';
 import 'intl-polyfill';
+import 'antd/dist/reset.css';
 
 const container = document.getElementById('app') as HTMLDivElement;
 const root = createRoot(container);

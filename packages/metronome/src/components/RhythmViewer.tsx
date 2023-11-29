@@ -4,17 +4,11 @@ import { PlusOutlined } from '@ant-design/icons';
 import { Localized } from '@fluent/react';
 import { Button, Flex, List } from 'antd';
 import { MeasureViewer } from './MeasureViewer';
-import { usePlayer } from '../hooks/usePlayer';
 import { Measure, Rhythm } from '@musicpal/music';
 import { useRhythmContext } from '../context/rhythm.context';
 
 export interface RhythmViewerProps {
-  isRunning: boolean;
   rhythm: Rhythm;
-  currMeasureIndex?: number;
-  currMeasureOffset?: number;
-  currBeatIndex?: number;
-  currNoteIndex?: number;
   onAddMeasure: () => void;
   onRemoveMeasure: (measureIndex: number) => void;
   onChangeRepeat: (measureIndex: number, repeat: number) => void;
@@ -31,7 +25,6 @@ export interface RhythmViewerProps {
 
 export function RhythmViewer(props: RhythmViewerProps) {
   const {
-    isRunning,
     rhythm,
     onAddMeasure,
     onRemoveMeasure,
@@ -43,9 +36,13 @@ export function RhythmViewer(props: RhythmViewerProps) {
     onRemoveNote,
   } = props;
 
-  const { currMeasureIndex, currMeasureOffset, currBeatIndex, currNoteIndex } =
-    usePlayer({ isRunning, rhythm });
-  const { editable } = useRhythmContext();
+  const {
+    editable,
+    currMeasureIndex,
+    currMeasureOffset,
+    currBeatIndex,
+    currNoteIndex,
+  } = useRhythmContext();
 
   return (
     <div className="rhythm__viewer">

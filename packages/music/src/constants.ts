@@ -1,7 +1,6 @@
 import {
   Dynamics,
   Measure,
-  Rhythm,
   UniformTempo,
   VaryingTempo,
 } from './theory';

@@ -138,7 +138,9 @@ export function TempoSettings(props: TempoSettingsProps) {
         <FormField name={`${id}-speed`} label="speed">
           <InputNumber
             id={`${id}-speed`}
-            min={1}
+            min={10}
+            max={120}
+            step={10}
             value={uniformTempoSpeed}
             onChange={handleChangeUniformTempoSpeed}
           />
@@ -148,7 +150,9 @@ export function TempoSettings(props: TempoSettingsProps) {
           <FormField name={`${id}-begin`} label="begin">
             <InputNumber
               id={`${id}-begin`}
-              min={1}
+              min={10}
+              max={120}
+              step={10}
               value={varyingTempoBegin}
               onChange={handleChangeVaryingTempoBegin}
             />
@@ -157,7 +161,9 @@ export function TempoSettings(props: TempoSettingsProps) {
           <FormField name={`${id}-end`} label="end">
             <InputNumber
               id={`${id}-end`}
-              min={1}
+              min={10}
+              max={120}
+              step={10}
               value={varyingTempoEnd}
               onChange={handleChangeVaryingTempoEnd}
             />
@@ -166,7 +172,9 @@ export function TempoSettings(props: TempoSettingsProps) {
           <FormField name={`${id}-step`} label="step">
             <InputNumber
               id={`${id}-step`}
-              min={1}
+              min={10}
+              max={120}
+              step={10}
               value={varyingTempoStep}
               onChange={handleChangeVaryingTempoStep}
             />
