@@ -3,3 +3,13 @@
 
   font-size: 5rem;
 }
+
+.sound__analyser__panel {
+  text-align: center;
+}
+
+.sound__analyser__panel .note__name {
+  margin: 1rem 0;
+
+  font-size: 5rem;
+}

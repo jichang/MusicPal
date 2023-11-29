@@ -35,7 +35,7 @@ export enum NoteName {
 }
 
 export interface Note {
-  name: NoteName,
+  name: NoteName;
   octave: number;
   dynamics: Dynamics;
 }

@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 import { Button, Flex, Typography, Switch, Modal } from 'antd';
 import { Localized } from '@fluent/react';
-import { useAudio } from '../context/audio.context';
+import { useAudio } from '@musicpal/common/src/context/audio.context';
 import { generateRandomNote } from '../utils/note';
 import {
   QuestionOutlined,
@@ -16,9 +16,8 @@ import {
   AudioOutlined,
 } from '@ant-design/icons';
 import './SightEar.css';
-import { getNoteFrenquency, stringifyNote } from '@musicpal/music';
-import { useFlag } from '@musicpal/common';
-import { SingingAnalyser } from './SingingAnalyser';
+import { getNoteFrequency, stringifyNote } from '@musicpal/music';
+import { useFlag, useSoundAnalyser } from '@musicpal/common';
 
 export function SightEar() {
   const { audioContext } = useAudio();
@@ -63,7 +62,7 @@ export function SightEar() {
     }
 
     const oscillator = new OscillatorNode(audioContext, {
-      frequency: getNoteFrenquency(note),
+      frequency: getNoteFrequency(note),
     });
     oscillator.connect(audioContext.destination);
     oscillator.start();
@@ -85,10 +84,13 @@ export function SightEar() {
   }, [setIsNoteShown]);
 
   const {
-    flag: isSiningModalShown,
-    turnOn: openSingingModal,
-    turnOff: closeSingingModal,
+    flag: isSoundAnalyserModalShown,
+    turnOn: openSoundAnalyserModal,
+    turnOff: closeSoundAnalyserModal,
   } = useFlag(false);
+  const { note: soundNote } = useSoundAnalyser({
+    isRunning: isSoundAnalyserModalShown,
+  });
 
   return (
     <div className="sight-ear">
@@ -113,7 +115,7 @@ export function SightEar() {
           )}
         </div>
         <div>
-          <Button icon={<AudioOutlined />} onClick={openSingingModal}>
+          <Button icon={<AudioOutlined />} onClick={openSoundAnalyserModal}>
             <Localized id="sing">Sing</Localized>
           </Button>
           <Button
@@ -131,12 +133,17 @@ export function SightEar() {
       </Flex>
 
       <Modal
-        open={isSiningModalShown}
+        open={isSoundAnalyserModalShown}
         destroyOnClose
-        onCancel={closeSingingModal}
+        onCancel={closeSoundAnalyserModal}
         footer={null}
+        className="sound__analyser__modal"
       >
-        <SingingAnalyser note={note} />
+        <div className="sound__analyser__panel">
+          <Typography.Title className="note__name">
+            {soundNote ? stringifyNote(soundNote) : '-'}
+          </Typography.Title>
+        </div>
       </Modal>
     </div>
   );
