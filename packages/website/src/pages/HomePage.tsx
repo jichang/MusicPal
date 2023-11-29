@@ -69,6 +69,19 @@ export function HomePage() {
               description={<Localized id="sightear-description" />}
             />
           </List.Item>
+          <List.Item
+            actions={[
+              <Link to="/tuner">
+                <ArrowRightOutlined />
+                <Localized id="open">Open</Localized>
+              </Link>,
+            ]}
+          >
+            <List.Item.Meta
+              title={<Localized id="tuner" />}
+              description={<Localized id="tuner-description" />}
+            />
+          </List.Item>
         </List>
       </div>
     </div>

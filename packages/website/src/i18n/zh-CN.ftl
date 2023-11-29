@@ -54,3 +54,5 @@ change = 切换
 show-note = 显示音符
 hide-note = 隐藏音符
 sing = 演唱
+tuner = 调音表
+tuner-description = 乐器调音

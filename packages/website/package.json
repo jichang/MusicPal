@@ -29,6 +29,7 @@
     "@musicpal/metronome": "^1.0.0",
     "@musicpal/music": "^1.0.0",
     "@musicpal/sightear": "^1.0.0",
+    "@musicpal/tuner": "^1.0.0",
     "antd": "^5.10.1",
     "classnames": "^2.3.2",
     "dexie": "^3.2.4",

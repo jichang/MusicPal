@@ -20,6 +20,7 @@
     "packages/common",
     "packages/music",
     "packages/metronome",
+    "packages/tuner",
     "packages/sightear",
     "packages/website"
   ],

@@ -54,3 +54,5 @@ change = Change
 show-note = Show Note
 hide-note = Hide Note
 sing = Sing
+tuner = Tuner
+tuner-description = Instrument tuner

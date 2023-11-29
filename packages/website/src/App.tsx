@@ -9,6 +9,7 @@ import {
 import { AppContextProvider } from './components/app.context';
 import { MetronomePlayerPage } from './pages/MetronomePlayerPage';
 import { SightEarPage } from './pages/SightEarPage';
+import { TunerPage } from './pages/TunerPage';
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
   {
     path: '/sightear',
     element: <SightEarPage />,
+  },
+  {
+    path: '/tuner',
+    element: <TunerPage />,
   },
 ]);
 

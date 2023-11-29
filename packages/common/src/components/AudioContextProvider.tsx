@@ -2,7 +2,7 @@ import React from 'react';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { Localized } from '@fluent/react';
 import { Button, Flex } from 'antd';
-import { AudioContext } from '@musicpal/common/src/context/audio.context';
+import { AudioContext } from '../context/audio.context';
 
 import './AudioContextProvider.css';
 
@@ -19,7 +19,7 @@ export function AudioContextProvider(props: ToneContextProviderProps) {
   if (!audioContext) {
     return (
       <Flex
-        className="tone__context__provider"
+        className="audio__context__provider"
         justify="center"
         align="center"
         vertical

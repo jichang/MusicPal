@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 import { Button, Flex, Typography, Switch, Modal } from 'antd';
 import { Localized } from '@fluent/react';
-import { useAudio } from '@musicpal/common/src/context/audio.context';
+import { useAudio } from '@musicpal/common';
 import { generateRandomNote } from '../utils/note';
 import {
   QuestionOutlined,

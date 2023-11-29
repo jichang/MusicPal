@@ -8,7 +8,7 @@ import {
 } from '@musicpal/music';
 
 export interface UseSoundAnalyserOptions {
-  isRunning: boolean
+  isRunning: boolean;
 }
 
 export function useSoundAnalyser(options: UseSoundAnalyserOptions) {

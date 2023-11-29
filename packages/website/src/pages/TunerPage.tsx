@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import './SightEarPage.css';
-import { GoBack } from '../components/GoBack';
 import { Typography } from 'antd';
 import { Localized } from '@fluent/react';
-import { SightEar } from '@musicpal/sightear';
+import './TunerPage.css';
+import { GoBack } from '../components/GoBack';
+import { Tuner } from '@musicpal/tuner';
 import { AudioContextProvider } from '@musicpal/common';
 
-export function SightEarPage() {
+export function TunerPage() {
   const [audioContext, setAudioContext] = useState<AudioContext | undefined>();
 
   const createAudioContext = useCallback(async () => {
@@ -23,7 +23,7 @@ export function SightEarPage() {
   }, [audioContext]);
 
   return (
-    <div className="page page--sightear">
+    <div className="page page--tuner">
       <div className="page__header">
         <GoBack />
       </div>
@@ -39,7 +39,7 @@ export function SightEarPage() {
           }
           onStart={createAudioContext}
         >
-          <SightEar />
+          <Tuner />
         </AudioContextProvider>
       </div>
     </div>
