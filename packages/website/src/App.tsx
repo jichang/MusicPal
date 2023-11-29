@@ -6,6 +6,7 @@ import {
   MusicPalDexie,
   StorageContextProvider,
 } from "./components/storage.context";
+import { LocalizationProvider, ReactLocalization } from "@fluent/react";
 
 const router = createBrowserRouter([
   {
@@ -24,14 +25,17 @@ const router = createBrowserRouter([
 
 export interface AppProps {
   dexie: MusicPalDexie;
+  l10n: ReactLocalization;
 }
 
 export function App(props: AppProps) {
-  const { dexie } = props;
+  const { dexie, l10n } = props;
 
   return (
     <StorageContextProvider dexie={dexie}>
-      <RouterProvider router={router} />
+      <LocalizationProvider l10n={l10n}>
+        <RouterProvider router={router} />
+      </LocalizationProvider>
     </StorageContextProvider>
   );
 }

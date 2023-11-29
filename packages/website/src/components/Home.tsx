@@ -1,7 +1,7 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { Row, Col, Card, Button } from "antd";
 import { PlaySquareOutlined } from "@ant-design/icons";
+import { Localized } from "@fluent/react";
 
 export function Home() {
   return (
@@ -19,7 +19,10 @@ export function Home() {
               </Button>,
             ]}
           >
-            <Card.Meta title="Metronome" description="a simple metronome" />
+            <Card.Meta
+              title={<Localized id="metronome" />}
+              description="a simple metronome"
+            />
           </Card>
         </Col>
       </Row>
