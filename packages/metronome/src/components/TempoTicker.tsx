@@ -2,7 +2,8 @@ import { Rhythm, UniformTempo, locateNextBeat } from '@musicpal/music';
 import { useEffect, useRef } from 'react';
 import * as Comlink from 'comlink';
 import { Tick, TickerEvent, TickerTask, TickerWorker } from '../utils/ticker';
-import { MILLISECONDS_PER_MINUTE, getId } from '@musicpal/common';
+import { getId } from '@musicpal/common';
+import { MILLISECONDS_PER_MINUTE } from '@musicpal/music';
 import { scheduleFirstBeat, scheduleBeat } from '../utils/tone';
 
 export interface TempoTickerProps {

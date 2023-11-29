@@ -1,6 +1,6 @@
 import * as Comlink from 'comlink';
 import { Rhythm, UniformTempo, locate } from '@musicpal/music';
-import { MILLISECONDS_PER_MINUTE } from '@musicpal/common';
+import { MILLISECONDS_PER_MINUTE } from '@musicpal/music';
 
 export interface TickerTask {
   id: string;

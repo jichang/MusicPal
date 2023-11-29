@@ -4,7 +4,7 @@ import { RhythmContextProvider } from '../context/rhythm.context';
 import { useTickerWorker } from '../hooks/useTicker';
 import { TempoTicker } from './TempoTicker';
 import { useAudioContext } from '../hooks/useAudioContext';
-import { MILLISECONDS_PER_MINUTE } from '@musicpal/common';
+import { MILLISECONDS_PER_MINUTE } from '@musicpal/music';
 import { Tick } from '../utils/ticker';
 
 export interface RhythmPlayerProps {
