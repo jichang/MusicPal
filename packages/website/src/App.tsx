@@ -7,7 +7,6 @@ import {
   StorageContextProvider,
 } from "./components/storage.context";
 import { AppContextProvider } from "./components/app.context";
-import { MetronomeCreatePage } from "./pages/MetronomeCreatePage";
 import { MetronomePlayerPage } from "./pages/MetronomePlayerPage";
 
 const router = createBrowserRouter([
@@ -18,10 +17,6 @@ const router = createBrowserRouter([
   {
     path: "/metronome",
     element: <MetronomeListPage />,
-  },
-  {
-    path: "/metronome/create",
-    element: <MetronomeCreatePage />,
   },
   {
     path: "/metronome/:id",

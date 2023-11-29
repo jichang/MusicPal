@@ -2,14 +2,21 @@ import React, { useCallback } from "react";
 import { Rhythm } from "@musicpal/metronome";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useStorage } from "../storage.context";
-import { Button, ConfigProvider, Empty, Space, List } from "antd";
+import { Button, ConfigProvider, Empty, List, Card } from "antd";
 import { Link } from "react-router-dom";
 import { Localized } from "@fluent/react";
-import { PlayCircleOutlined, EditOutlined } from "@ant-design/icons";
+import {
+  ArrowRightOutlined,
+  PlayCircleOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 
-export interface PersonalRhythmListProps {}
+export interface PersonalRhythmListProps {
+  onCreateRhythm: () => void;
+}
 
 export function PersonalRhythmList(props: PersonalRhythmListProps) {
+  const { onCreateRhythm } = props;
   const { dexie } = useStorage();
 
   const rhythms = useLiveQuery(() => {
@@ -19,43 +26,45 @@ export function PersonalRhythmList(props: PersonalRhythmListProps) {
   const renderEmpty = useCallback(() => {
     return (
       <Empty description={<Localized id="no-rhythms">No Rhythms</Localized>}>
-        <Link to="/metronome/create">
-          <Localized id="create">Create</Localized>
-        </Link>
+        <Button type="primary" icon={<PlusOutlined />} onClick={onCreateRhythm}>
+          <Localized id="create-rhythm">Create Rhythm</Localized>
+        </Button>
       </Empty>
     );
-  }, []);
+  }, [onCreateRhythm]);
 
   return (
     <ConfigProvider renderEmpty={renderEmpty}>
-      <List
-        bordered
-        header={
-          <Space>
-            <Localized id="rhythms">Rhythms</Localized>
-            <Space />
-            <Link to="/metronome/create">
-              <Localized id="create">Create</Localized>
-            </Link>
-          </Space>
+      <Card
+        title={<Localized id="rhythms">Rhythms</Localized>}
+        extra={
+          <Button
+            type="primary"
+            icon={<PlusOutlined />}
+            onClick={onCreateRhythm}
+          >
+            <Localized id="create-rhythm">Create Rhythm</Localized>
+          </Button>
         }
-        dataSource={rhythms}
-        renderItem={(rhythm: Rhythm) => {
-          const actions = [
-            <Link to={`/metronome/${rhythm.id}`}>
-              <PlayCircleOutlined />
-              <Localized id="play">Play</Localized>
-            </Link>,
-            <Button icon={<EditOutlined />}>Edit</Button>,
-          ];
+      >
+        <List
+          dataSource={rhythms}
+          renderItem={(rhythm: Rhythm) => {
+            const actions = [
+              <Link to={`/metronome/${rhythm.id}`}>
+                <ArrowRightOutlined />
+                <Localized id="open">Open</Localized>
+              </Link>,
+            ];
 
-          return (
-            <List.Item actions={actions}>
-              <List.Item.Meta title={rhythm.name} />
-            </List.Item>
-          );
-        }}
-      />
+            return (
+              <List.Item actions={actions}>
+                <List.Item.Meta title={rhythm.name} />
+              </List.Item>
+            );
+          }}
+        />
+      </Card>
     </ConfigProvider>
   );
 }

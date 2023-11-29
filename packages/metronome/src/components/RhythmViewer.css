@@ -1,11 +1,22 @@
-.rhythm {
+.rhythm__viewer {
   display: block;
   margin: 1rem 0;
-  padding: 1rem;
 
   border-radius: 0.25rem;
 }
 
-.measure {
+.rhythm__viewer .measures {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.rhythm__viewer .measure__viewer {
+  margin: 0 0 1rem 0;
+
+  width: 64rem;
+}
+
+.rhythm__viewer__toolbar {
+  margin: 1rem 0;
 }

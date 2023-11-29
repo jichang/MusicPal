@@ -10,14 +10,36 @@ export interface Note {
   dynamics: Dynamics;
 }
 
+export function cloneNote(note: Note): Note {
+  return {
+    ...note
+  }
+}
+
 export interface Beat {
-  repeat: number;
   notes: Note[];
+}
+
+export function cloneBeat(beat: Beat): Beat {
+  return {
+    notes: beat.notes.map(note => {
+      return {
+        ...note
+      }
+    })
+  }
 }
 
 export interface Measure {
   repeat: number;
   beats: Beat[];
+}
+
+export function cloneMeasure(measure: Measure): Measure {
+  return {
+    repeat: measure.repeat,
+    beats: measure.beats.map(cloneBeat)
+  }
 }
 
 export interface Rhythm {
@@ -28,7 +50,7 @@ export interface Rhythm {
   measures: Measure[];
 }
 
-export function parseRhythm(rhythm: Rhythm) {
+export function parseRhythm(rhythm: Pick<Rhythm, "measures">) {
   let measureCount = 0;
   let beatCount = 0;
   let noteCount = 0;
@@ -39,11 +61,9 @@ export function parseRhythm(rhythm: Rhythm) {
       measureCount = measureCount + 1;
 
       for (const beat of measure.beats) {
-        for (let beatOffset = 0; beatOffset < beat.repeat; beatOffset++) {
-          beatCount = beatCount + 1;
+        beatCount = beatCount + 1;
 
-          noteCount = noteCount + beat.notes.length;
-        }
+        noteCount = noteCount + beat.notes.length;
 
         ticksPerBeat = lcm(ticksPerBeat, beat.notes.length);
       }
@@ -58,11 +78,10 @@ export function parseRhythm(rhythm: Rhythm) {
   }
 }
 
-export function locate(rhythm: Rhythm, ticksPerBeat: number, currTick: number) {
+export function locate(rhythm: Pick<Rhythm, "measures">, ticksPerBeat: number, currTick: number) {
   let currMeasureIndex = 0;
   let currMeasureOffset = 0;
   let currBeatIndex = 0;
-  let currBeatOffset = 0;
   let currNoteIndex = 0;
 
   let ticksCount = 0;
@@ -72,28 +91,24 @@ export function locate(rhythm: Rhythm, ticksPerBeat: number, currTick: number) {
     for (let measureOffset = 0; measureOffset < currMeasure.repeat; measureOffset++) {
       for (let beatIndex = 0; beatIndex < currMeasure.beats.length; beatIndex++) {
         const currBeat = currMeasure.beats[beatIndex];
-        for (let beatOffset = 0; beatOffset < currBeat.repeat; beatOffset++) {
-          const maxTicksCount = ticksCount + ticksPerBeat;
-          if (maxTicksCount - 1 < currTick) {
-            ticksCount = maxTicksCount;
-            continue;
-          }
-
-          currMeasureIndex = measureIndex;
-          currMeasureOffset = measureOffset;
-          currBeatIndex = beatIndex;
-          currBeatOffset = beatOffset;
-
-          currNoteIndex = Math.floor((currTick % ticksPerBeat) / (ticksPerBeat / currBeat.notes.length));
-
-          return {
-            currMeasureOffset,
-            currMeasureIndex,
-            currBeatIndex,
-            currBeatOffset,
-            currNoteIndex,
-          };
+        const maxTicksCount = ticksCount + ticksPerBeat;
+        if (maxTicksCount - 1 < currTick) {
+          ticksCount = maxTicksCount;
+          continue;
         }
+
+        currMeasureIndex = measureIndex;
+        currMeasureOffset = measureOffset;
+        currBeatIndex = beatIndex;
+
+        currNoteIndex = Math.floor((currTick % ticksPerBeat) / (ticksPerBeat / currBeat.notes.length));
+
+        return {
+          currMeasureOffset,
+          currMeasureIndex,
+          currBeatIndex,
+          currNoteIndex,
+        };
       }
     }
   }
@@ -102,7 +117,214 @@ export function locate(rhythm: Rhythm, ticksPerBeat: number, currTick: number) {
     currMeasureOffset,
     currMeasureIndex,
     currBeatIndex,
-    currBeatOffset,
     currNoteIndex,
   }
 }
+
+export const DEFAULT_MEASURES: Measure[] = [
+  {
+    repeat: 1,
+    beats: [
+      {
+        notes: [
+          {
+            dynamics: Dynamics.Strong,
+          },
+          {
+            dynamics: Dynamics.Light,
+          },
+        ],
+      },
+      {
+        notes: [
+          {
+            dynamics: Dynamics.Light,
+          },
+        ],
+      },
+      {
+        notes: [
+          {
+            dynamics: Dynamics.Light,
+          },
+        ],
+      },
+      {
+        notes: [
+          {
+            dynamics: Dynamics.Light,
+          },
+        ],
+      },
+      {
+        notes: [
+          {
+            dynamics: Dynamics.Strong,
+          },
+          {
+            dynamics: Dynamics.Light,
+          },
+        ],
+      },
+      {
+        notes: [
+          {
+            dynamics: Dynamics.Light,
+          },
+        ],
+      },
+      {
+        notes: [
+          {
+            dynamics: Dynamics.Light,
+          },
+        ],
+      },
+      {
+        notes: [
+          {
+            dynamics: Dynamics.Light,
+          },
+        ],
+      },
+    ],
+  }
+];
+
+export const SINGLE_RHYTHM: Rhythm = {
+  id: "0",
+  name: "single",
+  category: "default",
+  order: 0,
+  measures: [
+    {
+      repeat: 1,
+      beats: [
+        {
+          notes: [
+            {
+              dynamics: Dynamics.Strong,
+            },
+          ],
+        },
+        {
+          notes: [
+            {
+              dynamics: Dynamics.Light,
+            },
+          ],
+        },
+        {
+          notes: [
+            {
+              dynamics: Dynamics.Light,
+            },
+          ],
+        },
+        {
+          notes: [
+            {
+              dynamics: Dynamics.Light,
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
+
+export const DUPLETS_RHYTHM: Rhythm = {
+  id: "1",
+  name: "duplets",
+  category: "default",
+  order: 1,
+  measures: [
+    {
+      repeat: 1,
+      beats: [
+        {
+          notes: [
+            {
+              dynamics: Dynamics.Strong,
+            },
+            { dynamics: Dynamics.Light },
+          ],
+        },
+        {
+          notes: [
+            {
+              dynamics: Dynamics.Strong,
+            },
+            { dynamics: Dynamics.Light },
+          ],
+        },
+        {
+          notes: [
+            {
+              dynamics: Dynamics.Strong,
+            },
+            { dynamics: Dynamics.Light },
+          ],
+        },
+        {
+          notes: [
+            {
+              dynamics: Dynamics.Strong,
+            },
+            { dynamics: Dynamics.Light },
+          ],
+        },
+      ],
+    },
+  ],
+};
+
+export const TRIPLETS_RHYTHM: Rhythm = {
+  id: "2",
+  name: "triplets",
+  category: "default",
+  order: 1,
+  measures: [
+    {
+      repeat: 1,
+      beats: [
+        {
+          notes: [
+            {
+              dynamics: Dynamics.Strong,
+            },
+            { dynamics: Dynamics.Light },
+            { dynamics: Dynamics.Light },
+          ],
+        },
+        {
+          notes: [
+            {
+              dynamics: Dynamics.Strong,
+            },
+            { dynamics: Dynamics.Light },
+            { dynamics: Dynamics.Light },
+          ],
+        },
+        {
+          notes: [
+            {
+              dynamics: Dynamics.Strong,
+            },
+            { dynamics: Dynamics.Light },
+            { dynamics: Dynamics.Light },
+          ],
+        },
+        {
+          notes: [
+            {
+              dynamics: Dynamics.Strong,
+            },
+            { dynamics: Dynamics.Light },
+            { dynamics: Dynamics.Light },
+          ],
+        },
+      ],
+    },
+  ],
+};

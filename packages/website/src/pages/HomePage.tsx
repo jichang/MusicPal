@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import { Button, Dropdown, List, MenuProps } from "antd";
-import { PlaySquareOutlined, TranslationOutlined } from "@ant-design/icons";
+import { ArrowRightOutlined, TranslationOutlined } from "@ant-design/icons";
 import { Localized } from "@fluent/react";
 import "./HomePage.css";
 import { useAppContext } from "../components/app.context";
@@ -46,7 +46,7 @@ export function HomePage() {
           <List.Item
             actions={[
               <Link to="/metronome">
-                <PlaySquareOutlined />
+                <ArrowRightOutlined />
                 <Localized id="open">Open</Localized>
               </Link>,
             ]}

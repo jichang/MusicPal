@@ -1,24 +1,33 @@
-import React, { useCallback } from "react";
-import { Button, Dropdown, List, MenuProps } from "antd";
-import {
-  ArrowLeftOutlined,
-  PlaySquareOutlined,
-  TranslationOutlined,
-} from "@ant-design/icons";
-import { Localized } from "@fluent/react";
+import React from "react";
 import "./MetronomePlayerPage.css";
-import { Link } from "react-router-dom";
+import { GoBack } from "../components/GoBack";
+import { useStorage } from "../components/storage.context";
+import { useLiveQuery } from "dexie-react-hooks";
+import { useParams } from "react-router-dom";
+import { RhythmEditor } from "../components/metronome/RhythmEditor";
+import { Fill } from "../components/Fill";
 
 export function MetronomePlayerPage() {
+  const { id } = useParams();
+  const { dexie } = useStorage();
+
+  const rhythm = useLiveQuery(() => {
+    if (id) {
+      return dexie.rhythms.get(id);
+    }
+  }, [dexie, id]);
+
   return (
     <div className="page page--metronome-player">
       <div className="page__header">
-        <Link to="/metronome">
-          <ArrowLeftOutlined />
-          <Localized id="back">Back</Localized>
-        </Link>
+        <GoBack />
+        <Fill>
+          <p className="page__header__title">{rhythm?.name}</p>
+        </Fill>
       </div>
-      <div className="page__content"></div>
+      <div className="page__content">
+        {rhythm ? <RhythmEditor rhythm={rhythm} /> : null}
+      </div>
     </div>
   );
 }

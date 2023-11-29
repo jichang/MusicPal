@@ -1,6 +1,11 @@
 import React, { useContext } from "react";
 import { createContext } from "react";
-import { Dynamics, Rhythm } from "@musicpal/metronome";
+import {
+  DUPLETS_RHYTHM,
+  Rhythm,
+  SINGLE_RHYTHM,
+  TRIPLETS_RHYTHM,
+} from "@musicpal/metronome";
 import Dexie, { Table } from "dexie";
 
 export class MusicPalDexie extends Dexie {
@@ -15,134 +20,7 @@ export class MusicPalDexie extends Dexie {
   }
 
   init() {
-    this.rhythms.bulkAdd([
-      {
-        id: "0",
-        name: "single-beat",
-        category: "default",
-        order: 0,
-        measures: [
-          {
-            repeat: 1,
-            beats: [
-              {
-                repeat: 1,
-                notes: [
-                  {
-                    dynamics: Dynamics.Strong,
-                  },
-                  { dynamics: Dynamics.Light },
-                  { dynamics: Dynamics.Light },
-                  { dynamics: Dynamics.Light },
-                ],
-              },
-            ],
-          },
-        ],
-      },
-      {
-        id: "1",
-        name: "duplets",
-        category: "default",
-        order: 1,
-        measures: [
-          {
-            repeat: 1,
-            beats: [
-              {
-                repeat: 1,
-                notes: [
-                  {
-                    dynamics: Dynamics.Strong,
-                  },
-                  { dynamics: Dynamics.Light },
-                ],
-              },
-              {
-                repeat: 1,
-                notes: [
-                  {
-                    dynamics: Dynamics.Strong,
-                  },
-                  { dynamics: Dynamics.Light },
-                ],
-              },
-              {
-                repeat: 1,
-                notes: [
-                  {
-                    dynamics: Dynamics.Strong,
-                  },
-                  { dynamics: Dynamics.Light },
-                ],
-              },
-              {
-                repeat: 1,
-                notes: [
-                  {
-                    dynamics: Dynamics.Strong,
-                  },
-                  { dynamics: Dynamics.Light },
-                ],
-              },
-            ],
-          },
-        ],
-      },
-      {
-        id: "2",
-        name: "triplets",
-        category: "default",
-        order: 1,
-        measures: [
-          {
-            repeat: 1,
-            beats: [
-              {
-                repeat: 1,
-                notes: [
-                  {
-                    dynamics: Dynamics.Strong,
-                  },
-                  { dynamics: Dynamics.Light },
-                  { dynamics: Dynamics.Light },
-                ],
-              },
-              {
-                repeat: 1,
-                notes: [
-                  {
-                    dynamics: Dynamics.Strong,
-                  },
-                  { dynamics: Dynamics.Light },
-                  { dynamics: Dynamics.Light },
-                ],
-              },
-              {
-                repeat: 1,
-                notes: [
-                  {
-                    dynamics: Dynamics.Strong,
-                  },
-                  { dynamics: Dynamics.Light },
-                  { dynamics: Dynamics.Light },
-                ],
-              },
-              {
-                repeat: 1,
-                notes: [
-                  {
-                    dynamics: Dynamics.Strong,
-                  },
-                  { dynamics: Dynamics.Light },
-                  { dynamics: Dynamics.Light },
-                ],
-              },
-            ],
-          },
-        ],
-      },
-    ]);
+    this.rhythms.bulkAdd([SINGLE_RHYTHM, DUPLETS_RHYTHM, TRIPLETS_RHYTHM]);
   }
 }
 

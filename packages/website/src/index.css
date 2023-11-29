@@ -11,9 +11,19 @@ body {
 }
 
 .page__header {
+  display: flex;
+  flex-direction: row;
   padding: 1rem;
 
+  align-items: center;
+
   border-bottom: 1px solid #f0f0f0;
+}
+
+.page__header__title {
+  margin: 0 1rem;
+
+  text-align: center;
 }
 
 .page__content {

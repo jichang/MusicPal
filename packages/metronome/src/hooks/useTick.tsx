@@ -3,6 +3,7 @@ import { useTimingWorker } from "./useTimingWorker";
 import * as Comlink from "comlink";
 
 export interface TickOption {
+  isRunning: boolean;
   beatsPerMinute: number;
   ticksPerBeat: number;
 }
@@ -10,14 +11,14 @@ export interface TickOption {
 export type TickCallback = () => void;
 
 export function useTick(option: TickOption, callback: TickCallback) {
-  const { beatsPerMinute, ticksPerBeat } = option;
+  const { isRunning, beatsPerMinute, ticksPerBeat } = option;
   const callbackRef = useRef(callback);
   callbackRef.current = callback;
 
   const worker = useTimingWorker();
 
   useEffect(() => {
-    if (beatsPerMinute && ticksPerBeat) {
+    if (isRunning && beatsPerMinute && ticksPerBeat) {
       const tpm = beatsPerMinute * ticksPerBeat;
 
       const identity = `Tick.${Date.now()}.${Math.random}`;
@@ -25,12 +26,12 @@ export function useTick(option: TickOption, callback: TickCallback) {
         callbackRef.current();
       });
 
-      const interval = 60 * 1000 / tpm;
+      const interval = (60 * 1000) / tpm;
       worker.setInterval(identity, handleInteval, interval);
 
       return () => {
         worker.clearInterval(identity);
-      }
+      };
     }
-  }, [worker, beatsPerMinute, ticksPerBeat])
+  }, [worker, isRunning, beatsPerMinute, ticksPerBeat]);
 }

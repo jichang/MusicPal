@@ -1,0 +1,12 @@
+.measure__viewer .measure__index {
+  text-align: center;
+}
+
+.measure__viewer .beats {
+  display: grid;
+  grid-gap: 1rem;
+  justify-items: center;
+  grid-auto-rows: 1fr;
+
+  overflow-x: auto;
+}

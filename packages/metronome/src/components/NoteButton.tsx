@@ -1,7 +1,7 @@
 import React from "react";
-import { Button } from "antd";
-import { AudioFilled } from "@ant-design/icons";
-import { Note } from "../utils/music";
+import { Button, ButtonProps } from "antd";
+import { BellOutlined } from "@ant-design/icons";
+import { Dynamics, Note } from "../utils/music";
 import "./NoteButton.css";
 
 export interface NoteButtonProps {
@@ -9,16 +9,24 @@ export interface NoteButtonProps {
   isCurrent: boolean;
 }
 
+const types: Record<Dynamics, ButtonProps["type"]> = {
+  [Dynamics.Strong]: "primary",
+  [Dynamics.Light]: "dashed",
+  [Dynamics.None]: "default",
+};
+
 export function NoteButton(props: NoteButtonProps) {
   const { note, isCurrent } = props;
 
   return (
     <Button
       title="note"
-      icon={<AudioFilled />}
-      className={`note note--${note.dynamics} ${
-        isCurrent ? "note--active" : ""
+      icon={<BellOutlined />}
+      className={`button--note note--${note.dynamics} ${
+        isCurrent ? "button--active" : ""
       }`}
+      disabled={note.dynamics === Dynamics.None}
+      type={types[note.dynamics]}
     />
   );
 }
