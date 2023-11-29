@@ -10,10 +10,10 @@ export interface RhythmContextProviderValue {
 
 export const RhythmContext = React.createContext<RhythmContextProviderValue>({
   editable: true,
-  currMeasureIndex: 0,
-  currMeasureOffset: 0,
-  currBeatIndex: 0,
-  currNoteIndex: 0,
+  currMeasureIndex: -1,
+  currMeasureOffset: -1,
+  currBeatIndex: -1,
+  currNoteIndex: -1,
 });
 
 export interface RhythmContextProviderProps extends RhythmContextProviderValue {

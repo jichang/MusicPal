@@ -1,6 +1,14 @@
 import { DEFAULT_MEASURES } from './constants';
 import { lcm } from './math';
-import { Tempo, Note, Beat, Measure, Rhythm, Dynamics, UniformTempo } from './theory';
+import {
+  Tempo,
+  Note,
+  Beat,
+  Measure,
+  Rhythm,
+  Dynamics,
+  UniformTempo,
+} from './theory';
 import * as R from 'ramda';
 
 export function cloneTempo<T extends Tempo>(tempo: T): T {
@@ -21,6 +29,13 @@ export function cloneMeasure(measure: Measure): Measure {
 
 export function cloneRhythm(rhythm: Rhythm): Rhythm {
   return R.clone(rhythm);
+}
+
+export function changePreparatory(rhythm: Rhythm, preparatory: number) {
+  const newRhythm = cloneRhythm(rhythm);
+  newRhythm.preparatory = preparatory;
+
+  return newRhythm;
 }
 
 export function changeTempo(rhythm: Rhythm, tempo: Tempo) {
@@ -165,11 +180,15 @@ export function analyseRhythm(rhythm: Rhythm) {
       break;
     case 'varying':
       {
-        for (let speed = rhythm.tempo.begin; speed <= rhythm.tempo.end; speed += rhythm.tempo.step) {
+        for (
+          let speed = rhythm.tempo.begin;
+          speed <= rhythm.tempo.end;
+          speed += rhythm.tempo.step
+        ) {
           tempos.push({
             type: 'uniform',
-            speed
-          })
+            speed,
+          });
         }
       }
       break;
@@ -192,11 +211,16 @@ export function analyseRhythm(rhythm: Rhythm) {
     beatCount,
     noteCount,
     ticksPerBeat,
-    tempos
+    tempos,
   };
 }
 
-export function locate(rhythm: Rhythm, ticksPerBeat: number, beatsPerMinute: number, currTick: number) {
+export function locate(
+  rhythm: Rhythm,
+  ticksPerBeat: number,
+  beatsPerMinute: number,
+  currTick: number,
+) {
   let currMeasureIndex = 0;
   let currMeasureOffset = 0;
   let currBeatIndex = 0;

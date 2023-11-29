@@ -1,14 +1,9 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import {
-  Rhythm,
-  Tempo,
-  UniformTempo,
-  analyseRhythm,
-  locate,
-} from '@musicpal/music';
+import React, { useCallback, useMemo, useState } from 'react';
+import { Rhythm, UniformTempo, analyseRhythm, locate } from '@musicpal/music';
 import { RhythmContextProvider } from '../context/rhythm.context';
 import { useTickerWorker } from '../hooks/useTicker';
 import { TempoTicker } from './TempoTicker';
+import { useAudioContext } from '../hooks/useAudioContext';
 
 export interface RhythmPlayerProps {
   rhythm: Rhythm;
@@ -19,18 +14,19 @@ export interface RhythmPlayerProps {
 export function RhythmPlayer(props: RhythmPlayerProps) {
   const { rhythm, isRunning, children } = props;
 
-  const [currMeasureIndex, setCurrMeasureIndex] = useState(0);
-  const [currMeasureOffset, setCurrMeasureOffset] = useState(0);
-  const [currBeatIndex, setCurrBeatIndex] = useState(0);
-  const [currNoteIndex, setCurrNoteIndex] = useState(0);
+  const [currMeasureIndex, setCurrMeasureIndex] = useState(-1);
+  const [currMeasureOffset, setCurrMeasureOffset] = useState(-1);
+  const [currBeatIndex, setCurrBeatIndex] = useState(-1);
+  const [currNoteIndex, setCurrNoteIndex] = useState(-1);
 
+  const audioContext = useAudioContext();
   const worker = useTickerWorker();
   const { beatCount, ticksPerBeat, tempos } = useMemo(() => {
     return analyseRhythm(rhythm);
   }, [rhythm]);
 
   const tickers = useMemo(() => {
-    let delay = 0;
+    let delay = rhythm.preparatory;
 
     return tempos.map((tempo) => {
       const ticker = {
@@ -44,7 +40,7 @@ export function RhythmPlayer(props: RhythmPlayerProps) {
 
       return ticker;
     });
-  }, [tempos, beatCount, ticksPerBeat]);
+  }, [rhythm.preparatory, tempos, beatCount, ticksPerBeat]);
 
   const handleTick = useCallback(
     (tick: number, tempo: UniformTempo) => {
@@ -77,21 +73,23 @@ export function RhythmPlayer(props: RhythmPlayerProps) {
       currBeatIndex={currBeatIndex}
       currNoteIndex={currNoteIndex}
     >
-      {isRunning
-        ? tickers.map((ticker, index) => {
-            return (
-              <TempoTicker
-                key={index}
-                worker={worker}
-                tempo={ticker.tempo}
-                delay={ticker.delay}
-                interval={ticker.interval}
-                count={ticker.count}
-                onTick={handleTick}
-              />
-            );
-          })
-        : null}
+      {tickers.map((ticker, index) => {
+        return (
+          <TempoTicker
+            key={index}
+            audioContext={audioContext}
+            worker={worker}
+            isRunning={isRunning}
+            rhythm={rhythm}
+            tempo={ticker.tempo}
+            delay={ticker.delay}
+            interval={ticker.interval}
+            ticksPerBeat={ticksPerBeat}
+            count={ticker.count}
+            onTick={handleTick}
+          />
+        );
+      })}
       {children}
     </RhythmContextProvider>
   );

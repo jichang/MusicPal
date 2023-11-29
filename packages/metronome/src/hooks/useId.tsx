@@ -1,8 +1,9 @@
+import { getId } from '@musicpal/common';
 import { useState } from 'react';
 
 export function useId() {
   const [id] = useState(() => {
-    return Date.now();
+    return getId();
   });
 
   return id;

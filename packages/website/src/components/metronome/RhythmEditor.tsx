@@ -1,5 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { RhythmPlayer, RhythmViewer, TempoSettings } from '@musicpal/metronome';
+import {
+  PreparatorySettings,
+  RhythmPlayer,
+  RhythmViewer,
+  TempoSettings,
+} from '@musicpal/metronome';
 import {
   Tempo,
   Rhythm,
@@ -13,9 +18,10 @@ import {
   removeBeat,
   removeMeasure,
   removeNote,
+  changePreparatory,
 } from '@musicpal/music';
 import './RhythmEditor.css';
-import { Button, Form, Modal } from 'antd';
+import { Button, Modal } from 'antd';
 import {
   ClockCircleOutlined,
   PauseCircleFilled,
@@ -24,7 +30,6 @@ import {
 } from '@ant-design/icons';
 import { Localized } from '@fluent/react';
 import { useFlag } from '../../hooks/useFlag';
-import { RhythmContextProvider } from '@musicpal/metronome';
 
 export interface RhythmEditorProps {
   rhythm: Rhythm;
@@ -130,6 +135,15 @@ export function RhythmEditor(props: RhythmEditorProps) {
     turnOff: closeTempoModal,
   } = useFlag(false);
 
+  const handleChangePreparatory = useCallback(
+    (pareparatory: number) => {
+      updateRhythm((rhythm) => {
+        return changePreparatory(rhythm, pareparatory);
+      });
+    },
+    [updateRhythm],
+  );
+
   const handleChangeTempo = useCallback(
     (tempo: Tempo) => {
       updateRhythm((rhythm) => {
@@ -205,6 +219,10 @@ export function RhythmEditor(props: RhythmEditorProps) {
         footer={null}
         onCancel={closeTempoModal}
       >
+        <PreparatorySettings
+          preparatory={rhythm.preparatory}
+          onChangePreparatory={handleChangePreparatory}
+        />
         <TempoSettings tempo={rhythm.tempo} onChangeTempo={handleChangeTempo} />
       </Modal>
     </div>

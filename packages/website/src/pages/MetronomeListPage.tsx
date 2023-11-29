@@ -1,15 +1,16 @@
 import React, { ChangeEvent, FormEvent, useCallback, useState } from 'react';
 import './MetronomeListPage.css';
-import { Button, Input, Modal, Tabs } from 'antd';
+import { Button, Input, Modal } from 'antd';
 import type { TabsProps } from 'antd';
 import { PersonalRhythmList } from '../components/metronome/PersonalRhythmList';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Localized } from '@fluent/react';
 import { GoBack } from '../components/GoBack';
 import { useFlag } from '../hooks/useFlag';
 import { useStorage } from '../components/storage.context';
 import { Form, FormField } from '@musicpal/metronome';
 import { DEFAULT_MEASURES, Rhythm, UNIFORM_BPM_60 } from '@musicpal/music';
+import { getId } from '@musicpal/common';
 
 export type TabsItems = TabsProps['items'];
 
@@ -32,36 +33,30 @@ export function MetronomeListPage() {
   const { dexie } = useStorage();
   const navigate = useNavigate();
 
-  const [isCreating, setIsCreating] = useState(false);
-
   const createRhythm = useCallback(
     (evt: FormEvent) => {
       evt.preventDefault();
 
-      const id = `${Date.now()}.${Math.random()}`;
+      const id = getId();
       const rhythm: Rhythm = {
         id,
         name: rhythmName,
         order: Date.now(),
         createdTime: new Date(),
         updatedTime: new Date(),
+        preparatory: 1000,
         tempo: UNIFORM_BPM_60,
         measures: DEFAULT_MEASURES,
       };
 
-      setIsCreating(true);
-
       dexie.rhythms.add(rhythm).then(
         () => {
-          setIsCreating(false);
           navigate(`/metronome/${id}`);
         },
-        () => {
-          setIsCreating(false);
-        },
+        () => {},
       );
     },
-    [rhythmName, dexie, navigate, setIsCreating],
+    [rhythmName, dexie, navigate],
   );
 
   return (

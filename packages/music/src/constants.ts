@@ -1,9 +1,4 @@
-import {
-  Dynamics,
-  Measure,
-  UniformTempo,
-  VaryingTempo,
-} from './theory';
+import { Dynamics, Measure, UniformTempo, VaryingTempo } from './theory';
 
 export const UNIFORM_BPM_60: UniformTempo = {
   type: 'uniform',

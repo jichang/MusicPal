@@ -1,5 +1,5 @@
 {
-  "name": "@musicpal/music",
+  "name": "@musicpal/common",
   "version": "1.0.0",
   "description": "",
   "main": "src/index.js",
@@ -8,11 +8,6 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "@musicpal/common": "^1.0.0",
-    "ramda": "^0.29.1"
-  },
-  "devDependencies": {
-    "@types/ramda": "^0.29.7"
-  }
+  "dependencies": {},
+  "devDependencies": {}
 }

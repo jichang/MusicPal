@@ -139,7 +139,7 @@ export function TempoSettings(props: TempoSettingsProps) {
           <InputNumber
             id={`${id}-speed`}
             min={10}
-            max={120}
+            max={240}
             step={10}
             value={uniformTempoSpeed}
             onChange={handleChangeUniformTempoSpeed}
@@ -162,7 +162,7 @@ export function TempoSettings(props: TempoSettingsProps) {
             <InputNumber
               id={`${id}-end`}
               min={10}
-              max={120}
+              max={240}
               step={10}
               value={varyingTempoEnd}
               onChange={handleChangeVaryingTempoEnd}

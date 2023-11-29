@@ -7,7 +7,7 @@ export interface TickerTask {
 }
 
 export interface TickerTimer {
-  timeoutId?: number;
+  timeoutId: number;
   intervalId?: number;
 }
 
@@ -17,20 +17,21 @@ export function startTask(
   task: TickerTask,
   callback: (ticker: TickerTask) => void,
 ) {
-  const timer: TickerTimer = {};
   const handleInterval = () => {
     callback(task);
   };
 
-  if (task.delay) {
-    const handleTimeout = () => {
+  const handleTimeout = () => {
+    const timer = timerMap.get(task.id);
+    if (timer) {
       timer.intervalId = self.setInterval(handleInterval, task.interval);
-    };
+    }
+  };
 
-    timer.timeoutId = self.setTimeout(handleTimeout, task.delay);
-  } else {
-    timer.intervalId = self.setInterval(handleInterval, task.interval);
-  }
+  const timeoutId = self.setTimeout(handleTimeout, task.delay);
+  const timer: TickerTimer = {
+    timeoutId,
+  };
 
   timerMap.set(task.id, timer);
 }
@@ -52,5 +53,5 @@ export interface TickerWorker {
 
 Comlink.expose({
   startTask,
-  stopTask
+  stopTask,
 });

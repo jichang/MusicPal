@@ -43,3 +43,4 @@ begin = 开始
 end = 结束
 step = 间隔
 settings = 设置
+prepratory = 预备时间

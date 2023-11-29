@@ -10,7 +10,8 @@ export class MusicPalDexie extends Dexie {
     super('musicpal');
 
     this.version(1).stores({
-      rhythms: '++id, name, createdTime, order, measures',
+      rhythms:
+        '++id, name, createdTime, updatedTime, preparatory, order, tempo, measures',
     });
   }
 

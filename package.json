@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/jichang/MusicPal#readme",
   "workspaces": [
+    "packages/common",
     "packages/music",
     "packages/metronome",
     "packages/website"
