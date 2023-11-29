@@ -20,7 +20,7 @@ export function MetronomePlayerPage() {
 
   const save = useCallback(
     (rhythm: Rhythm) => {
-      dexie.rhythms.update(rhythm.id, rhythm);
+      dexie.rhythms.update(rhythm.id, { ...rhythm, updatedTime: new Date() });
     },
     [dexie],
   );

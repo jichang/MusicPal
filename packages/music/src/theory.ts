@@ -33,9 +33,10 @@ export interface Measure {
 
 export interface Rhythm {
   id: string;
-  category: string;
   name: string;
   order: number;
   tempo: Tempo;
+  createdTime: Date;
+  updatedTime: Date;
   measures: Measure[];
 }

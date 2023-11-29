@@ -1,11 +1,6 @@
 import React, { useContext } from 'react';
 import { createContext } from 'react';
-import {
-  DUPLETS_RHYTHM,
-  Rhythm,
-  SINGLE_RHYTHM,
-  TRIPLETS_RHYTHM,
-} from '@musicpal/music';
+import { Rhythm } from '@musicpal/music';
 import Dexie, { Table } from 'dexie';
 
 export class MusicPalDexie extends Dexie {
@@ -15,13 +10,11 @@ export class MusicPalDexie extends Dexie {
     super('musicpal');
 
     this.version(1).stores({
-      rhythms: '++id, name, category, order, measures',
+      rhythms: '++id, name, createdTime, order, measures',
     });
   }
 
-  init() {
-    this.rhythms.bulkAdd([SINGLE_RHYTHM, DUPLETS_RHYTHM, TRIPLETS_RHYTHM]);
-  }
+  init() {}
 }
 
 export const StorageContext = createContext<{ dexie: MusicPalDexie | null }>({

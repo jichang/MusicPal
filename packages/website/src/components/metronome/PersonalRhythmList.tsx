@@ -16,7 +16,7 @@ export function PersonalRhythmList(props: PersonalRhythmListProps) {
   const { dexie } = useStorage();
 
   const rhythms = useLiveQuery(() => {
-    return dexie.rhythms.where('category').equals('personal').toArray();
+    return dexie.rhythms.toArray();
   }, [dexie]);
 
   const renderEmpty = useCallback(() => {
@@ -55,7 +55,10 @@ export function PersonalRhythmList(props: PersonalRhythmListProps) {
 
             return (
               <List.Item actions={actions}>
-                <List.Item.Meta title={rhythm.name} />
+                <List.Item.Meta
+                  title={rhythm.name}
+                  description={rhythm.createdTime.toLocaleString()}
+                />
               </List.Item>
             );
           }}
