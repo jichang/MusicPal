@@ -15,7 +15,9 @@ export function SightEarPage() {
 
   useEffect(() => {
     return () => {
-      audioContext?.close();
+      if (audioContext?.state === 'running') {
+        audioContext?.close();
+      }
     };
   }, [audioContext]);
 

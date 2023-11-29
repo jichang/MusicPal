@@ -1,3 +1,5 @@
+export * from './hooks/useFlag';
+
 export interface IdOption {
   prefix?: string;
 }

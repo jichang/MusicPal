@@ -6,11 +6,10 @@ import { PersonalRhythmList } from '../components/metronome/PersonalRhythmList';
 import { useNavigate } from 'react-router-dom';
 import { Localized } from '@fluent/react';
 import { GoBack } from '../components/GoBack';
-import { useFlag } from '../hooks/useFlag';
 import { useStorage } from '../components/storage.context';
 import { Form, FormField } from '@musicpal/metronome';
 import { DEFAULT_MEASURES, Rhythm, UNIFORM_BPM_60 } from '@musicpal/music';
-import { getId } from '@musicpal/common';
+import { getId, useFlag } from '@musicpal/common';
 
 export type TabsItems = TabsProps['items'];
 

@@ -29,7 +29,7 @@ import {
   SettingOutlined,
 } from '@ant-design/icons';
 import { Localized } from '@fluent/react';
-import { useFlag } from '../../hooks/useFlag';
+import { useFlag } from '@musicpal/common';
 
 export interface RhythmEditorProps {
   rhythm: Rhythm;

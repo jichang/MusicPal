@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { Button, Flex, Typography, Switch } from 'antd';
+import { Button, Flex, Typography, Switch, Modal } from 'antd';
 import { Localized } from '@fluent/react';
 import { useAudio } from '../context/audio.context';
 import { generateRandomNote } from '../utils/note';
@@ -17,18 +17,33 @@ import {
 } from '@ant-design/icons';
 import './SightEar.css';
 import { getNoteFrenquency, stringifyNote } from '@musicpal/music';
+import { useFlag } from '@musicpal/common';
+import { SingingAnalyser } from './SingingAnalyser';
 
 export function SightEar() {
   const { audioContext } = useAudio();
 
-  const oscillatorRef = useRef<OscillatorNode | null>(null);
+  const oscillatorNodeRef = useRef<OscillatorNode | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+  const streamSourceNodeRef = useRef<MediaStreamAudioSourceNode | null>(null);
 
   useEffect(() => {
     return () => {
-      if (oscillatorRef.current) {
-        oscillatorRef.current.stop();
-        oscillatorRef.current.disconnect();
-        oscillatorRef.current = null;
+      if (oscillatorNodeRef.current) {
+        oscillatorNodeRef.current.stop();
+        oscillatorNodeRef.current.disconnect();
+        oscillatorNodeRef.current = null;
+      }
+
+      if (streamSourceNodeRef.current) {
+        streamSourceNodeRef.current.disconnect();
+        streamSourceNodeRef.current = null;
+      }
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((track) => {
+          track.stop();
+        });
+        streamRef.current = null;
       }
     };
   }, []);
@@ -41,10 +56,10 @@ export function SightEar() {
   }, [setNote, setIsNoteShown]);
 
   const playNote = useCallback(() => {
-    if (oscillatorRef.current) {
-      oscillatorRef.current.stop();
-      oscillatorRef.current.disconnect();
-      oscillatorRef.current = null;
+    if (oscillatorNodeRef.current) {
+      oscillatorNodeRef.current.stop();
+      oscillatorNodeRef.current.disconnect();
+      oscillatorNodeRef.current = null;
     }
 
     const oscillator = new OscillatorNode(audioContext, {
@@ -52,14 +67,14 @@ export function SightEar() {
     });
     oscillator.connect(audioContext.destination);
     oscillator.start();
-    oscillatorRef.current = oscillator;
+    oscillatorNodeRef.current = oscillator;
   }, [audioContext, note]);
 
   const stopNote = useCallback(() => {
-    if (oscillatorRef.current) {
-      oscillatorRef.current.stop();
-      oscillatorRef.current.disconnect();
-      oscillatorRef.current = null;
+    if (oscillatorNodeRef.current) {
+      oscillatorNodeRef.current.stop();
+      oscillatorNodeRef.current.disconnect();
+      oscillatorNodeRef.current = null;
     }
   }, []);
 
@@ -69,9 +84,11 @@ export function SightEar() {
     });
   }, [setIsNoteShown]);
 
-  const startSinging = useCallback(() => {}, [audioContext, note]);
-
-  const stopSinging = useCallback(() => {}, [audioContext]);
+  const {
+    flag: isSiningModalShown,
+    turnOn: openSingingModal,
+    turnOff: closeSingingModal,
+  } = useFlag(false);
 
   return (
     <div className="sight-ear">
@@ -96,11 +113,7 @@ export function SightEar() {
           )}
         </div>
         <div>
-          <Button
-            icon={<AudioOutlined />}
-            onPointerDown={startSinging}
-            onPointerUp={stopSinging}
-          >
+          <Button icon={<AudioOutlined />} onClick={openSingingModal}>
             <Localized id="sing">Sing</Localized>
           </Button>
           <Button
@@ -116,6 +129,15 @@ export function SightEar() {
           </Button>
         </div>
       </Flex>
+
+      <Modal
+        open={isSiningModalShown}
+        destroyOnClose
+        onCancel={closeSingingModal}
+        footer={null}
+      >
+        <SingingAnalyser note={note} />
+      </Modal>
     </div>
   );
 }
