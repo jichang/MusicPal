@@ -26,8 +26,19 @@
     "packages/website"
   ],
   "devDependencies": {
+    "@ant-design/icons": "^5.2.6",
+    "@fluent/react": "^0.15.2",
+    "@musicpal/common": "^1.0.0",
+    "@musicpal/music": "^1.0.0",
+    "antd": "^5.11.5",
+    "classnames": "^2.3.2",
+    "comlink": "^4.4.1",
     "husky": "^8.0.3",
     "prettier": "^3.0.3",
+    "process": "^0.11.10",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.20.0",
     "typescript": "^5.2.2"
   }
 }
