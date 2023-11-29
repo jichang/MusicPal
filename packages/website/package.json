@@ -5,6 +5,7 @@
   "scripts": {
     "start": "parcel ./src/index.html --no-cache",
     "build": "parcel build ./src/index.html --no-cache",
+    "typecheck": "tsc --noEmit",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -36,8 +37,7 @@
     "intl-polyfill": "^0.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.16.0",
-    "tone": "^14.7.77"
+    "react-router-dom": "^6.16.0"
   },
   "devDependencies": {
     "@parcel/packager-ts": "^2.8.3",

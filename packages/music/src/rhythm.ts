@@ -1,4 +1,4 @@
-import { DEFAULT_MEASURES } from './constants';
+import { DEFAULT_MEASURES } from './common';
 import { lcm } from './math';
 import {
   Tempo,

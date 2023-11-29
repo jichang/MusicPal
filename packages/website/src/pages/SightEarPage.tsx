@@ -1,18 +1,23 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import './SightEarPage.css';
 import { GoBack } from '../components/GoBack';
 import { Typography } from 'antd';
 import { Localized } from '@fluent/react';
-import { SightEar, ToneContextProvider } from '@musicpal/sightear';
-import * as Tone from 'tone';
+import { SightEar, AudioContextProvider } from '@musicpal/sightear';
 
 export function SightEarPage() {
-  const [synth, setSynth] = useState<Tone.Synth | undefined>();
+  const [audioContext, setAudioContext] = useState<AudioContext | undefined>();
 
-  const createSynth = useCallback(async () => {
-    await Tone.start();
-    setSynth(new Tone.Synth().toDestination());
-  }, [setSynth]);
+  const createAudioContext = useCallback(async () => {
+    const audioContext = new AudioContext();
+    setAudioContext(audioContext);
+  }, [setAudioContext]);
+
+  useEffect(() => {
+    return () => {
+      audioContext?.close();
+    };
+  }, [audioContext]);
 
   return (
     <div className="page page--sightear">
@@ -20,8 +25,8 @@ export function SightEarPage() {
         <GoBack />
       </div>
       <div className="page__content">
-        <ToneContextProvider
-          synth={synth}
+        <AudioContextProvider
+          audioContext={audioContext}
           description={
             <Typography.Paragraph>
               <Localized id="this-app-needs-to-access-mic-and-speaker">
@@ -29,10 +34,10 @@ export function SightEarPage() {
               </Localized>
             </Typography.Paragraph>
           }
-          onStart={createSynth}
+          onStart={createAudioContext}
         >
           <SightEar />
-        </ToneContextProvider>
+        </AudioContextProvider>
       </div>
     </div>
   );

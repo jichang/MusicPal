@@ -1,3 +1,3 @@
-export * from './context/tone.context';
-export * from './components/ToneContextProvider';
+export * from './context/audio.context';
+export * from './components/AudioContextProvider';
 export * from './components/SightEar';

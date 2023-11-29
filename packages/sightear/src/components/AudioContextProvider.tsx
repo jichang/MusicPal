@@ -2,22 +2,21 @@ import React from 'react';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { Localized } from '@fluent/react';
 import { Button, Flex } from 'antd';
-import * as Tone from 'tone';
-import { ToneContext } from '../context/tone.context';
+import { AudioContext } from '../context/audio.context';
 
-import './ToneContextProvider.css';
+import './AudioContextProvider.css';
 
 export interface ToneContextProviderProps {
   description: React.ReactNode;
-  synth: Tone.Synth | undefined;
+  audioContext: AudioContext | undefined;
   onStart: () => void;
   children: React.ReactNode;
 }
 
-export function ToneContextProvider(props: ToneContextProviderProps) {
-  const { children, description, onStart, synth } = props;
+export function AudioContextProvider(props: ToneContextProviderProps) {
+  const { children, description, onStart, audioContext } = props;
 
-  if (!synth) {
+  if (!audioContext) {
     return (
       <Flex
         className="tone__context__provider"
@@ -35,6 +34,8 @@ export function ToneContextProvider(props: ToneContextProviderProps) {
   }
 
   return (
-    <ToneContext.Provider value={{ synth }}>{children}</ToneContext.Provider>
+    <AudioContext.Provider value={{ audioContext }}>
+      {children}
+    </AudioContext.Provider>
   );
 }

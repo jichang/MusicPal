@@ -1,7 +1,13 @@
-import React, { useCallback, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { Button, Flex, Typography, Switch } from 'antd';
 import { Localized } from '@fluent/react';
-import { useTone } from '../context/tone.context';
+import { useAudio } from '../context/audio.context';
 import { generateRandomNote } from '../utils/note';
 import {
   QuestionOutlined,
@@ -10,9 +16,22 @@ import {
   AudioOutlined,
 } from '@ant-design/icons';
 import './SightEar.css';
+import { getNoteFrenquency, stringifyNote } from '@musicpal/music';
 
 export function SightEar() {
-  const { synth } = useTone();
+  const { audioContext } = useAudio();
+
+  const oscillatorRef = useRef<OscillatorNode | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (oscillatorRef.current) {
+        oscillatorRef.current.stop();
+        oscillatorRef.current.disconnect();
+        oscillatorRef.current = null;
+      }
+    };
+  }, []);
 
   const [isNoteShown, setIsNoteShown] = useState(false);
   const [note, setNote] = useState(generateRandomNote);
@@ -22,18 +41,37 @@ export function SightEar() {
   }, [setNote, setIsNoteShown]);
 
   const playNote = useCallback(() => {
-    synth.triggerAttack(note);
-  }, [synth, note]);
+    if (oscillatorRef.current) {
+      oscillatorRef.current.stop();
+      oscillatorRef.current.disconnect();
+      oscillatorRef.current = null;
+    }
+
+    const oscillator = new OscillatorNode(audioContext, {
+      frequency: getNoteFrenquency(note),
+    });
+    oscillator.connect(audioContext.destination);
+    oscillator.start();
+    oscillatorRef.current = oscillator;
+  }, [audioContext, note]);
 
   const stopNote = useCallback(() => {
-    synth.triggerRelease();
-  }, [synth]);
+    if (oscillatorRef.current) {
+      oscillatorRef.current.stop();
+      oscillatorRef.current.disconnect();
+      oscillatorRef.current = null;
+    }
+  }, []);
 
   const toggleIsNoteShown = useCallback(() => {
     setIsNoteShown((isNoteShown) => {
       return !isNoteShown;
     });
   }, [setIsNoteShown]);
+
+  const startSinging = useCallback(() => {}, [audioContext, note]);
+
+  const stopSinging = useCallback(() => {}, [audioContext]);
 
   return (
     <div className="sight-ear">
@@ -48,7 +86,9 @@ export function SightEar() {
         </div>
         <div>
           {isNoteShown ? (
-            <Typography.Title className="note__name">{note}</Typography.Title>
+            <Typography.Title className="note__name">
+              {stringifyNote(note)}
+            </Typography.Title>
           ) : (
             <Typography.Title className="note__name">
               <QuestionOutlined />
@@ -58,14 +98,15 @@ export function SightEar() {
         <div>
           <Button
             icon={<AudioOutlined />}
-            onPointerDown={playNote}
-            onPointerUp={stopNote}
+            onPointerDown={startSinging}
+            onPointerUp={stopSinging}
           >
             <Localized id="sing">Sing</Localized>
           </Button>
           <Button
             icon={<PlayCircleOutlined />}
             onPointerDown={playNote}
+            onPointerLeave={stopNote}
             onPointerUp={stopNote}
           >
             <Localized id="play">Play</Localized>

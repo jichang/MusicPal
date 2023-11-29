@@ -19,7 +19,24 @@ export enum Dynamics {
   Invalid,
 }
 
+export enum NoteName {
+  C,
+  CSharp,
+  D,
+  DSharp,
+  E,
+  F,
+  FSharp,
+  G,
+  GSharp,
+  A,
+  ASharp,
+  B,
+}
+
 export interface Note {
+  name: NoteName,
+  octave: number;
   dynamics: Dynamics;
 }
 
