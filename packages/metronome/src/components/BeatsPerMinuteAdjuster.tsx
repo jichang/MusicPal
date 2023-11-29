@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
-import { BeatsPerMinute } from "../utils/music";
-import { Select } from "antd";
+import { UNIFORM_BPM_60, BeatsPerMinute, VARYING_BPM_60 } from "../utils/music";
+import { InputNumber, Select } from "antd";
 import { Localized } from "@fluent/react";
 
 export interface BeatsPerMinuteAdjusterProps {
@@ -11,15 +11,60 @@ export interface BeatsPerMinuteAdjusterProps {
 export function BeatsPerMinuteAdjuster(props: BeatsPerMinuteAdjusterProps) {
   const { beatsPerMinute, onChange } = props;
 
-  const [type, setType] = useState(beatsPerMinute.type);
+  const [uniformBeatsPerMinuteSpeed, setUniformBeatsPerMinuteSpeed] = useState(
+    beatsPerMinute.type === "uniform"
+      ? beatsPerMinute.speed
+      : UNIFORM_BPM_60.speed
+  );
 
-  const handleOnChange = useCallback(() => {}, [beatsPerMinute, onChange]);
+  const [varyingBeatsPerMinuteFrom, setVaryingBeatsPerMinuteFrom] = useState(
+    beatsPerMinute.type === "uniform"
+      ? VARYING_BPM_60.from
+      : beatsPerMinute.from
+  );
 
-  const handleChangeType = useCallback(() => {}, [beatsPerMinute, onChange]);
+  const [varyingBeatsPerMinuteTo, setVaryingBeatsPerMinuteTo] = useState(
+    beatsPerMinute.type === "uniform" ? VARYING_BPM_60.to : beatsPerMinute.to
+  );
+
+  const [varyingBeatsPerMinuteStep, setVaryingBeatsPerMinuteStep] = useState(
+    beatsPerMinute.type === "uniform"
+      ? VARYING_BPM_60.step
+      : beatsPerMinute.step
+  );
+
+  const handleOnChange = useCallback(
+    (beatsPerMinute: BeatsPerMinute) => {
+      onChange(beatsPerMinute);
+    },
+    [onChange]
+  );
+
+  const handleChangeType = useCallback(
+    (value: BeatsPerMinute["type"]) => {
+      if (value === "uniform") {
+        handleOnChange({ type: value, speed: uniformBeatsPerMinuteSpeed });
+      } else {
+        handleOnChange({
+          type: value,
+          from: varyingBeatsPerMinuteFrom,
+          to: varyingBeatsPerMinuteTo,
+          step: varyingBeatsPerMinuteStep,
+        });
+      }
+    },
+    [
+      uniformBeatsPerMinuteSpeed,
+      varyingBeatsPerMinuteFrom,
+      varyingBeatsPerMinuteTo,
+      varyingBeatsPerMinuteStep,
+      handleOnChange,
+    ]
+  );
 
   return (
     <div>
-      <Select
+      <Select<BeatsPerMinute["type"]>
         value={beatsPerMinute.type}
         options={[
           {
@@ -31,7 +76,19 @@ export function BeatsPerMinuteAdjuster(props: BeatsPerMinuteAdjusterProps) {
             label: <Localized id="varying">Varying</Localized>,
           },
         ]}
+        onChange={handleChangeType}
       />
+      {beatsPerMinute.type === "uniform" ? (
+        <>
+          <InputNumber value={uniformBeatsPerMinuteSpeed} />
+        </>
+      ) : (
+        <>
+          <InputNumber value={varyingBeatsPerMinuteFrom} />
+          <InputNumber value={varyingBeatsPerMinuteTo} />
+          <InputNumber value={varyingBeatsPerMinuteStep} />
+        </>
+      )}
     </div>
   );
 }

@@ -31,3 +31,5 @@ remove-note-btn =
 no-measures = 尚无小节
 uniform = 匀速
 varying = 变速
+beats = 节拍
+tempo = 速度

@@ -31,3 +31,5 @@ remove-note-btn =
 no-measures = No Measures
 uniform = Uniform
 varying = Varying
+beats = Beats
+tempo = Tempo

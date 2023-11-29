@@ -1,19 +1,30 @@
 import { lcm } from "./math";
 
-export type BeatsPerMinute = {
-  type: 'uniform',
+export interface UniformBeatsPerMinute {
+  type: "uniform";
   speed: number;
-} | {
-  type: 'varying',
-  from: number,
-  step: number;
-  to: number,
 }
 
-export const BPM_60: BeatsPerMinute = {
-  type: 'uniform',
-  speed: 60
+export interface VaryingBeatsPerMinute {
+  type: "varying";
+  from: number;
+  step: number;
+  to: number;
 }
+
+export type BeatsPerMinute = UniformBeatsPerMinute | VaryingBeatsPerMinute;
+
+export const UNIFORM_BPM_60: UniformBeatsPerMinute = {
+  type: "uniform",
+  speed: 60,
+};
+
+export const VARYING_BPM_60: VaryingBeatsPerMinute = {
+  type: "varying",
+  from: 60,
+  to: 60,
+  step: 10,
+};
 
 export enum Dynamics {
   None = 0,
@@ -96,7 +107,25 @@ export function removeMeasure(rhythm: Rhythm, measureIndex: number) {
   return newRhythm;
 }
 
-export function changeBeatsPerMinute(rhythm: Rhythm, measureIndex: number, beatsPerMinute: BeatsPerMinute) {
+export function changeRepeat(
+  rhythm: Rhythm,
+  measureIndex: number,
+  repeat: number
+) {
+  const newRhythm = cloneRhythm(rhythm);
+  const measure = newRhythm.measures[measureIndex];
+  if (measure) {
+    measure.repeat = repeat;
+  }
+
+  return newRhythm;
+}
+
+export function changeBeatsPerMinute(
+  rhythm: Rhythm,
+  measureIndex: number,
+  beatsPerMinute: BeatsPerMinute
+) {
   const newRhythm = cloneRhythm(rhythm);
   const measure = newRhythm.measures[measureIndex];
   if (measure) {
@@ -265,7 +294,7 @@ export function locate(rhythm: Rhythm, ticksPerBeat: number, currTick: number) {
 export const DEFAULT_MEASURES: Measure[] = [
   {
     repeat: 1,
-    beatsPerMinute: BPM_60,
+    beatsPerMinute: UNIFORM_BPM_60,
     beats: [
       {
         notes: [
@@ -335,7 +364,7 @@ export const SINGLE_RHYTHM: Rhythm = {
   measures: [
     {
       repeat: 1,
-      beatsPerMinute: BPM_60,
+      beatsPerMinute: UNIFORM_BPM_60,
       beats: [
         {
           notes: [
@@ -378,7 +407,7 @@ export const DUPLETS_RHYTHM: Rhythm = {
   measures: [
     {
       repeat: 1,
-      beatsPerMinute: BPM_60,
+      beatsPerMinute: UNIFORM_BPM_60,
       beats: [
         {
           notes: [
@@ -425,7 +454,7 @@ export const TRIPLETS_RHYTHM: Rhythm = {
   measures: [
     {
       repeat: 1,
-      beatsPerMinute: BPM_60,
+      beatsPerMinute: UNIFORM_BPM_60,
       beats: [
         {
           notes: [

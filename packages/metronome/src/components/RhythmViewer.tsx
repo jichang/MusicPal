@@ -17,7 +17,8 @@ export interface RhythmViewerProps {
   editable: boolean;
   onAddMeasure: () => void;
   onRemoveMeasure: (measureIndex: number) => void;
-  onChangeBeatPerMinute: (
+  onChangeRepeat: (measureIndex: number, repeat: number) => void;
+  onChangeBeatsPerMinute: (
     measureIndex: number,
     beatPerMinute: BeatsPerMinute
   ) => void;
@@ -34,7 +35,8 @@ export function RhythmViewer(props: RhythmViewerProps) {
     editable,
     onAddMeasure,
     onRemoveMeasure,
-    onChangeBeatPerMinute,
+    onChangeRepeat,
+    onChangeBeatsPerMinute,
     onAddBeat,
     onRemoveBeat,
     onAddNote,
@@ -78,7 +80,8 @@ export function RhythmViewer(props: RhythmViewerProps) {
                 currBeatIndex={currBeatIndex}
                 currNoteIndex={currNoteIndex}
                 onRemove={onRemoveMeasure}
-                onChangeBeatPerMinute={onChangeBeatPerMinute}
+                onChangeRepeat={onChangeRepeat}
+                onChangeBeatsPerMinute={onChangeBeatsPerMinute}
                 onAddBeat={onAddBeat}
                 onRemoveBeat={onRemoveBeat}
                 onAddNote={onAddNote}
