@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import './MetronomePlayerPage.css';
 import { GoBack } from '../components/GoBack';
 import { useStorage } from '../components/storage.context';
@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom';
 import { RhythmEditor } from '../components/metronome/RhythmEditor';
 import { Fill } from '../components/Fill';
 import { Rhythm } from '@musicpal/music';
+import { AudioContextInitializer } from '../components/AudioContextInitializer';
 
 export function MetronomePlayerPage() {
   const { id } = useParams();
@@ -34,7 +35,9 @@ export function MetronomePlayerPage() {
         </Fill>
       </div>
       <div className="page__content">
-        {rhythm ? <RhythmEditor rhythm={rhythm} onSave={save} /> : null}
+        <AudioContextInitializer>
+          {rhythm ? <RhythmEditor rhythm={rhythm} onSave={save} /> : null}
+        </AudioContextInitializer>
       </div>
     </div>
   );

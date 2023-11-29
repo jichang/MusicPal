@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { useAudio } from '../context/audio.context';
 import {
   Dynamics,
   Note,
   detectPitch,
   getNoteFromFrequency,
 } from '@musicpal/music';
+import { useWebAudio } from './useWebAudio';
 
 export interface UseSoundAnalyserOptions {
   isRunning: boolean;
@@ -13,7 +13,7 @@ export interface UseSoundAnalyserOptions {
 
 export function useSoundAnalyser(options: UseSoundAnalyserOptions) {
   const { isRunning } = options;
-  const { audioContext } = useAudio();
+  const { audioContext } = useWebAudio();
 
   const [note, setNote] = useState<Note>();
 

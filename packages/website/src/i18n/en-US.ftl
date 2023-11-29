@@ -56,3 +56,5 @@ hide-note = Hide Note
 sing = Sing
 tuner = Tuner
 tuner-description = Instrument tuner
+guitar = Guitar
+bass = Bass

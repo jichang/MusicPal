@@ -1,12 +1,19 @@
-import { negotiateLanguages } from '@fluent/langneg';
-import { createContext, useCallback, useContext, useState } from 'react';
-import { RESOURCES, generateBundles, getDefaultLocale } from '../i18n';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+import { generateBundles, getDefaultLocale } from '../i18n';
 import { LocalizationProvider, ReactLocalization } from '@fluent/react';
 import React from 'react';
 
 export const LOCALE_STORAGE_KEY = 'musicalpal.locale';
 
 export interface IAppContextValue {
+  audioContext?: AudioContext | undefined;
+  setupAudioContext: () => void;
   locale: string;
   changeLocale: (locale: string) => void;
 }
@@ -14,6 +21,7 @@ export interface IAppContextValue {
 export const AppContext = createContext<IAppContextValue>({
   locale: 'en-US',
   changeLocale: () => {},
+  setupAudioContext: () => {},
 });
 
 export interface AppContextProviderProps {
@@ -50,8 +58,25 @@ export function AppContextProvider(props: AppContextProviderProps) {
     [setL10n],
   );
 
+  const [audioContext, setAudioContext] = useState<AudioContext>();
+
+  const setupAudioContext = useCallback(async () => {
+    const audioContext = new AudioContext();
+    setAudioContext(audioContext);
+  }, [setAudioContext]);
+
+  useEffect(() => {
+    return () => {
+      if (audioContext?.state === 'running') {
+        audioContext?.close();
+      }
+    };
+  }, [audioContext]);
+
   return (
-    <AppContext.Provider value={{ locale, changeLocale }}>
+    <AppContext.Provider
+      value={{ audioContext, setupAudioContext, locale, changeLocale }}
+    >
       <LocalizationProvider l10n={l10n}>{children}</LocalizationProvider>
     </AppContext.Provider>
   );

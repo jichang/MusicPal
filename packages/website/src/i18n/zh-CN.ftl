@@ -56,3 +56,5 @@ hide-note = 隐藏音符
 sing = 演唱
 tuner = 调音表
 tuner-description = 乐器调音
+guitar = 吉他
+bass = 贝斯

@@ -3,9 +3,9 @@ import { Rhythm, UniformTempo, analyseRhythm } from '@musicpal/music';
 import { RhythmContextProvider } from '../context/rhythm.context';
 import { useTickerWorker } from '../hooks/useTicker';
 import { TempoTicker } from './TempoTicker';
-import { useAudioContext } from '../hooks/useAudioContext';
 import { MILLISECONDS_PER_MINUTE } from '@musicpal/music';
 import { Tick } from '../utils/ticker';
+import { useWebAudio } from '@musicpal/common';
 
 export interface RhythmPlayerProps {
   rhythm: Rhythm;
@@ -22,7 +22,7 @@ export function RhythmPlayer(props: RhythmPlayerProps) {
   const [currBeatIndex, setCurrBeatIndex] = useState(-1);
   const [currNoteIndex, setCurrNoteIndex] = useState(-1);
 
-  const audioContext = useAudioContext();
+  const { audioContext } = useWebAudio();
   const worker = useTickerWorker();
   const { beatsCount, notesCount, ticksCount, ticksPerBeat, tempos } =
     useMemo(() => {

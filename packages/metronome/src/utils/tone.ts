@@ -1,8 +1,8 @@
-import { Dynamics, Note, Rhythm } from '@musicpal/music';
+import { CONCERT_PITCH, Dynamics, Note, Rhythm } from '@musicpal/music';
 
-export const frequencies: Record<Dynamics, number> = {
-  [Dynamics.Accent]: 1000,
-  [Dynamics.Light]: 500,
+export const gains: Record<Dynamics, number> = {
+  [Dynamics.Accent]: 0.75,
+  [Dynamics.Light]: 1,
   [Dynamics.None]: 0,
   [Dynamics.Invalid]: 0,
 };
@@ -13,12 +13,12 @@ export function scheduleNote(
   note: Note,
 ) {
   const osc = audioContext.createOscillator();
-  const envelope = audioContext.createGain();
+  osc.frequency.value = CONCERT_PITCH;
 
-  osc.frequency.value = frequencies[note.dynamics];
-  envelope.gain.value = 1;
-  envelope.gain.exponentialRampToValueAtTime(1, time + 0.001);
-  envelope.gain.exponentialRampToValueAtTime(0.001, time + 0.02);
+  const envelope = audioContext.createGain();
+  envelope.gain.value = gains[note.dynamics];
+  envelope.gain.exponentialRampToValueAtTime(1, time);
+  envelope.gain.exponentialRampToValueAtTime(0.000001, time + 0.03);
 
   osc.connect(envelope);
   envelope.connect(audioContext.destination);

@@ -1,13 +1,7 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Button, Flex, Typography, Switch, Modal } from 'antd';
 import { Localized } from '@fluent/react';
-import { useAudio } from '@musicpal/common';
+import { useWebAudio } from '@musicpal/common';
 import { generateRandomNote } from '../utils/note';
 import {
   QuestionOutlined,
@@ -20,7 +14,7 @@ import { getNoteFrequency, stringifyNote } from '@musicpal/music';
 import { useFlag, useSoundAnalyser } from '@musicpal/common';
 
 export function SightEar() {
-  const { audioContext } = useAudio();
+  const { audioContext } = useWebAudio();
 
   const oscillatorNodeRef = useRef<OscillatorNode | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
