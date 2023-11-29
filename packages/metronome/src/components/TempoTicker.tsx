@@ -1,9 +1,9 @@
-import { Rhythm, UniformTempo } from '@musicpal/music';
+import { Rhythm, UniformTempo, locateNextBeat } from '@musicpal/music';
 import { useEffect, useRef } from 'react';
 import * as Comlink from 'comlink';
 import { Tick, TickerEvent, TickerTask, TickerWorker } from '../utils/ticker';
 import { MILLISECONDS_PER_MINUTE, getId } from '@musicpal/common';
-import { scheduleNextBeat } from '../utils/tone';
+import { scheduleFirstBeat, scheduleBeat } from '../utils/tone';
 
 export interface TempoTickerProps {
   worker: Comlink.Remote<TickerWorker>;
@@ -71,13 +71,10 @@ export function TempoTicker(props: TempoTickerProps) {
         (event: TickerEvent, task: TickerTask) => {
           switch (event.type) {
             case 'preparatory':
-              scheduleNextBeat(
+              scheduleFirstBeat(
                 audioContext,
                 rhythm,
                 startTime,
-                0,
-                0,
-                0,
                 beatInterval / 1000,
               );
               onTempoPrepareRef.current?.(tempo);
@@ -94,15 +91,24 @@ export function TempoTicker(props: TempoTickerProps) {
                 }
 
                 if (tick.noteIndex === 0) {
-                  scheduleNextBeat(
-                    audioContext,
+                  const location = locateNextBeat(
                     rhythm,
-                    startTime,
                     tick.measureIndex,
+                    tick.measureOffset,
                     tick.beatIndex,
                     tick.beatOffset,
-                    beatInterval / 1000,
                   );
+                  if (location) {
+                    scheduleBeat(
+                      audioContext,
+                      rhythm,
+                      startTime,
+                      location.measureIndex,
+                      location.beatIndex,
+                      location.beatOffset,
+                      beatInterval / 1000,
+                    );
+                  }
                 }
 
                 onTempoTickRef.current?.(tick, tempo);

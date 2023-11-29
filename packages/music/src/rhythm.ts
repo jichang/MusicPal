@@ -286,3 +286,48 @@ export function locate(
     noteOffset,
   };
 }
+
+export function locateNextBeat(
+  rhythm: Rhythm,
+  measureIndex: number,
+  measureOffset: number,
+  beatIndex: number,
+  beatOffset: number,
+) {
+  let measure = rhythm.measures[measureIndex];
+  if (beatIndex >= measure.beats.length - 1) {
+    let measureCount = 0;
+    for (let i = 0; i < measureIndex; i++) {
+      measureCount = measureCount + rhythm.measures[measureIndex].repeat;
+    }
+
+    if (measureCount + measure.repeat <= measureOffset + 1) {
+      if (measureIndex >= rhythm.measures.length - 1) {
+        return;
+      } else {
+        measure = rhythm.measures[measureIndex + 1];
+
+        return {
+          measureIndex: measureIndex + 1,
+          measureOffset: measureOffset + 1,
+          beatIndex: 0,
+          beatOffset: beatOffset + 1,
+        };
+      }
+    } else {
+      return {
+        measureIndex: measureIndex,
+        measureOffset: measureOffset,
+        beatIndex: beatIndex + 1,
+        beatOffset: beatOffset + 1,
+      };
+    }
+  } else {
+    return {
+      measureIndex: measureIndex,
+      measureOffset: measureOffset,
+      beatIndex: beatIndex + 1,
+      beatOffset: beatOffset + 1,
+    };
+  }
+}

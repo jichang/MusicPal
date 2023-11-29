@@ -27,7 +27,16 @@ export function scheduleNote(
   osc.stop(time + 0.03);
 }
 
-export function scheduleNextBeat(
+export function scheduleFirstBeat(
+  audioContext: AudioContext,
+  rhythm: Rhythm,
+  startTime: number,
+  beatInterval: number,
+) {
+  return scheduleBeat(audioContext, rhythm, startTime, 0, 0, 0, beatInterval);
+}
+
+export function scheduleBeat(
   audioContext: AudioContext,
   rhythm: Rhythm,
   startTime: number,
@@ -46,7 +55,7 @@ export function scheduleNextBeat(
     return;
   }
 
-  const beatStartTime = startTime + beatInterval * (beatOffset + 1);
+  const beatStartTime = startTime + beatInterval * beatOffset;
   const noteInterval = beatInterval / beat.notes.length;
 
   for (let i = 0; i < beat.notes.length; i++) {

@@ -74,10 +74,6 @@ export function RhythmPlayer(props: RhythmPlayerProps) {
   const handleTempoEnd = useCallback(
     (tempo: UniformTempo) => {
       if (tempos[tempos.length - 1] === tempo) {
-        setCurrMeasureIndex(-1);
-        setCurrMeasureOffset(-1);
-        setCurrBeatIndex(-1);
-        setCurrNoteIndex(-1);
         onEnd();
       }
     },

@@ -112,7 +112,10 @@ export function startTask(
     handleTickerPreparatory,
     preparatoryTime,
   );
-  const beginTimeoutId = self.setTimeout(handleTickerBegin, beginTime);
+  const beginTimeoutId = self.setTimeout(
+    handleTickerBegin,
+    beginTime - tickInterval,
+  );
   const timer: TickerTimer = {
     beginTimeoutId,
     preparatoryTimeoutId,
