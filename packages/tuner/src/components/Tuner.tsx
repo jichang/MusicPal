@@ -3,7 +3,7 @@ import { useSoundAnalyser } from '@musicpal/common';
 import { Instrument, instruments } from '../utils/instruments';
 import { Flex, Select, Tag } from 'antd';
 import { Localized } from '@fluent/react';
-import { stringifyNoteName } from '@musicpal/music';
+import { getInterval, stringifyNote } from '@musicpal/music';
 import './Tuner.css';
 
 export function Tuner() {
@@ -37,13 +37,43 @@ export function Tuner() {
     [instruments],
   );
 
+  const closest = useMemo(() => {
+    if (!note) {
+      return undefined;
+    }
+
+    let closestNote = instrument.notes[0];
+    let closestInterval = getInterval(note, closestNote);
+    for (const currNote of instrument.notes) {
+      const interval = getInterval(note, currNote);
+      if (Math.abs(interval) < Math.abs(closestInterval)) {
+        closestInterval = interval;
+        closestNote = currNote;
+      }
+    }
+
+    return { note: closestNote, interval: closestInterval };
+  }, [note, instrument]);
+
   return (
     <div className="tuner">
       <Flex className="notes" align="center" justify="space-evenly">
         {instrument.notes.map((note, index) => {
+          const isClosest = note === closest?.note;
+          let color = undefined;
+          if (isClosest) {
+            if (closest.interval === 0) {
+              color = 'green';
+            } else if (closest.interval > 0) {
+              color = 'red';
+            } else if (closest.interval < 0) {
+              color = 'yellow';
+            }
+          }
+
           return (
-            <Tag className="note" key={index}>
-              {stringifyNoteName(note.name)}
+            <Tag className="note" key={index} color={color}>
+              {stringifyNote(note)}
             </Tag>
           );
         })}

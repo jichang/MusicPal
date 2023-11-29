@@ -104,9 +104,12 @@ export function stringifyNote(note: Note) {
   return `${stringifyNoteName(note.name)}${note.octave}`;
 }
 
+export function getInterval(noteA: Note, noteB: Note) {
+  return 12 * (noteA.octave - noteB.octave) + (noteA.name - noteB.name);
+}
+
 export function getNoteFrequency(note: Note) {
-  const halfSteps =
-    12 * (note.octave - NOTE_A4.octave) + (note.name - NoteName.A);
+  const halfSteps = getInterval(note, NOTE_A4);
 
   return Math.pow(2, halfSteps / 12) * CONCERT_PITCH;
 }
@@ -122,7 +125,7 @@ export function getNoteFromFrequency(frequency: number, dynamics: Dynamics) {
   return {
     name,
     octave,
-    dynamics: Dynamics.None,
+    dynamics,
   };
 }
 
