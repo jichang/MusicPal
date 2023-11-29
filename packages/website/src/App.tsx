@@ -8,6 +8,7 @@ import {
 } from './components/storage.context';
 import { AppContextProvider } from './components/app.context';
 import { MetronomePlayerPage } from './pages/MetronomePlayerPage';
+import { SightEarPage } from './pages/SightEarPage';
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
   {
     path: '/metronome/:id',
     element: <MetronomePlayerPage />,
+  },
+  {
+    path: '/sightear',
+    element: <SightEarPage />,
   },
 ]);
 

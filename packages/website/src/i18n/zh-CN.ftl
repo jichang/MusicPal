@@ -44,3 +44,7 @@ end = 结束
 step = 间隔
 settings = 设置
 prepratory = 预备拍
+sightear = 视唱练耳
+sightear-description = 视唱练耳训练
+sight-singing = 视唱
+ear-training = 练耳

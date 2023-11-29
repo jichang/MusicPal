@@ -20,10 +20,13 @@
     "packages/common",
     "packages/music",
     "packages/metronome",
+    "packages/sightear",
     "packages/website"
   ],
   "devDependencies": {
+    "@parcel/packager-ts": "^2.8.3",
+    "@parcel/transformer-typescript-types": "^2.8.3",
     "prettier": "^3.0.3",
-    "process": "^0.11.10"
+    "typescript": "^5.2.2"
   }
 }

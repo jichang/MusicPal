@@ -44,3 +44,7 @@ end = End
 step = Step
 settings = Settings
 prepratory = Prepratory
+sightear = SightEar
+sightear-description = Sight singing and Ear learning
+sight-singing = Sight Singing
+ear-training = Ear Training

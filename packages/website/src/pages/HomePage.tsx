@@ -56,6 +56,19 @@ export function HomePage() {
               description={<Localized id="metronome-description" />}
             />
           </List.Item>
+          <List.Item
+            actions={[
+              <Link to="/sightear">
+                <ArrowRightOutlined />
+                <Localized id="open">Open</Localized>
+              </Link>,
+            ]}
+          >
+            <List.Item.Meta
+              title={<Localized id="sightear" />}
+              description={<Localized id="sightear-description" />}
+            />
+          </List.Item>
         </List>
       </div>
     </div>
