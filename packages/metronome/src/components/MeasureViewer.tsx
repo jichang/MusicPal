@@ -5,6 +5,7 @@ import './MeasureViewer.css';
 import { MeasureBeats } from './MeasureBeats';
 import { MeasureSettings } from './MeasureSettings';
 import { Measure } from '@musicpal/music';
+import { useRhythmContext } from '../context/rhythm.context';
 
 export type TabsItems = TabsProps['items'];
 
@@ -91,6 +92,7 @@ export function MeasureViewer(props: MeasureViewerProps) {
   ];
 
   const [activeViewKey, setActiveViewKey] = useState('beats');
+  const { editable } = useRhythmContext();
 
   return (
     <Card
@@ -101,7 +103,7 @@ export function MeasureViewer(props: MeasureViewerProps) {
         </Localized>
       }
       extra={
-        <Button danger onClick={handleRemoveMeasure}>
+        <Button disabled={!editable} danger onClick={handleRemoveMeasure}>
           <Localized id="remove-measure">Remove Measure</Localized>
         </Button>
       }

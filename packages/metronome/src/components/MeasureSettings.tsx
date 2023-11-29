@@ -4,6 +4,7 @@ import { Localized } from '@fluent/react';
 import './MeasureSettings.css';
 import { Form, FormField, FormFieldGroup } from './Form';
 import { Measure } from '@musicpal/music';
+import { useRhythmContext } from '../context/rhythm.context';
 
 export interface MeasureSettingsProps {
   measure: Measure;
@@ -21,10 +22,13 @@ export function MeasureSettings(props: MeasureSettingsProps) {
     [onChangeRepeat],
   );
 
+  const { editable } = useRhythmContext();
+
   return (
     <Form autoComplete="off" name="settings" onSubmit={submit}>
       <FormField name={`${id}-repeat`} label="repeat">
         <InputNumber
+          disabled={!editable}
           id={`${id}-repeat`}
           value={measure.repeat}
           onChange={onChangeRepeat}

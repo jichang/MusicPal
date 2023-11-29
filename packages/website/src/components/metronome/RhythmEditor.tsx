@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { FormField, RhythmViewer, TempoSettings } from '@musicpal/metronome';
+import { RhythmViewer, TempoSettings } from '@musicpal/metronome';
 import {
   Tempo,
   Rhythm,
@@ -24,6 +24,7 @@ import {
 } from '@ant-design/icons';
 import { Localized } from '@fluent/react';
 import { useFlag } from '../../hooks/useFlag';
+import { RhythmContextProvider } from '@musicpal/metronome';
 
 export interface RhythmEditorProps {
   rhythm: Rhythm;
@@ -125,7 +126,6 @@ export function RhythmEditor(props: RhythmEditorProps) {
 
   const {
     flag: isTempoModalOpened,
-    toggle: toggleTempoModal,
     turnOn: openTempoModal,
     turnOff: closeTempoModal,
   } = useFlag(false);
@@ -146,25 +146,25 @@ export function RhythmEditor(props: RhythmEditorProps) {
 
   return (
     <div className="rhythm__editor">
-      <RhythmViewer
-        rhythm={rhythm}
-        isRunning={isRunning}
-        onChangeRepeat={handleChangeRepeat}
-        onAddMeasure={handleAddMeasure}
-        onRemoveMeasure={handleRemoveMeasure}
-        onAddBeat={handleAddBeat}
-        onRemoveBeat={handleRemoveBeat}
-        onAddNote={handleAddNote}
-        onChangeNote={handleChangeNote}
-        onRemoveNote={handleRemoveNote}
-      />
+      <RhythmContextProvider editable={!isRunning}>
+        <RhythmViewer
+          rhythm={rhythm}
+          isRunning={isRunning}
+          onChangeRepeat={handleChangeRepeat}
+          onAddMeasure={handleAddMeasure}
+          onRemoveMeasure={handleRemoveMeasure}
+          onAddBeat={handleAddBeat}
+          onRemoveBeat={handleRemoveBeat}
+          onAddNote={handleAddNote}
+          onChangeNote={handleChangeNote}
+          onRemoveNote={handleRemoveNote}
+        />
+      </RhythmContextProvider>
       <div className="rhythm__editor__footer">
         <div className="toolbar">
           <div className="toolbar__main">
-            <Button icon={<ClockCircleOutlined />} onClick={toggleTempoModal}>
-              <Localized id="tempo">Tempo</Localized>
-            </Button>
             <Button
+              type="primary"
               icon={isRunning ? <PauseCircleFilled /> : <PlayCircleFilled />}
               onClick={toggle}
             >
@@ -173,6 +173,13 @@ export function RhythmEditor(props: RhythmEditorProps) {
               ) : (
                 <Localized id="play">Play</Localized>
               )}
+            </Button>
+            <Button
+              disabled={isRunning}
+              icon={<ClockCircleOutlined />}
+              onClick={openTempoModal}
+            >
+              <Localized id="tempo">Tempo</Localized>
             </Button>
           </div>
           <div className="toolbar__side">

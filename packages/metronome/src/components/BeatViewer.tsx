@@ -1,10 +1,11 @@
 import React, { useCallback } from 'react';
-import { NoteButton } from './NoteButton';
+import { NoteIcon } from './NoteIcon';
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import { Localized } from '@fluent/react';
 import { Button } from 'antd';
 import './BeatViewer.css';
 import { Beat } from '@musicpal/music';
+import { useRhythmContext } from '../context/rhythm.context';
 
 export interface BeatViewerProps {
   beat: Beat;
@@ -50,11 +51,13 @@ export function BeatViewer(props: BeatViewerProps) {
     },
     [onChangeNote, measureIndex, beatIndex],
   );
+  const { editable } = useRhythmContext();
 
   return (
     <div key={beatIndex} className="beat">
       <Localized id="remove-note-btn" attrs={{ title: true }}>
         <Button
+          disabled={!editable}
           className="button--oper"
           title="Remove Note"
           icon={<MinusOutlined />}
@@ -69,18 +72,20 @@ export function BeatViewer(props: BeatViewerProps) {
             noteIndex === currNoteIndex;
 
           return (
-            <NoteButton
-              index={noteIndex}
-              isCurrent={isCurrent}
-              note={note}
-              key={noteIndex}
-              onClick={handleChangeNote}
-            />
+            <div key={noteIndex} className="note">
+              <NoteIcon
+                index={noteIndex}
+                isCurrent={isCurrent}
+                note={note}
+                onClick={handleChangeNote}
+              />
+            </div>
           );
         })}
       </div>
       <Localized id="add-note-btn" attrs={{ title: true }}>
         <Button
+          disabled={!editable}
           className="button--oper"
           title="Add Note"
           icon={<PlusOutlined />}

@@ -5,6 +5,7 @@ import { Localized } from '@fluent/react';
 import { Button } from 'antd';
 import { BeatViewer } from './BeatViewer';
 import { Measure } from '@musicpal/music';
+import { useRhythmContext } from '../context/rhythm.context';
 
 export interface MeasureBeatsProps {
   measure: Measure;
@@ -47,10 +48,13 @@ export function MeasureBeats(props: MeasureBeatsProps) {
     onRemoveBeat(measureIndex);
   }, [onRemoveBeat, measureIndex]);
 
+  const { editable } = useRhythmContext();
+
   return (
     <div className="measure__beats">
       <Localized id="remove-beat-btn" attrs={{ title: true }}>
         <Button
+          disabled={!editable}
           key="remove"
           icon={<MinusOutlined />}
           onClick={handleRemoveBeat}
@@ -83,6 +87,7 @@ export function MeasureBeats(props: MeasureBeatsProps) {
       </div>
       <Localized id="add-beat-btn" attrs={{ title: true }}>
         <Button
+          disabled={!editable}
           key="add"
           title="Add Beat"
           icon={<PlusOutlined />}

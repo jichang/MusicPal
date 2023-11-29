@@ -6,7 +6,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { useParams } from 'react-router-dom';
 import { RhythmEditor } from '../components/metronome/RhythmEditor';
 import { Fill } from '../components/Fill';
-import { Rhythm } from '@musicpal/metronome';
+import { Rhythm } from '@musicpal/music';
 
 export function MetronomePlayerPage() {
   const { id } = useParams();

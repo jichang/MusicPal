@@ -1,6 +1,6 @@
 import { DEFAULT_MEASURES } from './constants';
 import { lcm } from './math';
-import { Tempo, Note, Beat, Measure, Rhythm, Dynamics } from './theory';
+import { Tempo, Note, Beat, Measure, Rhythm, Dynamics, UniformTempo } from './theory';
 import * as R from 'ramda';
 
 export function cloneTempo<T extends Tempo>(tempo: T): T {
@@ -157,16 +157,19 @@ export function analyseRhythm(rhythm: Rhythm) {
   let beatCount = 0;
   let noteCount = 0;
   let ticksPerBeat = 0;
-  let beatsPerMinute = 0;
+  let tempos: UniformTempo[] = [];
 
   switch (rhythm.tempo.type) {
     case 'uniform':
-      beatsPerMinute = rhythm.tempo.speed;
+      tempos.push(cloneTempo(rhythm.tempo));
       break;
     case 'varying':
       {
         for (let speed = rhythm.tempo.begin; speed <= rhythm.tempo.end; speed += rhythm.tempo.step) {
-          beatsPerMinute = lcm(beatsPerMinute, speed);
+          tempos.push({
+            type: 'uniform',
+            speed
+          })
         }
       }
       break;
@@ -189,7 +192,7 @@ export function analyseRhythm(rhythm: Rhythm) {
     beatCount,
     noteCount,
     ticksPerBeat,
-    beatsPerMinute
+    tempos
   };
 }
 

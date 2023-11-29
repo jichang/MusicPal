@@ -17,6 +17,7 @@
     "@musicpal/metronome": "^1.0.0",
     "@musicpal/music": "^1.0.0",
     "antd": "^5.10.1",
+    "classnames": "^2.3.2",
     "comlink": "^4.4.1",
     "dexie": "^3.2.4",
     "dexie-react-hooks": "^1.1.6",

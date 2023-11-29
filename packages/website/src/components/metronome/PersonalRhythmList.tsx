@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Rhythm } from '@musicpal/metronome';
+import { Rhythm } from '@musicpal/music';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useStorage } from '../storage.context';
 import { Button, ConfigProvider, Empty, List, Card } from 'antd';

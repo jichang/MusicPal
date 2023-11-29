@@ -1,22 +1,31 @@
 import * as Comlink from 'comlink';
 
-const intervalIds: Map<string, number> = new Map<string, number>();
+const intervalMap: Map<string, number> = new Map<string, number>();
 
 export function setInterval(
   identity: string,
-  callback: () => void,
+  callback: (identity: string) => void,
   interval: number,
 ) {
-  const intervalId = globalThis.setInterval(callback, interval);
-  intervalIds.set(identity, intervalId);
+  const handleInterval = () => {
+    callback(identity);
+  };
+
+  const intervalId = self.setInterval(handleInterval, interval);
+  intervalMap.set(identity, intervalId);
 }
 
 export function clearInterval(identity: string) {
-  const intervalId = intervalIds.get(identity);
+  const intervalId = intervalMap.get(identity);
   if (intervalId) {
-    globalThis.clearInterval(intervalId);
-    intervalIds.delete(identity);
+    self.clearInterval(intervalId);
+    intervalMap.delete(identity);
   }
+}
+
+export interface TimingWorker {
+  setInterval: typeof setInterval;
+  clearInterval: typeof clearInterval;
 }
 
 Comlink.expose({

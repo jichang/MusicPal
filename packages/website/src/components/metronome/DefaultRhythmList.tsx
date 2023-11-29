@@ -2,7 +2,7 @@ import React from 'react';
 import { List, Card } from 'antd';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useStorage } from '../storage.context';
-import { Rhythm } from '@musicpal/metronome';
+import { Rhythm } from '@musicpal/music';
 import { Localized } from '@fluent/react';
 import { Link } from 'react-router-dom';
 import { ArrowRightOutlined } from '@ant-design/icons';

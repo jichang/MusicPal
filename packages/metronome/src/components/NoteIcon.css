@@ -1,0 +1,7 @@
+.note__icon {
+  margin: 0.5rem;
+}
+
+.note__icon.note__icon--current {
+  transform: scale(1.5);
+}
