@@ -2,23 +2,23 @@
   "name": "@musicpal/website",
   "version": "1.0.0",
   "description": "",
-  "source": "./src/index.tsx",
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/index.mjs",
-  "types": "./dist/types/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/esm/index.mjs",
-      "require": "./dist/cjs/index.js"
-    }
-  },
   "scripts": {
     "start": "parcel ./src/index.html --no-cache",
-    "build": "parcel build",
+    "build": "parcel build ./src/index.html --no-cache",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
+  "engines": {
+    "node": ">=18.0"
+  },
+  "targets": {
+    "default": {
+      "engines": {
+        "browsers": ">= 50%"
+      }
+    }
+  },
   "dependencies": {
     "@ant-design/icons": "^5.2.6",
     "@fluent/bundle": "^0.18.0",
@@ -39,6 +39,8 @@
     "react-router-dom": "^6.16.0"
   },
   "devDependencies": {
+    "@parcel/packager-ts": "^2.8.3",
+    "@parcel/transformer-typescript-types": "^2.8.3",
     "@types/node": "^20.8.6",
     "@types/react": "^18.2.28",
     "@types/react-dom": "^18.2.13",
