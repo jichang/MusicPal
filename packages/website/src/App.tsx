@@ -1,10 +1,11 @@
-import React from 'react';
+import React from "react";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { Metronome } from "./components/metronome/Metronome";
+import { Home } from "./components/Home";
 import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
-import { Metronome } from '@musicpal/metronome';
-import { Home } from './Home';
+  MusicPalDexie,
+  StorageContextProvider,
+} from "./components/storage.context";
 
 const router = createBrowserRouter([
   {
@@ -13,10 +14,24 @@ const router = createBrowserRouter([
   },
   {
     path: "/metronome",
-    element: <Metronome />
-  }
+    element: <Metronome />,
+  },
+  {
+    path: "/metronome/:id",
+    element: <></>,
+  },
 ]);
 
-export function App() {
-  return <RouterProvider router={router} />
+export interface AppProps {
+  dexie: MusicPalDexie;
+}
+
+export function App(props: AppProps) {
+  const { dexie } = props;
+
+  return (
+    <StorageContextProvider dexie={dexie}>
+      <RouterProvider router={router} />
+    </StorageContextProvider>
+  );
 }

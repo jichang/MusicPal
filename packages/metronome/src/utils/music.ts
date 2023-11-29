@@ -21,63 +21,12 @@ export interface Measure {
 }
 
 export interface Rhythm {
+  id: string;
+  category: 'default' | 'personal';
+  name: string;
+  order: number;
   measures: Measure[];
 }
-
-export const Rhythm4_4: Rhythm = {
-  measures: [
-    {
-      repeat: 1,
-      beats: [
-        {
-          repeat: 1,
-          notes: [
-            {
-              dynamics: Dynamics.Strong
-            },
-            { dynamics: Dynamics.Light },
-            { dynamics: Dynamics.Light },
-            { dynamics: Dynamics.Light }
-          ]
-        },
-      ]
-    },
-  ]
-}
-
-export const Rhythm8_8: Rhythm = {
-  measures: [
-    {
-      repeat: 1,
-      beats: [
-        {
-          repeat: 1,
-          notes: [
-            {
-              dynamics: Dynamics.Strong
-            },
-            { dynamics: Dynamics.Light },
-            { dynamics: Dynamics.Light },
-            { dynamics: Dynamics.Light }
-          ]
-        },
-        {
-          repeat: 1,
-          notes: [
-            {
-              dynamics: Dynamics.Strong
-            },
-            { dynamics: Dynamics.Light },
-            { dynamics: Dynamics.Light },
-            { dynamics: Dynamics.Light }
-          ]
-        }
-      ]
-    },
-  ]
-}
-
-export const rhythms = [Rhythm4_4, Rhythm8_8];
 
 export function parseRhythm(rhythm: Rhythm) {
   let measureCount = 0;
