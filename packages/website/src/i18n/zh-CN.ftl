@@ -28,3 +28,4 @@ add-note-btn =
   .title = 添加音符
 remove-note-btn =
   .title = 删除音符
+no-measures = 尚无小节

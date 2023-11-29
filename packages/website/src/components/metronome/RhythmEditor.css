@@ -1,0 +1,29 @@
+.rhythm__editor {
+  padding-bottom: 6rem;
+}
+
+.rhythm__editor__footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  border-top: 1px solid #f0f0f0;
+  background-color: white;
+
+  display: flex;
+  align-items: center;
+}
+
+.form--player {
+  flex: 1;
+}
+
+.rhythm__editor__footer .toolbar {
+  display: flex;
+  flex-direction: row;
+  margin: 0 auto;
+  padding: 1rem 0;
+
+  width: 100%;
+  max-width: 64rem;
+}

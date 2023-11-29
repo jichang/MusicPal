@@ -3,7 +3,7 @@ import { Rhythm, locate, parseRhythm } from "../utils/music";
 import "./RhythmViewer.css";
 import { PlusOutlined } from "@ant-design/icons";
 import { Localized } from "@fluent/react";
-import { Button, Flex } from "antd";
+import { Button, ConfigProvider, Flex, List } from "antd";
 import { MeasureViewer } from "./MeasureViewer";
 import { useTick } from "../hooks/useTick";
 
@@ -60,27 +60,33 @@ export function RhythmViewer(props: RhythmViewerProps) {
 
   return (
     <div className="rhythm__viewer">
-      <div className="measures">
-        {rhythm.measures.map((measure, index) => {
+      <List
+        className="measure__list"
+        dataSource={rhythm.measures}
+        renderItem={(measure, index) => {
           return (
-            <MeasureViewer
-              key={index}
-              index={index}
-              editable={editable}
-              measure={measure}
-              currMeasureIndex={currMeasureIndex}
-              currMeasureOffset={currMeasureOffset}
-              currBeatIndex={currBeatIndex}
-              currNoteIndex={currNoteIndex}
-              onRemove={onRemoveMeasure}
-              onAddBeat={onAddBeat}
-              onRemoveBeat={onRemoveBeat}
-              onAddNote={onAddNote}
-              onRemoveNote={onRemoveNote}
-            />
+            <List.Item className="measure__list__item" key={index}>
+              <MeasureViewer
+                index={index}
+                editable={editable}
+                measure={measure}
+                currMeasureIndex={currMeasureIndex}
+                currMeasureOffset={currMeasureOffset}
+                currBeatIndex={currBeatIndex}
+                currNoteIndex={currNoteIndex}
+                onRemove={onRemoveMeasure}
+                onAddBeat={onAddBeat}
+                onRemoveBeat={onRemoveBeat}
+                onAddNote={onAddNote}
+                onRemoveNote={onRemoveNote}
+              />
+            </List.Item>
           );
-        })}
-      </div>
+        }}
+        locale={{
+          emptyText: <Localized id="no-measures">No Measures</Localized>,
+        }}
+      />
       {editable ? (
         <Flex justify="center" className="rhythm__viewer__toolbar">
           <Button type="primary" icon={<PlusOutlined />} onClick={onAddMeasure}>

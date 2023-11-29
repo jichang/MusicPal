@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Rhythm,
   RhythmViewer,
@@ -11,20 +11,31 @@ import {
   removeNote,
 } from "@musicpal/metronome";
 import "./RhythmEditor.css";
+import { Button, Form, InputNumber } from "antd";
+import {
+  PauseCircleFilled,
+  PlayCircleFilled,
+  SaveOutlined,
+} from "@ant-design/icons";
+import { Localized } from "@fluent/react";
+import { useFlag } from "../../hooks/useFlag";
 
 export interface RhythmEditorProps {
-  isRunning: boolean;
-  beatsPerMinute: number;
   rhythm: Rhythm;
+  onSave: (rhythm: Rhythm) => void;
   children?: React.ReactNode;
 }
 
 export function RhythmEditor(props: RhythmEditorProps) {
-  const { isRunning, beatsPerMinute, children } = props;
+  const { children, onSave } = props;
 
   const [rhythm, setRhythm] = useState(() => {
     return cloneRhythm(props.rhythm);
   });
+
+  useEffect(() => {
+    setRhythm(cloneRhythm(props.rhythm));
+  }, [props.rhythm, setRhythm]);
 
   const handleAddMeasure = useCallback(() => {
     setRhythm((rhythm) => {
@@ -77,6 +88,21 @@ export function RhythmEditor(props: RhythmEditorProps) {
     [setRhythm]
   );
 
+  const { flag: isRunning, toggle } = useFlag(false);
+
+  const [beatsPerMinute, setBeatsPerMinute] = useState(120);
+
+  const handleBeatsPerMinuteChanged = useCallback(
+    (beatsPerMinute: number | null) => {
+      setBeatsPerMinute(beatsPerMinute || 60);
+    },
+    [setBeatsPerMinute]
+  );
+
+  const handleSave = useCallback(() => {
+    onSave(rhythm);
+  }, [rhythm, onSave]);
+
   return (
     <div className="rhythm__editor">
       <RhythmViewer
@@ -91,6 +117,25 @@ export function RhythmEditor(props: RhythmEditorProps) {
         onAddNote={handleAddNote}
         onRemoveNote={handleRemoveNote}
       />
+      <div className="rhythm__editor__footer">
+        <div className="toolbar">
+          <Form className="form--player">
+            <InputNumber
+              value={beatsPerMinute}
+              onChange={handleBeatsPerMinuteChanged}
+            />
+            <Button
+              icon={isRunning ? <PauseCircleFilled /> : <PlayCircleFilled />}
+              onClick={toggle}
+            >
+              <Localized id="play">Play</Localized>
+            </Button>
+          </Form>
+          <Button type="primary" icon={<SaveOutlined />} onClick={handleSave}>
+            <Localized id="save">Save</Localized>
+          </Button>
+        </div>
+      </div>
       {children}
     </div>
   );

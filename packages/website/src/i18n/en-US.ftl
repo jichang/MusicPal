@@ -28,3 +28,4 @@ add-note-btn =
   .title = Add Note
 remove-note-btn =
   .title = Remove Note
+no-measures = No Measures
