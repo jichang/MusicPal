@@ -1,24 +1,18 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import './SightEarPage.css';
 import { GoBack } from '../components/GoBack';
-import { Tabs } from 'antd';
-import { TabsItems } from './MetronomeListPage';
+import { Typography } from 'antd';
 import { Localized } from '@fluent/react';
-import { SightSinging, EarTraining } from '@musicpal/sightear';
+import { SightEar, ToneContextProvider } from '@musicpal/sightear';
+import * as Tone from 'tone';
 
 export function SightEarPage() {
-  const tabItems: TabsItems = [
-    {
-      key: 'sight-singing',
-      label: <Localized id="sight-singing">Sight Singing</Localized>,
-      children: <SightSinging />,
-    },
-    {
-      key: 'ear-traning',
-      label: <Localized id="ear-training">Ear Training</Localized>,
-      children: <EarTraining />,
-    },
-  ];
+  const [synth, setSynth] = useState<Tone.Synth | undefined>();
+
+  const createSynth = useCallback(async () => {
+    await Tone.start();
+    setSynth(new Tone.Synth().toDestination());
+  }, [setSynth]);
 
   return (
     <div className="page page--sightear">
@@ -26,7 +20,19 @@ export function SightEarPage() {
         <GoBack />
       </div>
       <div className="page__content">
-        <Tabs items={tabItems} />
+        <ToneContextProvider
+          synth={synth}
+          description={
+            <Typography.Paragraph>
+              <Localized id="this-app-needs-to-access-mic-and-speaker">
+                This app needs to access your mic and speaker.
+              </Localized>
+            </Typography.Paragraph>
+          }
+          onStart={createSynth}
+        >
+          <SightEar />
+        </ToneContextProvider>
       </div>
     </div>
   );

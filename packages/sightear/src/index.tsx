@@ -1,2 +1,3 @@
-export * from './components/EarTraining';
-export * from './components/SightSinging';
+export * from './context/tone.context';
+export * from './components/ToneContextProvider';
+export * from './components/SightEar';
