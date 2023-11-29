@@ -2,9 +2,10 @@
   "name": "@musicpal/website",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "source": "./src/index.html",
   "scripts": {
     "start": "parcel ./src/index.html --no-cache",
+    "build": "parcel build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -32,7 +33,7 @@
     "@types/node": "^20.8.6",
     "@types/react": "^18.2.28",
     "@types/react-dom": "^18.2.13",
-    "parcel": "^2.10.0",
+    "parcel": "2.8.3",
     "typescript": "^5.2.2"
   }
 }
