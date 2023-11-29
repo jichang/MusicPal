@@ -45,21 +45,6 @@ export function MeasureViewer(props: MeasureViewerProps) {
     onRemoveBeat?.(index);
   }, [onRemoveBeat, index]);
 
-  const actions = editable
-    ? [
-        <Button key="add" icon={<PlusOutlined />} onClick={handleAddBeat}>
-          <Localized id="add-beat-btn">Add Beat</Localized>
-        </Button>,
-        <Button
-          key="remove"
-          icon={<MinusOutlined />}
-          onClick={handleRemoveBeat}
-        >
-          <Localized id="remove-beat-btn">Remove Beat</Localized>
-        </Button>,
-      ]
-    : [];
-
   const handleRemoveMeasure = useCallback(() => {
     onRemove?.(index);
   }, [index, onRemove]);
@@ -79,29 +64,52 @@ export function MeasureViewer(props: MeasureViewerProps) {
           </Button>
         ) : null
       }
-      actions={actions}
     >
-      <div
-        className="beats"
-        style={{ gridTemplateColumns: `repeat(${measure.beats.length}, 1fr)` }}
-      >
-        {measure.beats.map((beat, beatIndex) => {
-          return (
-            <BeatViewer
-              beat={beat}
-              key={beatIndex}
-              editable={editable}
-              measureIndex={index}
-              beatIndex={beatIndex}
-              currBeatIndex={currBeatIndex}
-              currMeasureIndex={currMeasureIndex}
-              currMeasureOffset={currMeasureOffset}
-              currNoteIndex={currNoteIndex}
-              onAddNote={onAddNote}
-              onRemoveNote={onRemoveNote}
+      <div className="measure__viewer__content">
+        {editable ? (
+          <Localized id="remove-beat-btn" attrs={{ title: true }}>
+            <Button
+              key="remove"
+              icon={<MinusOutlined />}
+              onClick={handleRemoveBeat}
+              title="Remove Beat"
             />
-          );
-        })}
+          </Localized>
+        ) : null}
+        <div
+          className="beats"
+          style={{
+            gridTemplateColumns: `repeat(${measure.beats.length}, 1fr)`,
+          }}
+        >
+          {measure.beats.map((beat, beatIndex) => {
+            return (
+              <BeatViewer
+                beat={beat}
+                key={beatIndex}
+                editable={editable}
+                measureIndex={index}
+                beatIndex={beatIndex}
+                currBeatIndex={currBeatIndex}
+                currMeasureIndex={currMeasureIndex}
+                currMeasureOffset={currMeasureOffset}
+                currNoteIndex={currNoteIndex}
+                onAddNote={onAddNote}
+                onRemoveNote={onRemoveNote}
+              />
+            );
+          })}
+        </div>
+        {editable ? (
+          <Localized id="add-beat-btn" attrs={{ title: true }}>
+            <Button
+              key="add"
+              title="Add Beat"
+              icon={<PlusOutlined />}
+              onClick={handleAddBeat}
+            />
+          </Localized>
+        ) : null}
       </div>
     </Card>
   );

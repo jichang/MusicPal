@@ -2,7 +2,15 @@
   text-align: center;
 }
 
+.measure__viewer__content {
+  display: flex;
+  flex-direction: row;
+
+  align-items: center;
+}
+
 .measure__viewer .beats {
+  flex: 1;
   display: grid;
   grid-gap: 1rem;
   justify-items: center;

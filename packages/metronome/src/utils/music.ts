@@ -12,8 +12,8 @@ export interface Note {
 
 export function cloneNote(note: Note): Note {
   return {
-    ...note
-  }
+    ...note,
+  };
 }
 
 export interface Beat {
@@ -22,12 +22,12 @@ export interface Beat {
 
 export function cloneBeat(beat: Beat): Beat {
   return {
-    notes: beat.notes.map(note => {
+    notes: beat.notes.map((note) => {
       return {
-        ...note
-      }
-    })
-  }
+        ...note,
+      };
+    }),
+  };
 }
 
 export interface Measure {
@@ -38,13 +38,13 @@ export interface Measure {
 export function cloneMeasure(measure: Measure): Measure {
   return {
     repeat: measure.repeat,
-    beats: measure.beats.map(cloneBeat)
-  }
+    beats: measure.beats.map(cloneBeat),
+  };
 }
 
 export interface Rhythm {
   id: string;
-  category: 'default' | 'personal';
+  category: "default" | "personal";
   name: string;
   order: number;
   measures: Measure[];
@@ -56,8 +56,8 @@ export function cloneRhythm(rhythm: Rhythm): Rhythm {
     category: rhythm.category,
     name: rhythm.name,
     order: rhythm.order,
-    measures: rhythm.measures.map(cloneMeasure)
-  }
+    measures: rhythm.measures.map(cloneMeasure),
+  };
 }
 
 export function addMeasure(rhythm: Rhythm) {
@@ -105,7 +105,11 @@ export function removeBeat(rhythm: Rhythm, measureIndex: number) {
   return newRhythm;
 }
 
-export function addNote(rhythm: Rhythm, measureIndex: number, beatIndex: number) {
+export function addNote(
+  rhythm: Rhythm,
+  measureIndex: number,
+  beatIndex: number
+) {
   const newRhythm = cloneRhythm(rhythm);
 
   const measure = newRhythm.measures[measureIndex];
@@ -120,7 +124,11 @@ export function addNote(rhythm: Rhythm, measureIndex: number, beatIndex: number)
   return newRhythm;
 }
 
-export function removeNote(rhythm: Rhythm, measureIndex: number, beatIndex: number) {
+export function removeNote(
+  rhythm: Rhythm,
+  measureIndex: number,
+  beatIndex: number
+) {
   const newRhythm = cloneRhythm(rhythm);
 
   const measure = newRhythm.measures[measureIndex];
@@ -145,7 +153,11 @@ export function parseRhythm(rhythm: Rhythm) {
   let ticksPerBeat = 1;
 
   for (const measure of rhythm.measures) {
-    for (let measureOffset = 0; measureOffset < measure.repeat; measureOffset++) {
+    for (
+      let measureOffset = 0;
+      measureOffset < measure.repeat;
+      measureOffset++
+    ) {
       measureCount = measureCount + 1;
 
       for (const beat of measure.beats) {
@@ -162,8 +174,8 @@ export function parseRhythm(rhythm: Rhythm) {
     measureCount,
     beatCount,
     noteCount,
-    ticksPerBeat
-  }
+    ticksPerBeat,
+  };
 }
 
 export function locate(rhythm: Rhythm, ticksPerBeat: number, currTick: number) {
@@ -173,11 +185,23 @@ export function locate(rhythm: Rhythm, ticksPerBeat: number, currTick: number) {
   let currNoteIndex = 0;
 
   let ticksCount = 0;
-  for (let measureIndex = 0; measureIndex < rhythm.measures.length; measureIndex++) {
+  for (
+    let measureIndex = 0;
+    measureIndex < rhythm.measures.length;
+    measureIndex++
+  ) {
     const currMeasure = rhythm.measures[measureIndex];
 
-    for (let measureOffset = 0; measureOffset < currMeasure.repeat; measureOffset++) {
-      for (let beatIndex = 0; beatIndex < currMeasure.beats.length; beatIndex++) {
+    for (
+      let measureOffset = 0;
+      measureOffset < currMeasure.repeat;
+      measureOffset++
+    ) {
+      for (
+        let beatIndex = 0;
+        beatIndex < currMeasure.beats.length;
+        beatIndex++
+      ) {
         const currBeat = currMeasure.beats[beatIndex];
         const maxTicksCount = ticksCount + ticksPerBeat;
         if (maxTicksCount - 1 < currTick) {
@@ -189,7 +213,9 @@ export function locate(rhythm: Rhythm, ticksPerBeat: number, currTick: number) {
         currMeasureOffset = measureOffset;
         currBeatIndex = beatIndex;
 
-        currNoteIndex = Math.floor((currTick % ticksPerBeat) / (ticksPerBeat / currBeat.notes.length));
+        currNoteIndex = Math.floor(
+          (currTick % ticksPerBeat) / (ticksPerBeat / currBeat.notes.length)
+        );
 
         return {
           currMeasureOffset,
@@ -206,7 +232,7 @@ export function locate(rhythm: Rhythm, ticksPerBeat: number, currTick: number) {
     currMeasureIndex,
     currBeatIndex,
     currNoteIndex,
-  }
+  };
 }
 
 export const DEFAULT_MEASURES: Measure[] = [
@@ -218,9 +244,6 @@ export const DEFAULT_MEASURES: Measure[] = [
           {
             dynamics: Dynamics.Strong,
           },
-          {
-            dynamics: Dynamics.Light,
-          },
         ],
       },
       {
@@ -248,9 +271,6 @@ export const DEFAULT_MEASURES: Measure[] = [
         notes: [
           {
             dynamics: Dynamics.Strong,
-          },
-          {
-            dynamics: Dynamics.Light,
           },
         ],
       },
@@ -276,7 +296,7 @@ export const DEFAULT_MEASURES: Measure[] = [
         ],
       },
     ],
-  }
+  },
 ];
 
 export const SINGLE_RHYTHM: Rhythm = {
