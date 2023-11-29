@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { useSoundAnalyser } from '@musicpal/common';
 import { Instrument, instruments } from '../utils/instruments';
-import { Flex, Select, Tag } from 'antd';
+import { Flex, Select, Tag, Typography } from 'antd';
 import { Localized } from '@fluent/react';
 import { getInterval, stringifyNote } from '@musicpal/music';
 import './Tuner.css';
@@ -57,17 +57,24 @@ export function Tuner() {
 
   return (
     <div className="tuner">
+      <div className="input">
+        <Typography.Title className="note__name">
+          {note ? stringifyNote(note) : '-'}
+        </Typography.Title>
+      </div>
       <Flex className="notes" align="center" justify="space-evenly">
         {instrument.notes.map((note, index) => {
-          const isClosest = note === closest?.note;
           let color = undefined;
-          if (isClosest) {
-            if (closest.interval === 0) {
-              color = 'green';
-            } else if (closest.interval > 0) {
-              color = 'red';
-            } else if (closest.interval < 0) {
-              color = 'yellow';
+          if (closest) {
+            const isClosest = note === closest.note;
+            if (isClosest) {
+              if (closest.interval === 0) {
+                color = 'green';
+              } else if (closest.interval > 0) {
+                color = 'red';
+              } else if (closest.interval < 0) {
+                color = 'yellow';
+              }
             }
           }
 

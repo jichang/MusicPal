@@ -7,3 +7,13 @@
 
   text-align: center;
 }
+
+.tuner .input {
+  text-align: center;
+}
+
+.tuner .input .note__name {
+  margin: 1rem 0;
+
+  font-size: 5rem;
+}
