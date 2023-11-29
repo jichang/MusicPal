@@ -1,9 +1,7 @@
-import { InputNumber, Select } from 'antd';
-import React, { useCallback, useId, useState } from 'react';
-import { Localized } from '@fluent/react';
+import { InputNumber } from 'antd';
+import React, { useCallback, useId } from 'react';
 import './PreparatorySettings.css';
-import { Form, FormField, FormFieldGroup } from './Form';
-import { UNIFORM_BPM_60, VARYING_BPM_60 } from '@musicpal/music';
+import { Form, FormField } from './Form';
 
 export interface PreparatorySettingsProps {
   preparatory: number;
@@ -17,7 +15,7 @@ export function PreparatorySettings(props: PreparatorySettingsProps) {
   const handleChangePreparatory = useCallback(
     (preparatory: number | null) => {
       if (preparatory) {
-        onChangePreparatory(preparatory * 1000);
+        onChangePreparatory(preparatory);
       }
     },
     [onChangePreparatory],
@@ -33,9 +31,9 @@ export function PreparatorySettings(props: PreparatorySettingsProps) {
         <InputNumber
           id={`${id}-prepratory`}
           min={1}
-          max={10}
+          max={20}
           step={1}
-          value={preparatory / 1000}
+          value={preparatory}
           onChange={handleChangePreparatory}
         />
       </FormField>

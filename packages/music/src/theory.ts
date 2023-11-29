@@ -35,7 +35,7 @@ export interface Rhythm {
   id: string;
   name: string;
   order: number;
-  preparatory: number;
+  preparatoryBeats: number;
   tempo: Tempo;
   createdTime: Date;
   updatedTime: Date;

@@ -1,18 +1,21 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { Rhythm, UniformTempo, analyseRhythm, locate } from '@musicpal/music';
+import { Rhythm, UniformTempo, analyseRhythm } from '@musicpal/music';
 import { RhythmContextProvider } from '../context/rhythm.context';
 import { useTickerWorker } from '../hooks/useTicker';
 import { TempoTicker } from './TempoTicker';
 import { useAudioContext } from '../hooks/useAudioContext';
+import { MILLISECONDS_PER_MINUTE } from '@musicpal/common';
+import { Tick } from '../utils/ticker';
 
 export interface RhythmPlayerProps {
   rhythm: Rhythm;
   isRunning: boolean;
+  onEnd: () => void;
   children: React.ReactNode;
 }
 
 export function RhythmPlayer(props: RhythmPlayerProps) {
-  const { rhythm, isRunning, children } = props;
+  const { rhythm, isRunning, onEnd, children } = props;
 
   const [currMeasureIndex, setCurrMeasureIndex] = useState(-1);
   const [currMeasureOffset, setCurrMeasureOffset] = useState(-1);
@@ -21,39 +24,42 @@ export function RhythmPlayer(props: RhythmPlayerProps) {
 
   const audioContext = useAudioContext();
   const worker = useTickerWorker();
-  const { beatCount, ticksPerBeat, tempos } = useMemo(() => {
-    return analyseRhythm(rhythm);
-  }, [rhythm]);
+  const { beatsCount, notesCount, ticksCount, ticksPerBeat, tempos } =
+    useMemo(() => {
+      return analyseRhythm(rhythm);
+    }, [rhythm]);
 
   const tickers = useMemo(() => {
-    let delay = rhythm.preparatory;
+    if (tempos.length === 0) {
+      return [];
+    }
+
+    let beginTime =
+      rhythm.preparatoryBeats * (MILLISECONDS_PER_MINUTE / tempos[0].speed);
 
     return tempos.map((tempo) => {
+      const preparatoryTime =
+        beginTime -
+        rhythm.preparatoryBeats * (MILLISECONDS_PER_MINUTE / tempo.speed);
       const ticker = {
         tempo,
-        delay,
-        interval: (60 * 1000) / (ticksPerBeat * tempo.speed),
-        count: ticksPerBeat * beatCount,
+        preparatoryTime,
+        beginTime,
       };
 
-      delay = delay + (beatCount * 60 * 1000) / tempo.speed;
+      beginTime =
+        beginTime + beatsCount * (MILLISECONDS_PER_MINUTE / tempo.speed);
 
       return ticker;
     });
-  }, [rhythm.preparatory, tempos, beatCount, ticksPerBeat]);
+  }, [rhythm.preparatoryBeats, tempos, beatsCount, notesCount, ticksPerBeat]);
 
-  const handleTick = useCallback(
-    (tick: number, tempo: UniformTempo) => {
-      const {
-        currMeasureIndex,
-        currMeasureOffset,
-        currBeatIndex,
-        currNoteIndex,
-      } = locate(rhythm, ticksPerBeat, tempo.speed, tick);
-      setCurrMeasureIndex(currMeasureIndex);
-      setCurrMeasureOffset(currMeasureOffset);
-      setCurrBeatIndex(currBeatIndex);
-      setCurrNoteIndex(currNoteIndex);
+  const handleTempoTempoTick = useCallback(
+    (tick: Tick, tempo: UniformTempo) => {
+      setCurrMeasureIndex(tick.measureIndex);
+      setCurrMeasureOffset(tick.measureOffset);
+      setCurrBeatIndex(tick.beatIndex);
+      setCurrNoteIndex(tick.noteIndex);
     },
     [
       rhythm,
@@ -62,6 +68,26 @@ export function RhythmPlayer(props: RhythmPlayerProps) {
       setCurrMeasureOffset,
       setCurrBeatIndex,
       setCurrNoteIndex,
+    ],
+  );
+
+  const handleTempoEnd = useCallback(
+    (tempo: UniformTempo) => {
+      if (tempos[tempos.length - 1] === tempo) {
+        setCurrMeasureIndex(-1);
+        setCurrMeasureOffset(-1);
+        setCurrBeatIndex(-1);
+        setCurrNoteIndex(-1);
+        onEnd();
+      }
+    },
+    [
+      tempos,
+      setCurrMeasureIndex,
+      setCurrMeasureOffset,
+      setCurrBeatIndex,
+      setCurrNoteIndex,
+      onEnd,
     ],
   );
 
@@ -82,11 +108,14 @@ export function RhythmPlayer(props: RhythmPlayerProps) {
             isRunning={isRunning}
             rhythm={rhythm}
             tempo={ticker.tempo}
-            delay={ticker.delay}
-            interval={ticker.interval}
+            preparatoryTime={ticker.preparatoryTime}
+            beginTime={ticker.beginTime}
             ticksPerBeat={ticksPerBeat}
-            count={ticker.count}
-            onTick={handleTick}
+            beatsCount={beatsCount}
+            notesCount={notesCount}
+            ticksCount={ticksCount}
+            onTempoTick={handleTempoTempoTick}
+            onTempoEnd={handleTempoEnd}
           />
         );
       })}

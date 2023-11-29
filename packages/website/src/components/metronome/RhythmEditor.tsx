@@ -23,10 +23,10 @@ import {
 import './RhythmEditor.css';
 import { Button, Modal } from 'antd';
 import {
-  ClockCircleOutlined,
   PauseCircleFilled,
   PlayCircleFilled,
   SaveOutlined,
+  SettingOutlined,
 } from '@ant-design/icons';
 import { Localized } from '@fluent/react';
 import { useFlag } from '../../hooks/useFlag';
@@ -118,7 +118,7 @@ export function RhythmEditor(props: RhythmEditorProps) {
     [updateRhythm],
   );
 
-  const { flag: isRunning, toggle } = useFlag(false);
+  const { flag: isRunning, turnOff: stop, toggle } = useFlag(false);
 
   const handleChangeRepeat = useCallback(
     (measuerIndex: number, repeat: number) => {
@@ -130,9 +130,9 @@ export function RhythmEditor(props: RhythmEditorProps) {
   );
 
   const {
-    flag: isTempoModalOpened,
-    turnOn: openTempoModal,
-    turnOff: closeTempoModal,
+    flag: isSettingsModalOpened,
+    turnOn: openSettingsModal,
+    turnOff: closeSettingsModal,
   } = useFlag(false);
 
   const handleChangePreparatory = useCallback(
@@ -160,7 +160,7 @@ export function RhythmEditor(props: RhythmEditorProps) {
 
   return (
     <div className="rhythm__editor">
-      <RhythmPlayer rhythm={rhythm} isRunning={isRunning}>
+      <RhythmPlayer rhythm={rhythm} isRunning={isRunning} onEnd={stop}>
         <RhythmViewer
           rhythm={rhythm}
           onChangeRepeat={handleChangeRepeat}
@@ -189,10 +189,10 @@ export function RhythmEditor(props: RhythmEditorProps) {
             </Button>
             <Button
               disabled={isRunning}
-              icon={<ClockCircleOutlined />}
-              onClick={openTempoModal}
+              icon={<SettingOutlined />}
+              onClick={openSettingsModal}
             >
-              <Localized id="tempo">Tempo</Localized>
+              <Localized id="play-settings">Play Settings</Localized>
             </Button>
           </div>
           <div className="toolbar__side">
@@ -210,17 +210,13 @@ export function RhythmEditor(props: RhythmEditorProps) {
       {children}
 
       <Modal
-        title={
-          <Localized id="update-tempo-of-rhythm">
-            Update tempo of rhythm
-          </Localized>
-        }
-        open={isTempoModalOpened}
+        title={<Localized id="play-settings">Play Settings</Localized>}
+        open={isSettingsModalOpened}
         footer={null}
-        onCancel={closeTempoModal}
+        onCancel={closeSettingsModal}
       >
         <PreparatorySettings
-          preparatory={rhythm.preparatory}
+          preparatory={rhythm.preparatoryBeats}
           onChangePreparatory={handleChangePreparatory}
         />
         <TempoSettings tempo={rhythm.tempo} onChangeTempo={handleChangeTempo} />

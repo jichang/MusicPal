@@ -44,7 +44,7 @@ export function MetronomeListPage() {
         order: Date.now(),
         createdTime: new Date(),
         updatedTime: new Date(),
-        preparatory: 1000,
+        preparatoryBeats: 4,
         tempo: UNIFORM_BPM_60,
         measures: DEFAULT_MEASURES,
       };

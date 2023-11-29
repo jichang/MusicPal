@@ -54,6 +54,7 @@ export function MeasureBeats(props: MeasureBeatsProps) {
     <div className="measure__beats">
       <Localized id="remove-beat-btn" attrs={{ title: true }}>
         <Button
+          shape="circle"
           disabled={!editable}
           key="remove"
           icon={<MinusOutlined />}
@@ -87,6 +88,7 @@ export function MeasureBeats(props: MeasureBeatsProps) {
       </div>
       <Localized id="add-beat-btn" attrs={{ title: true }}>
         <Button
+          shape="circle"
           disabled={!editable}
           key="add"
           title="Add Beat"

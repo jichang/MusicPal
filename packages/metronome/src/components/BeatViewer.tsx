@@ -57,6 +57,7 @@ export function BeatViewer(props: BeatViewerProps) {
     <div key={beatIndex} className="beat">
       <Localized id="remove-note-btn" attrs={{ title: true }}>
         <Button
+          shape="circle"
           disabled={!editable}
           className="button--oper"
           title="Remove Note"
@@ -85,6 +86,7 @@ export function BeatViewer(props: BeatViewerProps) {
       </div>
       <Localized id="add-note-btn" attrs={{ title: true }}>
         <Button
+          shape="circle"
           disabled={!editable}
           className="button--oper"
           title="Add Note"

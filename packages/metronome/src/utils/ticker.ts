@@ -1,48 +1,140 @@
 import * as Comlink from 'comlink';
+import { Rhythm, UniformTempo, locate } from '@musicpal/music';
+import { MILLISECONDS_PER_MINUTE } from '@musicpal/common';
 
 export interface TickerTask {
   id: string;
-  delay: number;
-  interval: number;
+  rhythm: Rhythm;
+  tempo: UniformTempo;
+  preparatoryTime: number;
+  beginTime: number;
+  ticksPerBeat: number;
+  ticksCount: number;
 }
 
 export interface TickerTimer {
-  timeoutId: number;
-  intervalId?: number;
+  preparatoryTimeoutId: number;
+  beginTimeoutId: number;
+  tickIntervalId: number | null;
 }
 
-const timerMap: Map<string, TickerTimer> = new Map<string, TickerTimer>();
+const timerMap: Map<TickerTask['id'], TickerTimer> = new Map();
+
+export enum TickType {
+  First = 0,
+  Middle = 1,
+  Last = 2,
+}
+
+export interface Tick {
+  measureIndex: number;
+  measureOffset: number;
+  beatIndex: number;
+  beatOffset: number;
+  noteIndex: number;
+  noteOffset: number;
+  tickIndex: number;
+}
+
+export interface TickerPreparatoryEvent {
+  type: 'preparatory';
+}
+
+export interface TickerTickEvent {
+  type: 'tick';
+  tick: Tick;
+}
+
+export type TickerEvent = TickerPreparatoryEvent | TickerTickEvent;
 
 export function startTask(
   task: TickerTask,
-  callback: (ticker: TickerTask) => void,
+  callback: (event: TickerEvent, ticker: TickerTask) => void,
 ) {
-  const handleInterval = () => {
-    callback(task);
-  };
+  const {
+    id,
+    rhythm,
+    preparatoryTime,
+    beginTime,
+    tempo,
+    ticksCount,
+    ticksPerBeat,
+  } = task;
+  let tickIndex = -1;
+  const handleTick = () => {
+    tickIndex++;
+    const {
+      measureIndex,
+      measureOffset,
+      beatIndex,
+      beatOffset,
+      noteIndex,
+      noteOffset,
+    } = locate(rhythm, ticksPerBeat, tickIndex);
+    callback(
+      {
+        type: 'tick',
+        tick: {
+          measureOffset,
+          measureIndex,
+          beatIndex,
+          beatOffset,
+          noteIndex,
+          noteOffset,
+          tickIndex,
+        },
+      },
+      task,
+    );
 
-  const handleTimeout = () => {
-    const timer = timerMap.get(task.id);
-    if (timer) {
-      timer.intervalId = self.setInterval(handleInterval, task.interval);
+    if (tickIndex >= ticksCount - 1) {
+      const timer = timerMap.get(task.id);
+      if (timer?.tickIntervalId) {
+        self.clearInterval(timer?.tickIntervalId);
+        timer.tickIntervalId = null;
+      }
     }
   };
 
-  const timeoutId = self.setTimeout(handleTimeout, task.delay);
-  const timer: TickerTimer = {
-    timeoutId,
+  const tickInterval = MILLISECONDS_PER_MINUTE / (ticksPerBeat * tempo.speed);
+  const handleTickerBegin = () => {
+    const timer = timerMap.get(task.id);
+    if (timer) {
+      timer.tickIntervalId = self.setInterval(handleTick, tickInterval);
+    }
   };
 
-  timerMap.set(task.id, timer);
+  const handleTickerPreparatory = () => {
+    callback({ type: 'preparatory' }, task);
+  };
+
+  const preparatoryTimeoutId = self.setTimeout(
+    handleTickerPreparatory,
+    preparatoryTime,
+  );
+  const beginTimeoutId = self.setTimeout(handleTickerBegin, beginTime);
+  const timer: TickerTimer = {
+    beginTimeoutId,
+    preparatoryTimeoutId,
+    tickIntervalId: null,
+  };
+
+  timerMap.set(id, timer);
 }
 
 export function stopTask(task: TickerTask) {
   const timer = timerMap.get(task.id);
-  if (timer?.timeoutId) {
-    self.clearTimeout(timer.timeoutId);
+
+  if (timer?.preparatoryTimeoutId) {
+    self.clearTimeout(timer.preparatoryTimeoutId);
   }
-  if (timer?.intervalId) {
-    self.clearInterval(timer.intervalId);
+
+  if (timer?.beginTimeoutId) {
+    self.clearTimeout(timer.beginTimeoutId);
+  }
+
+  if (timer?.tickIntervalId) {
+    self.clearInterval(timer.tickIntervalId);
   }
 }
 

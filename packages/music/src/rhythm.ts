@@ -33,7 +33,7 @@ export function cloneRhythm(rhythm: Rhythm): Rhythm {
 
 export function changePreparatory(rhythm: Rhythm, preparatory: number) {
   const newRhythm = cloneRhythm(rhythm);
-  newRhythm.preparatory = preparatory;
+  newRhythm.preparatoryBeats = preparatory;
 
   return newRhythm;
 }
@@ -168,9 +168,10 @@ export function removeNote(
 }
 
 export function analyseRhythm(rhythm: Rhythm) {
-  let measureCount = 0;
-  let beatCount = 0;
-  let noteCount = 0;
+  let measuresCount = 0;
+  let beatsCount = 0;
+  let notesCount = 0;
+  let ticksCount = 0;
   let ticksPerBeat = 0;
   let tempos: UniformTempo[] = [];
 
@@ -195,84 +196,93 @@ export function analyseRhythm(rhythm: Rhythm) {
   }
 
   for (const measure of rhythm.measures) {
-    measureCount = measureCount + measure.repeat;
+    measuresCount = measuresCount + measure.repeat;
 
     for (const beat of measure.beats) {
-      beatCount = beatCount + measure.repeat;
+      beatsCount = beatsCount + measure.repeat;
 
-      noteCount = noteCount + beat.notes.length * measure.repeat;
+      notesCount = notesCount + beat.notes.length * measure.repeat;
 
       ticksPerBeat = lcm(ticksPerBeat, beat.notes.length);
     }
   }
+  ticksCount = beatsCount * ticksPerBeat;
 
   return {
-    measureCount,
-    beatCount,
-    noteCount,
-    ticksPerBeat,
     tempos,
+    measuresCount,
+    beatsCount,
+    notesCount,
+    ticksCount,
+    ticksPerBeat,
   };
 }
 
 export function locate(
   rhythm: Rhythm,
   ticksPerBeat: number,
-  beatsPerMinute: number,
-  currTick: number,
+  tickIndex: number,
 ) {
-  let currMeasureIndex = 0;
-  let currMeasureOffset = 0;
-  let currBeatIndex = 0;
-  let currNoteIndex = 0;
-
+  let measureIndex = 0;
+  let measureOffset = 0;
+  let beatIndex = 0;
+  let beatOffset = 0;
+  let noteIndex = 0;
+  let noteOffset = 0;
   let ticksCount = 0;
+
   for (
-    let measureIndex = 0;
-    measureIndex < rhythm.measures.length;
-    measureIndex++
+    let currMeasureIndex = 0;
+    currMeasureIndex < rhythm.measures.length;
+    currMeasureIndex++
   ) {
-    const currMeasure = rhythm.measures[measureIndex];
+    const currMeasure = rhythm.measures[currMeasureIndex];
 
     for (
-      let measureOffset = 0;
-      measureOffset < currMeasure.repeat;
-      measureOffset++
+      let currMeasureOffset = 0;
+      currMeasureOffset < currMeasure.repeat;
+      currMeasureOffset++
     ) {
       for (
-        let beatIndex = 0;
-        beatIndex < currMeasure.beats.length;
-        beatIndex++
+        let currBeatIndex = 0;
+        currBeatIndex < currMeasure.beats.length;
+        currBeatIndex++
       ) {
-        const currBeat = currMeasure.beats[beatIndex];
+        const currBeat = currMeasure.beats[currBeatIndex];
         const maxTicksCount = ticksCount + ticksPerBeat;
-        if (maxTicksCount - 1 < currTick) {
+        if (maxTicksCount - 1 < tickIndex) {
           ticksCount = maxTicksCount;
+          beatOffset = beatOffset + 1;
+          noteOffset = noteOffset + currBeat.notes.length;
           continue;
         }
 
-        currMeasureIndex = measureIndex;
-        currMeasureOffset = measureOffset;
-        currBeatIndex = beatIndex;
-
-        currNoteIndex = Math.floor(
-          (currTick % ticksPerBeat) / (ticksPerBeat / currBeat.notes.length),
+        measureIndex = currMeasureIndex;
+        measureOffset = currMeasureOffset;
+        beatIndex = currBeatIndex;
+        noteIndex = Math.floor(
+          (tickIndex % ticksPerBeat) / (ticksPerBeat / currBeat.notes.length),
         );
+        noteOffset = noteOffset + noteIndex;
 
         return {
-          currMeasureOffset,
-          currMeasureIndex,
-          currBeatIndex,
-          currNoteIndex,
+          measureOffset,
+          measureIndex,
+          beatIndex,
+          beatOffset,
+          noteIndex,
+          noteOffset,
         };
       }
     }
   }
 
   return {
-    currMeasureOffset,
-    currMeasureIndex,
-    currBeatIndex,
-    currNoteIndex,
+    measureOffset,
+    measureIndex,
+    beatIndex,
+    beatOffset,
+    noteIndex,
+    noteOffset,
   };
 }
