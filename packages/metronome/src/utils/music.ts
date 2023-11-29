@@ -29,7 +29,8 @@ export const VARYING_BPM_60: VaryingBeatsPerMinute = {
 export enum Dynamics {
   None = 0,
   Light,
-  Strong,
+  Accent,
+  Invalid,
 }
 
 export interface Note {
@@ -180,6 +181,28 @@ export function addNote(
   return newRhythm;
 }
 
+export function changeNote(
+  rhythm: Rhythm,
+  measureIndex: number,
+  beatIndex: number,
+  noteIndex: number
+) {
+  const newRhythm = cloneRhythm(rhythm);
+
+  const measure = newRhythm.measures[measureIndex];
+  if (measure) {
+    const beat = measure.beats[beatIndex];
+    if (beat) {
+      const note = beat.notes[noteIndex];
+      if (note) {
+        note.dynamics = (note.dynamics + 1) % Dynamics.Invalid;
+      }
+    }
+  }
+
+  return newRhythm;
+}
+
 export function removeNote(
   rhythm: Rhythm,
   measureIndex: number,
@@ -299,7 +322,7 @@ export const DEFAULT_MEASURES: Measure[] = [
       {
         notes: [
           {
-            dynamics: Dynamics.Strong,
+            dynamics: Dynamics.Accent,
           },
         ],
       },
@@ -327,7 +350,7 @@ export const DEFAULT_MEASURES: Measure[] = [
       {
         notes: [
           {
-            dynamics: Dynamics.Strong,
+            dynamics: Dynamics.Accent,
           },
         ],
       },
@@ -369,7 +392,7 @@ export const SINGLE_RHYTHM: Rhythm = {
         {
           notes: [
             {
-              dynamics: Dynamics.Strong,
+              dynamics: Dynamics.Accent,
             },
           ],
         },
@@ -412,7 +435,7 @@ export const DUPLETS_RHYTHM: Rhythm = {
         {
           notes: [
             {
-              dynamics: Dynamics.Strong,
+              dynamics: Dynamics.Accent,
             },
             { dynamics: Dynamics.Light },
           ],
@@ -420,7 +443,7 @@ export const DUPLETS_RHYTHM: Rhythm = {
         {
           notes: [
             {
-              dynamics: Dynamics.Strong,
+              dynamics: Dynamics.Accent,
             },
             { dynamics: Dynamics.Light },
           ],
@@ -428,7 +451,7 @@ export const DUPLETS_RHYTHM: Rhythm = {
         {
           notes: [
             {
-              dynamics: Dynamics.Strong,
+              dynamics: Dynamics.Accent,
             },
             { dynamics: Dynamics.Light },
           ],
@@ -436,7 +459,7 @@ export const DUPLETS_RHYTHM: Rhythm = {
         {
           notes: [
             {
-              dynamics: Dynamics.Strong,
+              dynamics: Dynamics.Accent,
             },
             { dynamics: Dynamics.Light },
           ],
@@ -459,7 +482,7 @@ export const TRIPLETS_RHYTHM: Rhythm = {
         {
           notes: [
             {
-              dynamics: Dynamics.Strong,
+              dynamics: Dynamics.Accent,
             },
             { dynamics: Dynamics.Light },
             { dynamics: Dynamics.Light },
@@ -468,7 +491,7 @@ export const TRIPLETS_RHYTHM: Rhythm = {
         {
           notes: [
             {
-              dynamics: Dynamics.Strong,
+              dynamics: Dynamics.Accent,
             },
             { dynamics: Dynamics.Light },
             { dynamics: Dynamics.Light },
@@ -477,7 +500,7 @@ export const TRIPLETS_RHYTHM: Rhythm = {
         {
           notes: [
             {
-              dynamics: Dynamics.Strong,
+              dynamics: Dynamics.Accent,
             },
             { dynamics: Dynamics.Light },
             { dynamics: Dynamics.Light },
@@ -486,7 +509,7 @@ export const TRIPLETS_RHYTHM: Rhythm = {
         {
           notes: [
             {
-              dynamics: Dynamics.Strong,
+              dynamics: Dynamics.Accent,
             },
             { dynamics: Dynamics.Light },
             { dynamics: Dynamics.Light },

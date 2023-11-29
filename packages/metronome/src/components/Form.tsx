@@ -3,6 +3,12 @@ import React from "react";
 import { ComponentProps } from "react";
 import "./Form.css";
 
+export interface FormFieldGroupProps extends ComponentProps<"div"> {}
+
+export function FormFieldGroup(props: FormFieldGroupProps) {
+  return <div className="form__field__group">{props.children}</div>;
+}
+
 export interface FormFieldProps extends ComponentProps<"div"> {
   name?: string;
   label?: string;

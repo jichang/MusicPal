@@ -8,7 +8,7 @@ import {
 } from "../utils/music";
 import { Localized } from "@fluent/react";
 import "./MeasureSettings.css";
-import { Form, FormField } from "./Form";
+import { Form, FormField, FormFieldGroup } from "./Form";
 
 export interface MeasureSettingsProps {
   measure: Measure;
@@ -178,7 +178,7 @@ export function MeasureSettings(props: MeasureSettingsProps) {
           />
         </FormField>
       ) : (
-        <>
+        <FormFieldGroup>
           <FormField name={`${id}-begin`} label="begin">
             <InputNumber
               id={`${id}-begin`}
@@ -205,7 +205,7 @@ export function MeasureSettings(props: MeasureSettingsProps) {
               onChange={handleChangeVaryingBeatsPerMinuteStep}
             />
           </FormField>
-        </>
+        </FormFieldGroup>
       )}
     </Form>
   );

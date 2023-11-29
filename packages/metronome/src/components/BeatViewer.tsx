@@ -15,6 +15,11 @@ export interface BeatViewerProps {
   currBeatIndex: number;
   currNoteIndex: number;
   onAddNote: (measureIndex: number, beatIndex: number) => void;
+  onChangeNote: (
+    measureIndex: number,
+    beatIndex: number,
+    noteIndex: number
+  ) => void;
   onRemoveNote: (measureIndex: number, beatIndex: number) => void;
 }
 
@@ -27,6 +32,7 @@ export function BeatViewer(props: BeatViewerProps) {
     currMeasureIndex,
     currNoteIndex,
     onAddNote,
+    onChangeNote,
     onRemoveNote,
   } = props;
 
@@ -37,6 +43,13 @@ export function BeatViewer(props: BeatViewerProps) {
   const handleRemoveNote = useCallback(() => {
     onRemoveNote(measureIndex, beatIndex);
   }, [onRemoveNote, measureIndex, beatIndex]);
+
+  const handleChangeNote = useCallback(
+    (noteIndex: number) => {
+      onChangeNote(measureIndex, beatIndex, noteIndex);
+    },
+    [onChangeNote, measureIndex, beatIndex]
+  );
 
   return (
     <div key={beatIndex} className="beat">
@@ -56,7 +69,13 @@ export function BeatViewer(props: BeatViewerProps) {
             noteIndex === currNoteIndex;
 
           return (
-            <NoteButton isCurrent={isCurrent} note={note} key={noteIndex} />
+            <NoteButton
+              index={noteIndex}
+              isCurrent={isCurrent}
+              note={note}
+              key={noteIndex}
+              onClick={handleChangeNote}
+            />
           );
         })}
       </div>

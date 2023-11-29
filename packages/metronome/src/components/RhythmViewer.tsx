@@ -24,6 +24,11 @@ export interface RhythmViewerProps {
   onAddBeat: (measureIndex: number) => void;
   onRemoveBeat: (measureIndex: number) => void;
   onAddNote: (measureIndex: number, beatIndex: number) => void;
+  onChangeNote: (
+    measureIndex: number,
+    beatIndex: number,
+    noteIndex: number
+  ) => void;
   onRemoveNote: (measureIndex: number, beatIndex: number) => void;
 }
 
@@ -38,6 +43,7 @@ export function RhythmViewer(props: RhythmViewerProps) {
     onAddBeat,
     onRemoveBeat,
     onAddNote,
+    onChangeNote,
     onRemoveNote,
   } = props;
 
@@ -82,6 +88,7 @@ export function RhythmViewer(props: RhythmViewerProps) {
                 onAddBeat={onAddBeat}
                 onRemoveBeat={onRemoveBeat}
                 onAddNote={onAddNote}
+                onChangeNote={onChangeNote}
                 onRemoveNote={onRemoveNote}
               />
             </List.Item>

@@ -16,6 +16,11 @@ export interface MeasureBeatsProps {
   onAddBeat: (measureIndex: number) => void;
   onRemoveBeat: (measureIndex: number) => void;
   onAddNote: (measureIndex: number, beatIndex: number) => void;
+  onChangeNote: (
+    measureIndex: number,
+    beatIndex: number,
+    noteIndex: number
+  ) => void;
   onRemoveNote: (measureIndex: number, beatIndex: number) => void;
 }
 
@@ -30,6 +35,7 @@ export function MeasureBeats(props: MeasureBeatsProps) {
     onAddBeat,
     onRemoveBeat,
     onAddNote,
+    onChangeNote,
     onRemoveNote,
   } = props;
 
@@ -69,6 +75,7 @@ export function MeasureBeats(props: MeasureBeatsProps) {
               currMeasureOffset={currMeasureOffset}
               currNoteIndex={currNoteIndex}
               onAddNote={onAddNote}
+              onChangeNote={onChangeNote}
               onRemoveNote={onRemoveNote}
             />
           );

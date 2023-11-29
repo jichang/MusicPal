@@ -7,6 +7,7 @@ import {
   addMeasure,
   addNote,
   changeBeatsPerMinute,
+  changeNote,
   changeRepeat,
   cloneRhythm,
   removeBeat,
@@ -82,6 +83,15 @@ export function RhythmEditor(props: RhythmEditorProps) {
     [setRhythm]
   );
 
+  const handleChangeNote = useCallback(
+    (measureIndex: number, beatIndex: number, noteIndex: number) => {
+      setRhythm((rhythm) => {
+        return changeNote(rhythm, measureIndex, beatIndex, noteIndex);
+      });
+    },
+    [setRhythm]
+  );
+
   const handleRemoveNote = useCallback(
     (measureIndex: number, beatIndex: number) => {
       setRhythm((rhythm) => {
@@ -127,6 +137,7 @@ export function RhythmEditor(props: RhythmEditorProps) {
         onAddBeat={handleAddBeat}
         onRemoveBeat={handleRemoveBeat}
         onAddNote={handleAddNote}
+        onChangeNote={handleChangeNote}
         onRemoveNote={handleRemoveNote}
       />
       <div className="rhythm__editor__footer">

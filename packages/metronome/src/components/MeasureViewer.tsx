@@ -24,6 +24,11 @@ export interface MeasureViewerProps {
   onAddBeat: (measureIndex: number) => void;
   onRemoveBeat: (measureIndex: number) => void;
   onAddNote: (measureIndex: number, beatIndex: number) => void;
+  onChangeNote: (
+    measureIndex: number,
+    beatIndex: number,
+    noteIndex: number
+  ) => void;
   onRemoveNote: (measureIndex: number, beatIndex: number) => void;
 }
 
@@ -41,6 +46,7 @@ export function MeasureViewer(props: MeasureViewerProps) {
     onAddBeat,
     onRemoveBeat,
     onAddNote,
+    onChangeNote,
     onRemoveNote,
   } = props;
 
@@ -79,6 +85,7 @@ export function MeasureViewer(props: MeasureViewerProps) {
           onAddBeat={onAddBeat}
           onRemoveBeat={onRemoveBeat}
           onAddNote={onAddNote}
+          onChangeNote={onChangeNote}
           onRemoveNote={onRemoveNote}
         />
       ),
