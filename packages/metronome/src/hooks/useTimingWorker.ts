@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Comlink from "comlink";
+import * as Comlink from "comlink";
 
 export interface TimlingWorker {
   setInterval(identity: string, callback: () => void, interval: number): number;

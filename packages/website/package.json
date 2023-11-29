@@ -4,14 +4,20 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "parcel ./src/index.html",
+    "start": "parcel ./src/index.html --no-cache",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@ant-design/icons": "^5.2.6",
+    "@fluent/bundle": "^0.18.0",
+    "@fluent/langneg": "^0.7.0",
+    "@fluent/react": "^0.15.2",
     "@musicpal/metronome": "^1.0.0",
+    "antd": "^5.10.1",
     "comlink": "^4.4.1",
+    "intl-pluralrules": "^2.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.16.0"
