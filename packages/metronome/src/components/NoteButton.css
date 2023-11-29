@@ -2,6 +2,6 @@
   margin: 0.5rem;
 }
 
-.button--note.button--active {
-  transform: scale(1.1);
+.button--note.note--active {
+  transform: scale(1.25);
 }

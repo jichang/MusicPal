@@ -5,11 +5,7 @@ import { useStorage } from "../storage.context";
 import { Button, ConfigProvider, Empty, List, Card } from "antd";
 import { Link } from "react-router-dom";
 import { Localized } from "@fluent/react";
-import {
-  ArrowRightOutlined,
-  PlayCircleOutlined,
-  PlusOutlined,
-} from "@ant-design/icons";
+import { ArrowRightOutlined, PlusOutlined } from "@ant-design/icons";
 
 export interface PersonalRhythmListProps {
   onCreateRhythm: () => void;

@@ -50,7 +50,95 @@ export interface Rhythm {
   measures: Measure[];
 }
 
-export function parseRhythm(rhythm: Pick<Rhythm, "measures">) {
+export function cloneRhythm(rhythm: Rhythm): Rhythm {
+  return {
+    id: rhythm.id,
+    category: rhythm.category,
+    name: rhythm.name,
+    order: rhythm.order,
+    measures: rhythm.measures.map(cloneMeasure)
+  }
+}
+
+export function addMeasure(rhythm: Rhythm) {
+  const newRhythm = cloneRhythm(rhythm);
+  const lastMeasure = newRhythm.measures[rhythm.measures.length - 1];
+  if (lastMeasure) {
+    newRhythm.measures.push(cloneMeasure(lastMeasure));
+  } else {
+    newRhythm.measures = DEFAULT_MEASURES;
+  }
+
+  return newRhythm;
+}
+
+export function removeMeasure(rhythm: Rhythm, measureIndex: number) {
+  const newRhythm = cloneRhythm(rhythm);
+  newRhythm.measures.splice(measureIndex, 1);
+
+  return newRhythm;
+}
+
+export function addBeat(rhythm: Rhythm, measureIndex: number) {
+  const newRhythm = cloneRhythm(rhythm);
+  const measure = newRhythm.measures[measureIndex];
+  if (measure) {
+    const beat = measure.beats[measure.beats.length - 1];
+    if (beat) {
+      measure.beats.push(cloneBeat(beat));
+    }
+  }
+
+  return newRhythm;
+}
+
+export function removeBeat(rhythm: Rhythm, measureIndex: number) {
+  const newRhythm = cloneRhythm(rhythm);
+  const measure = newRhythm.measures[measureIndex];
+  if (measure) {
+    measure.beats = measure.beats.slice(0, measure.beats.length - 1);
+    if (measure.beats.length === 0) {
+      newRhythm.measures.splice(measureIndex, 1);
+    }
+  }
+
+  return newRhythm;
+}
+
+export function addNote(rhythm: Rhythm, measureIndex: number, beatIndex: number) {
+  const newRhythm = cloneRhythm(rhythm);
+
+  const measure = newRhythm.measures[measureIndex];
+  if (measure) {
+    const beat = measure.beats[beatIndex];
+    if (beat) {
+      const lastNote = beat.notes[beat.notes.length - 1];
+      beat.notes.push(cloneNote(lastNote));
+    }
+  }
+
+  return newRhythm;
+}
+
+export function removeNote(rhythm: Rhythm, measureIndex: number, beatIndex: number) {
+  const newRhythm = cloneRhythm(rhythm);
+
+  const measure = newRhythm.measures[measureIndex];
+  if (measure) {
+    const beat = measure.beats[beatIndex];
+    if (beat) {
+      if (beat.notes.length === 1) {
+        measure.beats.splice(beatIndex, 1);
+      } else {
+        beat.notes = beat.notes.slice(0, beat.notes.length - 1);
+      }
+    }
+  }
+
+  return newRhythm;
+}
+
+export function parseRhythm(rhythm: Rhythm) {
   let measureCount = 0;
   let beatCount = 0;
   let noteCount = 0;
@@ -78,7 +166,7 @@ export function parseRhythm(rhythm: Pick<Rhythm, "measures">) {
   }
 }
 
-export function locate(rhythm: Pick<Rhythm, "measures">, ticksPerBeat: number, currTick: number) {
+export function locate(rhythm: Rhythm, ticksPerBeat: number, currTick: number) {
   let currMeasureIndex = 0;
   let currMeasureOffset = 0;
   let currBeatIndex = 0;

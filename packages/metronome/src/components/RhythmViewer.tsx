@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from "react";
-import { Measure, locate, parseRhythm } from "../utils/music";
+import { Rhythm, locate, parseRhythm } from "../utils/music";
 import "./RhythmViewer.css";
 import { PlusOutlined } from "@ant-design/icons";
 import { Localized } from "@fluent/react";
@@ -10,7 +10,7 @@ import { useTick } from "../hooks/useTick";
 export interface RhythmViewerProps {
   isRunning: boolean;
   beatsPerMinute: number;
-  measures: Measure[];
+  rhythm: Rhythm;
   currMeasureIndex?: number;
   currMeasureOffset?: number;
   currBeatIndex?: number;
@@ -27,7 +27,7 @@ export interface RhythmViewerProps {
 export function RhythmViewer(props: RhythmViewerProps) {
   const {
     isRunning,
-    measures,
+    rhythm,
     beatsPerMinute,
     editable,
     onAddMeasure,
@@ -39,8 +39,8 @@ export function RhythmViewer(props: RhythmViewerProps) {
   } = props;
 
   const { ticksPerBeat, beatCount } = useMemo(() => {
-    return parseRhythm({ measures });
-  }, [measures]);
+    return parseRhythm(rhythm);
+  }, [rhythm]);
 
   const [currTick, setCurrTick] = useState(0);
   const incrementTick = useCallback(() => {
@@ -52,15 +52,16 @@ export function RhythmViewer(props: RhythmViewerProps) {
   useTick({ isRunning, beatsPerMinute, ticksPerBeat }, incrementTick);
 
   const location = useMemo(() => {
-    return locate({ measures }, ticksPerBeat, currTick);
-  }, [measures, currTick, ticksPerBeat]);
+    return locate(rhythm, ticksPerBeat, currTick);
+  }, [rhythm, currTick, ticksPerBeat]);
 
-  const { currMeasureIndex, currBeatIndex, currNoteIndex } = location;
+  const { currMeasureIndex, currMeasureOffset, currBeatIndex, currNoteIndex } =
+    location;
 
   return (
     <div className="rhythm__viewer">
       <div className="measures">
-        {measures.map((measure, index) => {
+        {rhythm.measures.map((measure, index) => {
           return (
             <MeasureViewer
               key={index}
@@ -68,6 +69,7 @@ export function RhythmViewer(props: RhythmViewerProps) {
               editable={editable}
               measure={measure}
               currMeasureIndex={currMeasureIndex}
+              currMeasureOffset={currMeasureOffset}
               currBeatIndex={currBeatIndex}
               currNoteIndex={currNoteIndex}
               onRemove={onRemoveMeasure}

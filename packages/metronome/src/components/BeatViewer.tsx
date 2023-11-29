@@ -11,10 +11,10 @@ export interface BeatViewerProps {
   beat: Beat;
   measureIndex: number;
   beatIndex: number;
-  currMeasureIndex?: number;
-  currMeasureOffset?: number;
-  currBeatIndex?: number;
-  currNoteIndex?: number;
+  currMeasureIndex: number;
+  currMeasureOffset: number;
+  currBeatIndex: number;
+  currNoteIndex: number;
   onAddNote: (measureIndex: number, beatIndex: number) => void;
   onRemoveNote: (measureIndex: number, beatIndex: number) => void;
 }
@@ -49,7 +49,6 @@ export function BeatViewer(props: BeatViewerProps) {
             title="Remove Note"
             icon={<MinusOutlined />}
             onClick={handleRemoveNote}
-            disabled={beat.notes.length === 1}
           />
         </Localized>
       ) : null}

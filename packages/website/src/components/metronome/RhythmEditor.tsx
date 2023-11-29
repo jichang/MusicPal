@@ -2,151 +2,88 @@ import React, { useCallback, useState } from "react";
 import {
   Rhythm,
   RhythmViewer,
-  cloneBeat,
-  cloneMeasure,
-  cloneNote,
+  addBeat,
+  addMeasure,
+  addNote,
+  cloneRhythm,
+  removeBeat,
+  removeMeasure,
+  removeNote,
 } from "@musicpal/metronome";
 import "./RhythmEditor.css";
 
 export interface RhythmEditorProps {
+  isRunning: boolean;
+  beatsPerMinute: number;
   rhythm: Rhythm;
   children?: React.ReactNode;
 }
 
 export function RhythmEditor(props: RhythmEditorProps) {
-  const { rhythm, children } = props;
+  const { isRunning, beatsPerMinute, children } = props;
 
-  const [measures, setMeasures] = useState(rhythm.measures);
+  const [rhythm, setRhythm] = useState(() => {
+    return cloneRhythm(props.rhythm);
+  });
 
   const handleAddMeasure = useCallback(() => {
-    setMeasures((measures) => {
-      const lastMeasure = measures[measures.length - 1];
-
-      return [...measures, cloneMeasure(lastMeasure)];
+    setRhythm((rhythm) => {
+      return addMeasure(rhythm);
     });
-  }, [setMeasures]);
+  }, [setRhythm]);
 
   const handleRemoveMeasure = useCallback(
     (measureIndex: number) => {
-      setMeasures((measures) => {
-        if (measures.length === 1) {
-          return measures;
-        }
-
-        return measures.filter((_, index) => {
-          return index !== measureIndex;
-        });
+      setRhythm((rhythm) => {
+        return removeMeasure(rhythm, measureIndex);
       });
     },
-    [setMeasures]
+    [setRhythm]
   );
 
   const handleAddBeat = useCallback(
     (measureIndex: number) => {
-      setMeasures((measures) => {
-        return measures.map((measure, index) => {
-          if (index !== measureIndex) {
-            return measure;
-          } else {
-            const lastBeat = measure.beats[measure.beats.length - 1];
-
-            return {
-              ...measure,
-              beats: [...measure.beats, cloneBeat(lastBeat)],
-            };
-          }
-        });
+      setRhythm((rhythm) => {
+        return addBeat(rhythm, measureIndex);
       });
     },
-    [setMeasures]
+    [setRhythm]
   );
 
   const handleRemoveBeat = useCallback(
     (measureIndex: number) => {
-      setMeasures((measures) => {
-        return measures.map((measure, index) => {
-          if (index !== measureIndex) {
-            return measure;
-          } else {
-            if (measure.beats.length === 1) {
-              return measure;
-            }
-
-            return {
-              repeat: measure.repeat,
-              beats: measure.beats.slice(0, measure.beats.length - 1),
-            };
-          }
-        });
+      setRhythm((rhythm) => {
+        return removeBeat(rhythm, measureIndex);
       });
     },
-    [setMeasures]
+    [setRhythm]
   );
 
   const handleAddNote = useCallback(
     (measureIndex: number, beatIndex: number) => {
-      setMeasures((measures) => {
-        return measures.map((measure, index) => {
-          if (index !== measureIndex) {
-            return measure;
-          } else {
-            return {
-              ...measure,
-              beats: measure.beats.map((beat, index) => {
-                if (index !== beatIndex) {
-                  return beat;
-                } else {
-                  const note = cloneNote(beat.notes[beat.notes.length - 1]);
-                  return {
-                    notes: [...beat.notes, note],
-                  };
-                }
-              }),
-            };
-          }
-        });
+      setRhythm((rhythm) => {
+        return addNote(rhythm, measureIndex, beatIndex);
       });
     },
-    [setMeasures]
+    [setRhythm]
   );
 
   const handleRemoveNote = useCallback(
     (measureIndex: number, beatIndex: number) => {
-      setMeasures((measures) => {
-        return measures.map((measure, index) => {
-          if (index !== measureIndex) {
-            return measure;
-          } else {
-            return {
-              ...measure,
-              beats: measure.beats.map((beat, index) => {
-                if (index !== beatIndex) {
-                  return beat;
-                } else {
-                  if (beat.notes.length === 1) {
-                    return beat;
-                  }
-
-                  return {
-                    notes: beat.notes.slice(0, beat.notes.length - 1),
-                  };
-                }
-              }),
-            };
-          }
-        });
+      setRhythm((rhythm) => {
+        return removeNote(rhythm, measureIndex, beatIndex);
       });
     },
-    [setMeasures]
+    [setRhythm]
   );
 
   return (
     <div className="rhythm__editor">
       <RhythmViewer
         editable={rhythm.category !== "default"}
-        measures={measures}
-        isRunning={false}
-        beatsPerMinute={0}
+        rhythm={rhythm}
+        isRunning={isRunning}
+        beatsPerMinute={beatsPerMinute}
         onAddMeasure={handleAddMeasure}
         onRemoveMeasure={handleRemoveMeasure}
         onAddBeat={handleAddBeat}

@@ -23,7 +23,7 @@ export function NoteButton(props: NoteButtonProps) {
       title="note"
       icon={<BellOutlined />}
       className={`button--note note--${note.dynamics} ${
-        isCurrent ? "button--active" : ""
+        isCurrent ? "note--active" : ""
       }`}
       disabled={note.dynamics === Dynamics.None}
       type={types[note.dynamics]}

@@ -3,16 +3,15 @@ import { Measure } from "../utils/music";
 import { PlusOutlined, MinusOutlined } from "@ant-design/icons";
 import { Localized } from "@fluent/react";
 import { Card, Button } from "antd";
-import { NoteButton } from "./NoteButton";
 import "./MeasureViewer.css";
 import { BeatViewer } from "./BeatViewer";
 
 export interface MeasureViewerProps {
   index: number;
-  currMeasureIndex?: number;
-  currMeasureOffset?: number;
-  currBeatIndex?: number;
-  currNoteIndex?: number;
+  currMeasureIndex: number;
+  currMeasureOffset: number;
+  currBeatIndex: number;
+  currNoteIndex: number;
   editable: boolean;
   measure: Measure;
   onRemove: (measureIndex: number) => void;
@@ -27,6 +26,7 @@ export function MeasureViewer(props: MeasureViewerProps) {
     index,
     currBeatIndex,
     currMeasureIndex,
+    currMeasureOffset,
     currNoteIndex,
     editable,
     measure,
@@ -54,7 +54,6 @@ export function MeasureViewer(props: MeasureViewerProps) {
           key="remove"
           icon={<MinusOutlined />}
           onClick={handleRemoveBeat}
-          disabled={measure.beats.length === 1}
         >
           <Localized id="remove-beat-btn">Remove Beat</Localized>
         </Button>,
@@ -94,6 +93,10 @@ export function MeasureViewer(props: MeasureViewerProps) {
               editable={editable}
               measureIndex={index}
               beatIndex={beatIndex}
+              currBeatIndex={currBeatIndex}
+              currMeasureIndex={currMeasureIndex}
+              currMeasureOffset={currMeasureOffset}
+              currNoteIndex={currNoteIndex}
               onAddNote={onAddNote}
               onRemoveNote={onRemoveNote}
             />
