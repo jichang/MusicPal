@@ -24,7 +24,7 @@ export function HomePage() {
     ({ key }: { key: string }) => {
       changeLocale(key);
     },
-    [changeLocale]
+    [changeLocale],
   );
 
   return (

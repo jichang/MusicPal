@@ -43,7 +43,7 @@ export function MetronomeListPage() {
     (activeKey: string) => {
       setSearchParams({ tabkey: activeKey }, { replace: true });
     },
-    [setSearchParams]
+    [setSearchParams],
   );
 
   const [rhythmName, setRhythmName] = useState("");
@@ -52,7 +52,7 @@ export function MetronomeListPage() {
     (evt: ChangeEvent<HTMLInputElement>) => {
       setRhythmName(evt.target.value);
     },
-    [setRhythmName]
+    [setRhythmName],
   );
 
   const { dexie } = useStorage();
@@ -79,7 +79,7 @@ export function MetronomeListPage() {
       },
       () => {
         setIsCreating(false);
-      }
+      },
     );
   }, [rhythmName, dexie, navigate, setIsCreating]);
 

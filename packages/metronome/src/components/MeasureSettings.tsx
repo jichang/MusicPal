@@ -23,7 +23,7 @@ export function MeasureSettings(props: MeasureSettingsProps) {
   const [uniformBeatsPerMinuteSpeed, setUniformBeatsPerMinuteSpeed] = useState(
     measure.beatsPerMinute.type === "uniform"
       ? measure.beatsPerMinute.speed
-      : UNIFORM_BPM_60.speed
+      : UNIFORM_BPM_60.speed,
   );
 
   const handleChangeUniformBeatsPerMinuteSpeed = useCallback(
@@ -36,7 +36,7 @@ export function MeasureSettings(props: MeasureSettingsProps) {
         setUniformBeatsPerMinuteSpeed(speed);
       }
     },
-    [onChangeBeatsPerMinute]
+    [onChangeBeatsPerMinute],
   );
 
   const initialVaryingBeatsPerMinute =
@@ -45,15 +45,15 @@ export function MeasureSettings(props: MeasureSettingsProps) {
       : measure.beatsPerMinute;
 
   const [varyingBeatsPerMinuteBegin, setVaryingBeatsPerMinuteBegin] = useState(
-    initialVaryingBeatsPerMinute.begin
+    initialVaryingBeatsPerMinute.begin,
   );
 
   const [varyingBeatsPerMinuteEnd, setVaryingBeatsPerMinuteEnd] = useState(
-    initialVaryingBeatsPerMinute.end
+    initialVaryingBeatsPerMinute.end,
   );
 
   const [varyingBeatsPerMinuteStep, setVaryingBeatsPerMinuteStep] = useState(
-    initialVaryingBeatsPerMinute.step
+    initialVaryingBeatsPerMinute.step,
   );
 
   const handleChangeVaryingBeatsPerMinuteBegin = useCallback(
@@ -73,7 +73,7 @@ export function MeasureSettings(props: MeasureSettingsProps) {
       varyingBeatsPerMinuteStep,
       setVaryingBeatsPerMinuteBegin,
       onChangeBeatsPerMinute,
-    ]
+    ],
   );
 
   const handleChangeVaryingBeatsPerMinuteEnd = useCallback(
@@ -93,7 +93,7 @@ export function MeasureSettings(props: MeasureSettingsProps) {
       varyingBeatsPerMinuteStep,
       setVaryingBeatsPerMinuteEnd,
       onChangeBeatsPerMinute,
-    ]
+    ],
   );
 
   const handleChangeVaryingBeatsPerMinuteStep = useCallback(
@@ -113,7 +113,7 @@ export function MeasureSettings(props: MeasureSettingsProps) {
       varyingBeatsPerMinuteEnd,
       setVaryingBeatsPerMinuteStep,
       onChangeBeatsPerMinute,
-    ]
+    ],
   );
 
   const handleChangeType = useCallback(
@@ -138,7 +138,7 @@ export function MeasureSettings(props: MeasureSettingsProps) {
       varyingBeatsPerMinuteEnd,
       varyingBeatsPerMinuteStep,
       onChangeBeatsPerMinute,
-    ]
+    ],
   );
 
   return (

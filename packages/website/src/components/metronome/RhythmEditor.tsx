@@ -53,7 +53,7 @@ export function RhythmEditor(props: RhythmEditorProps) {
         return removeMeasure(rhythm, measureIndex);
       });
     },
-    [setRhythm]
+    [setRhythm],
   );
 
   const handleAddBeat = useCallback(
@@ -62,7 +62,7 @@ export function RhythmEditor(props: RhythmEditorProps) {
         return addBeat(rhythm, measureIndex);
       });
     },
-    [setRhythm]
+    [setRhythm],
   );
 
   const handleRemoveBeat = useCallback(
@@ -71,7 +71,7 @@ export function RhythmEditor(props: RhythmEditorProps) {
         return removeBeat(rhythm, measureIndex);
       });
     },
-    [setRhythm]
+    [setRhythm],
   );
 
   const handleAddNote = useCallback(
@@ -80,7 +80,7 @@ export function RhythmEditor(props: RhythmEditorProps) {
         return addNote(rhythm, measureIndex, beatIndex);
       });
     },
-    [setRhythm]
+    [setRhythm],
   );
 
   const handleChangeNote = useCallback(
@@ -89,7 +89,7 @@ export function RhythmEditor(props: RhythmEditorProps) {
         return changeNote(rhythm, measureIndex, beatIndex, noteIndex);
       });
     },
-    [setRhythm]
+    [setRhythm],
   );
 
   const handleRemoveNote = useCallback(
@@ -98,7 +98,7 @@ export function RhythmEditor(props: RhythmEditorProps) {
         return removeNote(rhythm, measureIndex, beatIndex);
       });
     },
-    [setRhythm]
+    [setRhythm],
   );
 
   const { flag: isRunning, toggle } = useFlag(false);
@@ -109,7 +109,7 @@ export function RhythmEditor(props: RhythmEditorProps) {
         return changeRepeat(rhythm, measuerIndex, repeat);
       });
     },
-    [setRhythm]
+    [setRhythm],
   );
 
   const handleChangeBeatsPerMinute = useCallback(
@@ -118,7 +118,7 @@ export function RhythmEditor(props: RhythmEditorProps) {
         return changeBeatsPerMinute(rhythm, measuerIndex, beatsPerMinute);
       });
     },
-    [setRhythm]
+    [setRhythm],
   );
 
   const handleSave = useCallback(() => {

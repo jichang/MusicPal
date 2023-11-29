@@ -18,7 +18,7 @@ export interface BeatViewerProps {
   onChangeNote: (
     measureIndex: number,
     beatIndex: number,
-    noteIndex: number
+    noteIndex: number,
   ) => void;
   onRemoveNote: (measureIndex: number, beatIndex: number) => void;
 }
@@ -48,7 +48,7 @@ export function BeatViewer(props: BeatViewerProps) {
     (noteIndex: number) => {
       onChangeNote(measureIndex, beatIndex, noteIndex);
     },
-    [onChangeNote, measureIndex, beatIndex]
+    [onChangeNote, measureIndex, beatIndex],
   );
 
   return (

@@ -19,7 +19,7 @@ export interface MeasureViewerProps {
   onChangeRepeat: (measureIndex: number, repeat: number) => void;
   onChangeBeatsPerMinute: (
     measureIndex: number,
-    beatsPerMinute: BeatsPerMinute
+    beatsPerMinute: BeatsPerMinute,
   ) => void;
   onAddBeat: (measureIndex: number) => void;
   onRemoveBeat: (measureIndex: number) => void;
@@ -27,7 +27,7 @@ export interface MeasureViewerProps {
   onChangeNote: (
     measureIndex: number,
     beatIndex: number,
-    noteIndex: number
+    noteIndex: number,
   ) => void;
   onRemoveNote: (measureIndex: number, beatIndex: number) => void;
 }
@@ -56,14 +56,14 @@ export function MeasureViewer(props: MeasureViewerProps) {
         onChangeRepeat(index, repeat);
       }
     },
-    [index, onChangeRepeat]
+    [index, onChangeRepeat],
   );
 
   const handleChangeBeatsPerMinute = useCallback(
     (beatsPerMinute: BeatsPerMinute) => {
       onChangeBeatsPerMinute(index, beatsPerMinute);
     },
-    [index, onChangeBeatsPerMinute]
+    [index, onChangeBeatsPerMinute],
   );
 
   const handleRemoveMeasure = useCallback(() => {

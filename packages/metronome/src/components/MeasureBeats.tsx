@@ -19,7 +19,7 @@ export interface MeasureBeatsProps {
   onChangeNote: (
     measureIndex: number,
     beatIndex: number,
-    noteIndex: number
+    noteIndex: number,
   ) => void;
   onRemoveNote: (measureIndex: number, beatIndex: number) => void;
 }

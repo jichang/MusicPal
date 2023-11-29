@@ -47,7 +47,7 @@ export function AppContextProvider(props: AppContextProviderProps) {
         setL10n(new ReactLocalization(generateBundles(locale)));
       }
     },
-    [setL10n]
+    [setL10n],
   );
 
   return (

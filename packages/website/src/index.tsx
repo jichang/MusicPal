@@ -19,6 +19,6 @@ dexie.rhythms
     root.render(
       <React.StrictMode>
         <App dexie={dexie} />
-      </React.StrictMode>
+      </React.StrictMode>,
     );
   });

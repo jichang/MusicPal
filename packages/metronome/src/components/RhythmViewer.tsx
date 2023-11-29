@@ -19,7 +19,7 @@ export interface RhythmViewerProps {
   onChangeRepeat: (measureIndex: number, repeat: number) => void;
   onChangeBeatsPerMinute: (
     measureIndex: number,
-    beatPerMinute: BeatsPerMinute
+    beatPerMinute: BeatsPerMinute,
   ) => void;
   onAddBeat: (measureIndex: number) => void;
   onRemoveBeat: (measureIndex: number) => void;
@@ -27,7 +27,7 @@ export interface RhythmViewerProps {
   onChangeNote: (
     measureIndex: number,
     beatIndex: number,
-    noteIndex: number
+    noteIndex: number,
   ) => void;
   onRemoveNote: (measureIndex: number, beatIndex: number) => void;
 }

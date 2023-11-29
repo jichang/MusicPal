@@ -22,7 +22,7 @@ export function MetronomePlayerPage() {
     (rhythm: Rhythm) => {
       dexie.rhythms.update(rhythm.id, rhythm);
     },
-    [dexie]
+    [dexie],
   );
 
   return (

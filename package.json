@@ -4,7 +4,7 @@
   "description": "useful tools for music lover",
   "main": "src/index.js",
   "scripts": {
-    "test": "tape"
+    "format": "prettier . --write"
   },
   "repository": {
     "type": "git",
@@ -17,10 +17,14 @@
   },
   "homepage": "https://github.com/jichang/MusicPal#readme",
   "workspaces": [
+    "packages/music",
     "packages/metronome",
     "packages/website"
   ],
   "devDependencies": {
     "process": "^0.11.10"
+  },
+  "dependencies": {
+    "prettier": "^3.0.3"
   }
 }
