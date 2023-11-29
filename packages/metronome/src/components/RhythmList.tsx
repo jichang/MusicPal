@@ -3,6 +3,7 @@ import "./RhythmList.css";
 import { Button, List } from "antd";
 import { Rhythm } from "../utils/music";
 import { EditOutlined, PlayCircleOutlined } from "@ant-design/icons";
+import { Localized } from "@fluent/react";
 
 export interface RhythmListProps {
   rhythms: Rhythm[];
@@ -13,6 +14,7 @@ export function RhythmList(props: RhythmListProps) {
 
   return (
     <List
+      bordered
       dataSource={rhythms}
       renderItem={(rhythm: Rhythm) => {
         const actions = [
@@ -21,7 +23,7 @@ export function RhythmList(props: RhythmListProps) {
             type="link"
             href={`/metronome/${rhythm.id}`}
           >
-            Play
+            <Localized id="play">Play</Localized>
           </Button>,
         ];
         if (rhythm.category !== "default") {
@@ -33,6 +35,9 @@ export function RhythmList(props: RhythmListProps) {
             <List.Item.Meta title={rhythm.name} />
           </List.Item>
         );
+      }}
+      locale={{
+        emptyText: <Localized id="no-rhythms" />,
       }}
     />
   );

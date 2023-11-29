@@ -1,0 +1,21 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.page__header {
+  padding: 1rem;
+
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.page__content {
+  padding: 1rem;
+}

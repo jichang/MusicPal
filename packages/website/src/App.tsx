@@ -1,21 +1,21 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { Metronome } from "./components/metronome/Metronome";
-import { Home } from "./components/Home";
+import { MetronomePage } from "./pages/MetronomePage";
+import { HomePage } from "./pages/HomePage";
 import {
   MusicPalDexie,
   StorageContextProvider,
 } from "./components/storage.context";
-import { LocalizationProvider, ReactLocalization } from "@fluent/react";
+import { AppContextProvider } from "./components/app.context";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
+    element: <HomePage />,
   },
   {
     path: "/metronome",
-    element: <Metronome />,
+    element: <MetronomePage />,
   },
   {
     path: "/metronome/:id",
@@ -25,17 +25,16 @@ const router = createBrowserRouter([
 
 export interface AppProps {
   dexie: MusicPalDexie;
-  l10n: ReactLocalization;
 }
 
 export function App(props: AppProps) {
-  const { dexie, l10n } = props;
+  const { dexie } = props;
 
   return (
     <StorageContextProvider dexie={dexie}>
-      <LocalizationProvider l10n={l10n}>
+      <AppContextProvider>
         <RouterProvider router={router} />
-      </LocalizationProvider>
+      </AppContextProvider>
     </StorageContextProvider>
   );
 }
