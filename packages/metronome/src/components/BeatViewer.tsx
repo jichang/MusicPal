@@ -7,7 +7,6 @@ import { Button } from "antd";
 import "./BeatViewer.css";
 
 export interface BeatViewerProps {
-  editable: boolean;
   beat: Beat;
   measureIndex: number;
   beatIndex: number;
@@ -21,7 +20,6 @@ export interface BeatViewerProps {
 
 export function BeatViewer(props: BeatViewerProps) {
   const {
-    editable,
     beat,
     measureIndex,
     beatIndex,
@@ -42,16 +40,14 @@ export function BeatViewer(props: BeatViewerProps) {
 
   return (
     <div key={beatIndex} className="beat">
-      {editable ? (
-        <Localized id="remove-note-btn" attrs={{ title: true }}>
-          <Button
-            className="button--oper"
-            title="Remove Note"
-            icon={<MinusOutlined />}
-            onClick={handleRemoveNote}
-          />
-        </Localized>
-      ) : null}
+      <Localized id="remove-note-btn" attrs={{ title: true }}>
+        <Button
+          className="button--oper"
+          title="Remove Note"
+          icon={<MinusOutlined />}
+          onClick={handleRemoveNote}
+        />
+      </Localized>
       <div className="notes">
         {beat.notes.map((note, noteIndex) => {
           const isCurrent =
@@ -64,16 +60,14 @@ export function BeatViewer(props: BeatViewerProps) {
           );
         })}
       </div>
-      {editable ? (
-        <Localized id="add-note-btn" attrs={{ title: true }}>
-          <Button
-            className="button--oper"
-            title="Add Note"
-            icon={<PlusOutlined />}
-            onClick={handleAddNote}
-          />
-        </Localized>
-      ) : null}
+      <Localized id="add-note-btn" attrs={{ title: true }}>
+        <Button
+          className="button--oper"
+          title="Add Note"
+          icon={<PlusOutlined />}
+          onClick={handleAddNote}
+        />
+      </Localized>
     </div>
   );
 }

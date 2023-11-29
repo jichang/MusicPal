@@ -14,7 +14,7 @@ import {
   removeNote,
 } from "@musicpal/metronome";
 import "./RhythmEditor.css";
-import { Button, Form, InputNumber } from "antd";
+import { Button } from "antd";
 import {
   PauseCircleFilled,
   PlayCircleFilled,
@@ -118,7 +118,6 @@ export function RhythmEditor(props: RhythmEditorProps) {
   return (
     <div className="rhythm__editor">
       <RhythmViewer
-        editable={rhythm.category !== "default"}
         rhythm={rhythm}
         isRunning={isRunning}
         onChangeRepeat={handleChangeRepeat}
@@ -132,15 +131,23 @@ export function RhythmEditor(props: RhythmEditorProps) {
       />
       <div className="rhythm__editor__footer">
         <div className="toolbar">
-          <Button
-            icon={isRunning ? <PauseCircleFilled /> : <PlayCircleFilled />}
-            onClick={toggle}
-          >
-            <Localized id="play">Play</Localized>
-          </Button>
-          <Button type="primary" icon={<SaveOutlined />} onClick={handleSave}>
-            <Localized id="save">Save</Localized>
-          </Button>
+          <div className="toolbar__main">
+            <Button
+              icon={isRunning ? <PauseCircleFilled /> : <PlayCircleFilled />}
+              onClick={toggle}
+            >
+              {isRunning ? (
+                <Localized id="pause">Pause</Localized>
+              ) : (
+                <Localized id="play">Play</Localized>
+              )}
+            </Button>
+          </div>
+          <div className="toolbar__side">
+            <Button type="primary" icon={<SaveOutlined />} onClick={handleSave}>
+              <Localized id="save">Save</Localized>
+            </Button>
+          </div>
         </div>
       </div>
       {children}

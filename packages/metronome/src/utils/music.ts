@@ -7,9 +7,9 @@ export interface UniformBeatsPerMinute {
 
 export interface VaryingBeatsPerMinute {
   type: "varying";
-  from: number;
+  begin: number;
   step: number;
-  to: number;
+  end: number;
 }
 
 export type BeatsPerMinute = UniformBeatsPerMinute | VaryingBeatsPerMinute;
@@ -21,8 +21,8 @@ export const UNIFORM_BPM_60: UniformBeatsPerMinute = {
 
 export const VARYING_BPM_60: VaryingBeatsPerMinute = {
   type: "varying",
-  from: 60,
-  to: 60,
+  begin: 60,
+  end: 60,
   step: 10,
 };
 

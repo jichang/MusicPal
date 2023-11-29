@@ -27,3 +27,7 @@
   width: 100%;
   max-width: 64rem;
 }
+
+.rhythm__editor__footer .toolbar .toolbar__main {
+  flex: 1;
+}

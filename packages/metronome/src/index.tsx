@@ -1,4 +1,4 @@
-export * from "./components/NoteButton";
+export * from "./components/Form";
 export * from "./components/RhythmViewer";
 export * from "./hooks/useTick";
 export * from "./hooks/useTimingWorker";

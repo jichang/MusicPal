@@ -3,7 +3,7 @@ import { BeatsPerMinute, Rhythm, locate, parseRhythm } from "../utils/music";
 import "./RhythmViewer.css";
 import { PlusOutlined } from "@ant-design/icons";
 import { Localized } from "@fluent/react";
-import { Button, ConfigProvider, Flex, List } from "antd";
+import { Button, Flex, List } from "antd";
 import { MeasureViewer } from "./MeasureViewer";
 import { useTick } from "../hooks/useTick";
 
@@ -14,7 +14,6 @@ export interface RhythmViewerProps {
   currMeasureOffset?: number;
   currBeatIndex?: number;
   currNoteIndex?: number;
-  editable: boolean;
   onAddMeasure: () => void;
   onRemoveMeasure: (measureIndex: number) => void;
   onChangeRepeat: (measureIndex: number, repeat: number) => void;
@@ -32,7 +31,6 @@ export function RhythmViewer(props: RhythmViewerProps) {
   const {
     isRunning,
     rhythm,
-    editable,
     onAddMeasure,
     onRemoveMeasure,
     onChangeRepeat,
@@ -73,7 +71,6 @@ export function RhythmViewer(props: RhythmViewerProps) {
             <List.Item className="measure__list__item" key={index}>
               <MeasureViewer
                 index={index}
-                editable={editable}
                 measure={measure}
                 currMeasureIndex={currMeasureIndex}
                 currMeasureOffset={currMeasureOffset}
@@ -94,13 +91,11 @@ export function RhythmViewer(props: RhythmViewerProps) {
           emptyText: <Localized id="no-measures">No Measures</Localized>,
         }}
       />
-      {editable ? (
-        <Flex justify="center" className="rhythm__viewer__toolbar">
-          <Button type="primary" icon={<PlusOutlined />} onClick={onAddMeasure}>
-            <Localized id="add-measure">Add Measure</Localized>
-          </Button>
-        </Flex>
-      ) : null}
+      <Flex justify="center" className="rhythm__viewer__toolbar">
+        <Button type="primary" icon={<PlusOutlined />} onClick={onAddMeasure}>
+          <Localized id="add-measure">Add Measure</Localized>
+        </Button>
+      </Flex>
     </div>
   );
 }

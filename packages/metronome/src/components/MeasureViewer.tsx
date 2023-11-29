@@ -1,15 +1,10 @@
 import React, { useCallback, useState } from "react";
-import {
-  BeatsPerMinute as number,
-  Measure,
-  BeatsPerMinute,
-} from "../utils/music";
-import { PlusOutlined, MinusOutlined } from "@ant-design/icons";
+import { Measure, BeatsPerMinute } from "../utils/music";
 import { Localized } from "@fluent/react";
-import { Card, Button, InputNumber, Form, TabsProps, Tabs } from "antd";
+import { Card, Button, TabsProps, Tabs } from "antd";
 import "./MeasureViewer.css";
-import { BeatViewer } from "./BeatViewer";
-import { BeatsPerMinuteAdjuster } from "./BeatsPerMinuteAdjuster";
+import { MeasureBeats } from "./MeasureBeats";
+import { MeasureSettings } from "./MeasureSettings";
 
 export type TabsItems = TabsProps["items"];
 
@@ -19,7 +14,6 @@ export interface MeasureViewerProps {
   currMeasureOffset: number;
   currBeatIndex: number;
   currNoteIndex: number;
-  editable: boolean;
   measure: Measure;
   onRemove: (measureIndex: number) => void;
   onChangeRepeat: (measureIndex: number, repeat: number) => void;
@@ -40,7 +34,6 @@ export function MeasureViewer(props: MeasureViewerProps) {
     currMeasureIndex,
     currMeasureOffset,
     currNoteIndex,
-    editable,
     measure,
     onRemove,
     onChangeRepeat,
@@ -67,14 +60,6 @@ export function MeasureViewer(props: MeasureViewerProps) {
     [index, onChangeBeatsPerMinute]
   );
 
-  const handleAddBeat = useCallback(() => {
-    onAddBeat(index);
-  }, [onAddBeat, index]);
-
-  const handleRemoveBeat = useCallback(() => {
-    onRemoveBeat(index);
-  }, [onRemoveBeat, index]);
-
   const handleRemoveMeasure = useCallback(() => {
     onRemove(index);
   }, [index, onRemove]);
@@ -84,72 +69,29 @@ export function MeasureViewer(props: MeasureViewerProps) {
       key: "beats",
       label: <Localized id="beats">Beats</Localized>,
       children: (
-        <div className="measure__viewer__content">
-          {editable ? (
-            <Localized id="remove-beat-btn" attrs={{ title: true }}>
-              <Button
-                key="remove"
-                icon={<MinusOutlined />}
-                onClick={handleRemoveBeat}
-                title="Remove Beat"
-              />
-            </Localized>
-          ) : null}
-          <div
-            className="beats"
-            style={{
-              gridTemplateColumns: `repeat(${measure.beats.length}, 1fr)`,
-            }}
-          >
-            {measure.beats.map((beat, beatIndex) => {
-              return (
-                <BeatViewer
-                  beat={beat}
-                  key={beatIndex}
-                  editable={editable}
-                  measureIndex={index}
-                  beatIndex={beatIndex}
-                  currBeatIndex={currBeatIndex}
-                  currMeasureIndex={currMeasureIndex}
-                  currMeasureOffset={currMeasureOffset}
-                  currNoteIndex={currNoteIndex}
-                  onAddNote={onAddNote}
-                  onRemoveNote={onRemoveNote}
-                />
-              );
-            })}
-          </div>
-          {editable ? (
-            <Localized id="add-beat-btn" attrs={{ title: true }}>
-              <Button
-                key="add"
-                title="Add Beat"
-                icon={<PlusOutlined />}
-                onClick={handleAddBeat}
-              />
-            </Localized>
-          ) : null}
-        </div>
+        <MeasureBeats
+          measure={measure}
+          measureIndex={index}
+          currMeasureIndex={currMeasureIndex}
+          currMeasureOffset={currMeasureOffset}
+          currBeatIndex={currBeatIndex}
+          currNoteIndex={currNoteIndex}
+          onAddBeat={onAddBeat}
+          onRemoveBeat={onRemoveBeat}
+          onAddNote={onAddNote}
+          onRemoveNote={onRemoveNote}
+        />
       ),
     },
     {
       key: "tempo",
       label: <Localized id="tempo">Tempo</Localized>,
       children: (
-        <div className="measure__viewer__content">
-          <Form>
-            <Form.Item>
-              <InputNumber
-                value={measure.repeat}
-                onChange={handleChangeRepeat}
-              />
-            </Form.Item>
-            <BeatsPerMinuteAdjuster
-              beatsPerMinute={measure.beatsPerMinute}
-              onChange={handleChangeBeatsPerMinute}
-            />
-          </Form>
-        </div>
+        <MeasureSettings
+          measure={measure}
+          onChangeRepeat={handleChangeRepeat}
+          onChangeBeatsPerMinute={handleChangeBeatsPerMinute}
+        />
       ),
     },
   ];
@@ -165,11 +107,9 @@ export function MeasureViewer(props: MeasureViewerProps) {
         </Localized>
       }
       extra={
-        editable ? (
-          <Button danger onClick={handleRemoveMeasure}>
-            <Localized id="remove-measure">Remove Measure</Localized>
-          </Button>
-        ) : null
+        <Button danger onClick={handleRemoveMeasure}>
+          <Localized id="remove-measure">Remove Measure</Localized>
+        </Button>
       }
     >
       <Tabs

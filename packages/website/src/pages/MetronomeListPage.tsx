@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useCallback, useState } from "react";
 import "./MetronomeListPage.css";
-import { Button, Form, Input, Modal, Tabs } from "antd";
+import { Button, Input, Modal, Tabs } from "antd";
 import type { TabsProps } from "antd";
 import { PersonalRhythmList } from "../components/metronome/PersonalRhythmList";
 import { DefaultRhythmList } from "../components/metronome/DefaultRhythmList";
@@ -9,7 +9,7 @@ import { Localized } from "@fluent/react";
 import { GoBack } from "../components/GoBack";
 import { useFlag } from "../hooks/useFlag";
 import { useStorage } from "../components/storage.context";
-import { DEFAULT_MEASURES, Rhythm } from "@musicpal/metronome";
+import { DEFAULT_MEASURES, Form, FormField, Rhythm } from "@musicpal/metronome";
 
 type FieldType = {
   name?: string;
@@ -104,11 +104,8 @@ export function MetronomeListPage() {
         footer={null}
         onCancel={closeRhythmNameModal}
       >
-        <Form autoComplete="off" layout="vertical" onFinish={createRhythm}>
-          <Form.Item<FieldType>
-            name="name"
-            label={<Localized id="name">Name</Localized>}
-          >
+        <Form autoComplete="off" onSubmit={createRhythm}>
+          <FormField name="name" label="name">
             <Localized id="rhythm-name-field" attrs={{ placeholder: true }}>
               <Input
                 name="name"
@@ -117,12 +114,12 @@ export function MetronomeListPage() {
                 placeholder="Input name of rhythm"
               />
             </Localized>
-          </Form.Item>
-          <Form.Item>
+          </FormField>
+          <FormField name="submit">
             <Button type="primary" htmlType="submit">
               <Localized id="create">Create</Localized>
             </Button>
-          </Form.Item>
+          </FormField>
         </Form>
       </Modal>
     </div>

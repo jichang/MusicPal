@@ -1,0 +1,16 @@
+.form {
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+}
+
+.form__field {
+  display: block;
+  margin: 0 0 1rem 0;
+}
+
+.form__field__label {
+  display: block;
+  margin: 0 0 0.5rem 0;
+}
