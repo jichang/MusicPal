@@ -5,6 +5,9 @@
   "main": "src/index.js",
   "scripts": {
     "format": "prettier . --write",
+    "build": "npm run build --ws",
+    "typecheck": "npm run typecheck --ws",
+    "clean": "npm run clean --ws",
     "prepare": "husky install"
   },
   "repository": {
