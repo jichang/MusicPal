@@ -11,28 +11,33 @@ import { MetronomePlayerPage } from './pages/MetronomePlayerPage';
 import { SightEarPage } from './pages/SightEarPage';
 import { TunerPage } from './pages/TunerPage';
 
-const router = createBrowserRouter([
+const router = createBrowserRouter(
+  [
+    {
+      path: '/',
+      element: <HomePage />,
+    },
+    {
+      path: '/metronome',
+      element: <MetronomeListPage />,
+    },
+    {
+      path: '/metronome/:id',
+      element: <MetronomePlayerPage />,
+    },
+    {
+      path: '/sightear',
+      element: <SightEarPage />,
+    },
+    {
+      path: '/tuner',
+      element: <TunerPage />,
+    },
+  ],
   {
-    path: '/',
-    element: <HomePage />,
+    basename: '/MusicPal',
   },
-  {
-    path: '/metronome',
-    element: <MetronomeListPage />,
-  },
-  {
-    path: '/metronome/:id',
-    element: <MetronomePlayerPage />,
-  },
-  {
-    path: '/sightear',
-    element: <SightEarPage />,
-  },
-  {
-    path: '/tuner',
-    element: <TunerPage />,
-  },
-]);
+);
 
 export interface AppProps {
   dexie: MusicPalDexie;
